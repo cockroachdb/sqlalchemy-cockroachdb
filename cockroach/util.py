@@ -1,4 +1,3 @@
-import datetime
 import logging
 import random
 import time
@@ -6,11 +5,12 @@ import time
 try:
     import enum  # >= py34
 except ImportError:
-    import enum34 as enum  # < py33
+    import enum34 as enum  # < py34
 
 # _RETRY_JITTER specifies random jitter to add to backoff
 # durations. Specified as a percentage of the backoff.
 _RETRY_JITTER = 0.15
+
 
 class RetryStatus(enum.Enum):
     # BREAK indicates the retry loop is finished and should return
@@ -35,7 +35,7 @@ class RetryMaxAttemptsError(Exception):
 
 class RetryOptions(object):
     """RetryOptions provides control of retry loop logic via the
-    RetryWithBackoffOptions method.
+    `retry_with_backoff` function.
     """
     def __init__(self, tag, backoff, max_backoff, constant, max_attempts=0, log_level=logging.INFO):
         self.tag = tag  # Tag for helpful logging of backoffs
@@ -47,11 +47,12 @@ class RetryOptions(object):
 
 
 def retry_with_backoff(opts, fn):
-    """RetryWithBackoff implements retry with exponential backoff using
-    the supplied options as parameters. When fn returns RetryContinue
-    and the number of retry attempts haven't been exhausted, fn is
-    retried. When fn returns RetryBreak, retry ends. As a special case,
-    if fn returns RetryReset, the backoff and retry count are reset to
+    """retry_with_backoff implements retry with exponential backoff using
+    the supplied options as parameters. When fn returns
+    `RetryStatus.CONTINUE` and the number of retry attempts haven't
+    been exhausted, fn is retried. When fn returns
+    `RetryStatus.BREAK`, retry ends. As a special case, if fn returns
+    `RetryStatus.RESET`, the backoff and retry count are reset to
     starting values and the next retry occurs immediately. Returns an
     error if the maximum number of retries is exceeded or if the fn
     returns an error.
