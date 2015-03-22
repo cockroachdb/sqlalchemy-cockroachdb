@@ -3,10 +3,14 @@ import time
 
 
 class Call(object):
-    def __init__(self, method, args):
+    def __init__(self, method, args, reply=None):
         self.method = method
         self.args = args
-        self.reply = method.response_type()
+        if reply is not None:
+            self.reply = reply
+        else:
+            self.reply = method.response_type()
+
 
     def reset_client_cmd_id(self):
         """Set the client command ID if the call is for a read-write method.
