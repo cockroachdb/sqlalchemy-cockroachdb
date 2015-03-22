@@ -2,10 +2,10 @@ import unittest
 import uuid
 
 from cockroach.call import Call
-from cockroach.interface import KVSender
+from cockroach.interface import KVSender, TransactionOptions
 from cockroach.methods import Methods
 from cockroach.proto import data_pb2, errors_pb2
-from cockroach.txn_sender import TxnSender, TransactionOptions
+from cockroach.txn_sender import TxnSender
 from cockroach.test_http_sender import test_put_request, test_put_response
 
 txn_key = b"test-txn"

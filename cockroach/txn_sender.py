@@ -1,13 +1,8 @@
 import collections
 
-from cockroach.interface import KVSender
+from cockroach.interface import KVSender, TransactionOptions
 from cockroach.methods import Methods
 from cockroach.proto import data_pb2
-
-class TransactionOptions(object):
-    def __init__(self, name='', isolation=data_pb2.SERIALIZABLE):
-        self.name = name  # concise description of txn for debugging.
-        self.isolation = isolation
 
 class TxnSender(KVSender):
     """A TxnSender proxies requests to the underlying KVSender,

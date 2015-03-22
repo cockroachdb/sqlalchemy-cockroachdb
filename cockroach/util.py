@@ -66,6 +66,7 @@ def retry_with_backoff(opts, fn):
     while True:
         count += 1
         status = fn()
+        assert isinstance(status, RetryStatus)
         if status is RetryStatus.BREAK:
             return
         elif status is RetryStatus.RESET:
