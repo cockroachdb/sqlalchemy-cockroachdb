@@ -1,9 +1,10 @@
-from distutils.core import setup
+from setuptools import setup
 import sys
 
 install_requires = [
     # protobuf 2.6 doesn't support python 3.
     'protobuf==3.0.0-alpha-1',
+    'requests',
 ]
 
 if sys.version_info < (3, 4):
@@ -13,4 +14,5 @@ setup(
     name='cockroach',
     packages=['cockroach', 'cockroach.proto'],
     install_requires=install_requires,
+    tests_require=['werkzeug'],
 )

@@ -37,14 +37,18 @@ class RetryOptions(object):
     """RetryOptions provides control of retry loop logic via the
     `retry_with_backoff` function.
     """
-    def __init__(self, tag, backoff, max_backoff, constant, max_attempts=0, log_level=logging.INFO):
-        self.tag = tag  # Tag for helpful logging of backoffs
+    def __init__(self, backoff, max_backoff, constant, max_attempts=0,
+                 tag='', log_level=logging.INFO):
         self.backoff = backoff  # Default retry backoff interval
         self.max_backoff = max_backoff  # Maximum retry backoff interval
         self.constant = constant  # Default backoff constant
         self.max_attempts = max_attempts  # Maximum number of attempts (0 for infinite)
+        self.tag = tag  # Tag for helpful logging of backoffs
         self.log_level = log_level
 
+    def copy(self):
+        return RetryOptions(self.backoff, self.max_backoff, self.constant, self.max_attempts,
+                            self.tag, self.log_level)
 
 def retry_with_backoff(opts, fn):
     """retry_with_backoff implements retry with exponential backoff using
@@ -61,12 +65,7 @@ def retry_with_backoff(opts, fn):
     count = 0
     while True:
         count += 1
-        status = RetryStatus.CONTINUE
-        try:
-            status = fn()
-        except Exception:
-            logging.log(opts.log_level, "%s failed an iteration", opts.tag, exc_info=True)
-            raise
+        status = fn()
         if status is RetryStatus.BREAK:
             return
         elif status is RetryStatus.RESET:
