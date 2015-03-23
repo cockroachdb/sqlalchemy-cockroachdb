@@ -1,10 +1,11 @@
 import datetime
 import logging
+import re
 
 from cockroach.call import Call
 from cockroach import errors
 from cockroach.methods import Methods
-from cockroach.proto import api_pb2
+from cockroach.proto import api_pb2, data_pb2
 from cockroach.txn_sender import TxnSender
 from cockroach import util
 
@@ -13,6 +14,11 @@ txn_retry_options = util.RetryOptions(
     max_backoff=datetime.timedelta(seconds=2),
     constant=2,
     max_attempts=0)  # retry indefinitely
+
+def _method_to_field(s):
+    """Converts CamelCase method name to underscore_field_name."""
+    return re.sub('(?!^)([A-Z])', r'_\1', s).lower()
+
 
 class KV(object):
     """Key-value store client.
@@ -116,10 +122,10 @@ class KV(object):
                 batch_args.header.end_key = call.args.header.end_key
             req_union = batch_args.requests.add()
             # TODO: this should be a proto 'oneof'.
-            getattr(req_union, call.method.name.lower()).CopyFrom(call.args)
+            getattr(req_union, _method_to_field(call.method.name)).CopyFrom(call.args)
         batch_reply = self.call(Methods.Batch, batch_args)
         for call, response in zip(calls, batch_reply.responses):
-            call.reply.CopyFrom(getattr(response, call.method.name.lower()))
+            call.reply.CopyFrom(getattr(response, _method_to_field(call.method.name)))
 
     def run_transaction(self, opts, retryable):
         """RunTransaction executes retryable in the context of a distributed transaction.
@@ -186,3 +192,32 @@ class KV(object):
                     logging.error("failure aborting transaction; abort caused by %s",
                                   e, exc_info=True)
             raise
+
+    def get_bytes(self, key):
+        """Fetch the data at the specified key.
+
+        Returns a tuple (found, timestamp, data).
+        """
+        reply = self.call(
+            Methods.Get, api_pb2.GetRequest(header=api_pb2.RequestHeader(key=key)))
+        return reply.HasField('value'), reply.value.timestamp, reply.value.bytes
+
+    def get_proto(self, key, message):
+        """Fetch the data at the specified key and decodes it into the given protobuf.
+
+        Returns a tuple (found, timestamp)
+        """
+        found, ts, data = self.get_bytes(key)
+        if not found:
+            return False, None
+        message.ParseFromString(data)
+        return True, ts
+
+    def put_bytes(self, key, data):
+        """Writes the given data to the specified key."""
+        return self.call(Methods.Put, api_pb2.PutRequest(header=api_pb2.RequestHeader(key=key),
+                                                         value=data_pb2.Value(bytes=data)))
+
+    def put_proto(self, key, message):
+        """Writes the given protobuf to the specified key."""
+        return self.put_bytes(key, message.SerializeToString())
