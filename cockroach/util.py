@@ -79,6 +79,7 @@ def retry_with_backoff(opts, fn):
                 raise RetryMaxAttemptsError(opts.max_attempts)
             logging.log(opts.log_level, "%s failed; retrying in %s", opts.tag, backoff)
             wait = backoff + backoff * _RETRY_JITTER * random.random()
+            backoff *= opts.constant
             if backoff > opts.max_backoff.total_seconds():
                 backoff = opts.max_backoff.total_seconds()
         # Wait before retry.
