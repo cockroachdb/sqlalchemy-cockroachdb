@@ -14,5 +14,5 @@ setup(
     name='cockroach',
     packages=['cockroach', 'cockroach.proto'],
     install_requires=install_requires,
-    tests_require=['werkzeug'],
+    extras_require={'tests': ['werkzeug']},
 )

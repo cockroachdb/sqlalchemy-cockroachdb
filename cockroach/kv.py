@@ -32,6 +32,9 @@ class KV(object):
 
         self.prepared = []
 
+    def close(self):
+        self._sender.close()
+
     def sender(self):
         """Returns the sender supplied to KV, unless wrapped by a
         transactional sender, in which case it returns the unwrapped sender.
@@ -149,6 +152,13 @@ class KV(object):
             txn_sender.txn_end = False  # always reset before [re]starting txn
             try:
                 retryable(txn_kv)
+                if not txn_sender.txn_end:
+                    # If there were no errors running retryable, commit the txn.
+                    # This may block waiting for outstanding writes to complete in
+                    # case retryable didn't -- we need the most recent of all response
+                    # timestamps in order to commit.
+                    txn_kv.call(Methods.EndTransaction,
+                                api_pb2.EndTransactionRequest(commit=True))
             except errors.ReadWithinUncertaintyIntervalError:
                 # Retry immediately on read within uncertainty interval.
                 return util.RetryStatus.RESET
@@ -164,12 +174,6 @@ class KV(object):
                 # whose timestamp was pushed.
                 return util.RetryStatus.RESET
             # All other errors are allowed to escape, aborting the retry loop.
-            if not txn_sender.txn_end:
-                # If there were no errors running retryable, commit the txn.
-                # This may block waiting for outstanding writes to complete in
-                # case retryable didn't -- we need the most recent of all response
-                # timestamps in order to commit.
-                txn_kv.call(Methods.EndTransaction, api_pb2.EndTransactionRequest(commit=True))
             return util.RetryStatus.BREAK
         try:
             util.retry_with_backoff(retry_opts, callback)
