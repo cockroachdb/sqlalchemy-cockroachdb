@@ -7,7 +7,7 @@ proto:
 
 .PHONY: test
 test:
-	tox
+	tox --skip-missing-interpreters
 
 # In theory we should just be able to do docker-compose build &&
 # docker-compose run cockroachpython, but docker-compose doesn't

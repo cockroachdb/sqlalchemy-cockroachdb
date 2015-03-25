@@ -4,7 +4,7 @@ ENV_BASE=~/envs
 ENV=$ENV_BASE/cockroach-python
 
 if [[ ! -d $ENV ]]; then
-    mkdir -p
+    mkdir -p $ENV
     virtualenv $ENV
 fi
 
