@@ -3,6 +3,7 @@
 
 import sys
 _b=sys.version_info[0]<3 and (lambda x:x) or (lambda x:x.encode('latin1'))
+from google.protobuf.internal import enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
@@ -20,49 +21,42 @@ import cockroach.proto.data_pb2
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='cockroach/proto/errors.proto',
   package='cockroach.proto',
-  serialized_pb=_b('\n\x1c\x63ockroach/proto/errors.proto\x12\x0f\x63ockroach.proto\x1a\x1c\x63ockroach/proto/config.proto\x1a\x1a\x63ockroach/proto/data.proto\"2\n\x0cGenericError\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x11\n\tretryable\x18\x02 \x01(\x08\":\n\x0eNotLeaderError\x12(\n\x06leader\x18\x01 \x01(\x0b\x32\x18.cockroach.proto.Replica\"%\n\x12RangeNotFoundError\x12\x0f\n\x07raft_id\x18\x01 \x01(\x03\"|\n\x15RangeKeyMismatchError\x12\x19\n\x11request_start_key\x18\x01 \x01(\x0c\x12\x17\n\x0frequest_end_key\x18\x02 \x01(\x0c\x12/\n\x05range\x18\x03 \x01(\x0b\x32 .cockroach.proto.RangeDescriptor\"\x8b\x01\n\"ReadWithinUncertaintyIntervalError\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12\x36\n\x12\x65xisting_timestamp\x18\x02 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\"D\n\x17TransactionAbortedError\x12)\n\x03txn\x18\x01 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\"s\n\x14TransactionPushError\x12)\n\x03txn\x18\x01 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\x12\x30\n\npushee_txn\x18\x02 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\"B\n\x15TransactionRetryError\x12)\n\x03txn\x18\x01 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\"P\n\x16TransactionStatusError\x12)\n\x03txn\x18\x01 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\x12\x0b\n\x03msg\x18\x02 \x01(\t\"\\\n\x10WriteIntentError\x12\x0b\n\x03key\x18\x01 \x01(\x0c\x12)\n\x03txn\x18\x02 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\x12\x10\n\x08resolved\x18\x03 \x01(\x08\"y\n\x10WriteTooOldError\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12\x36\n\x12\x65xisting_timestamp\x18\x02 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\"\x14\n\x12OpRequiresTxnError\"D\n\x14\x43onditionFailedError\x12,\n\x0c\x61\x63tual_value\x18\x01 \x01(\x0b\x32\x16.cockroach.proto.Value\"\xcf\x06\n\x05\x45rror\x12.\n\x07generic\x18\x01 \x01(\x0b\x32\x1d.cockroach.proto.GenericError\x12\x33\n\nnot_leader\x18\x02 \x01(\x0b\x32\x1f.cockroach.proto.NotLeaderError\x12<\n\x0frange_not_found\x18\x03 \x01(\x0b\x32#.cockroach.proto.RangeNotFoundError\x12\x42\n\x12range_key_mismatch\x18\x04 \x01(\x0b\x32&.cockroach.proto.RangeKeyMismatchError\x12]\n read_within_uncertainty_interval\x18\x05 \x01(\x0b\x32\x33.cockroach.proto.ReadWithinUncertaintyIntervalError\x12\x45\n\x13transaction_aborted\x18\x06 \x01(\x0b\x32(.cockroach.proto.TransactionAbortedError\x12?\n\x10transaction_push\x18\x07 \x01(\x0b\x32%.cockroach.proto.TransactionPushError\x12\x41\n\x11transaction_retry\x18\x08 \x01(\x0b\x32&.cockroach.proto.TransactionRetryError\x12\x43\n\x12transaction_status\x18\t \x01(\x0b\x32\'.cockroach.proto.TransactionStatusError\x12\x37\n\x0cwrite_intent\x18\n \x01(\x0b\x32!.cockroach.proto.WriteIntentError\x12\x38\n\rwrite_too_old\x18\x0b \x01(\x0b\x32!.cockroach.proto.WriteTooOldError\x12<\n\x0fop_requires_txn\x18\x0c \x01(\x0b\x32#.cockroach.proto.OpRequiresTxnError\x12?\n\x10\x63ondition_failed\x18\r \x01(\x0b\x32%.cockroach.proto.ConditionFailedErrorB\x07Z\x05proto')
+  serialized_pb=_b('\n\x1c\x63ockroach/proto/errors.proto\x12\x0f\x63ockroach.proto\x1a\x1c\x63ockroach/proto/config.proto\x1a\x1a\x63ockroach/proto/data.proto\"e\n\x0eNotLeaderError\x12)\n\x07replica\x18\x01 \x01(\x0b\x32\x18.cockroach.proto.Replica\x12(\n\x06leader\x18\x02 \x01(\x0b\x32\x18.cockroach.proto.Replica\"%\n\x12RangeNotFoundError\x12\x0f\n\x07raft_id\x18\x01 \x01(\x03\"|\n\x15RangeKeyMismatchError\x12\x19\n\x11request_start_key\x18\x01 \x01(\x0c\x12\x17\n\x0frequest_end_key\x18\x02 \x01(\x0c\x12/\n\x05range\x18\x03 \x01(\x0b\x32 .cockroach.proto.RangeDescriptor\"\x8b\x01\n\"ReadWithinUncertaintyIntervalError\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12\x36\n\x12\x65xisting_timestamp\x18\x02 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\"D\n\x17TransactionAbortedError\x12)\n\x03txn\x18\x01 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\"s\n\x14TransactionPushError\x12)\n\x03txn\x18\x01 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\x12\x30\n\npushee_txn\x18\x02 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\"B\n\x15TransactionRetryError\x12)\n\x03txn\x18\x01 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\"P\n\x16TransactionStatusError\x12)\n\x03txn\x18\x01 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\x12\x0b\n\x03msg\x18\x02 \x01(\t\"\xa1\x01\n\x10WriteIntentError\x12\x39\n\x07intents\x18\x01 \x03(\x0b\x32(.cockroach.proto.WriteIntentError.Intent\x12\x10\n\x08resolved\x18\x02 \x01(\x08\x1a@\n\x06Intent\x12\x0b\n\x03key\x18\x01 \x01(\x0c\x12)\n\x03txn\x18\x02 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\"y\n\x10WriteTooOldError\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12\x36\n\x12\x65xisting_timestamp\x18\x02 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\"\x14\n\x12OpRequiresTxnError\"D\n\x14\x43onditionFailedError\x12,\n\x0c\x61\x63tual_value\x18\x01 \x01(\x0b\x32\x16.cockroach.proto.Value\"\xc6\x06\n\x0b\x45rrorDetail\x12\x35\n\nnot_leader\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.NotLeaderErrorH\x00\x12>\n\x0frange_not_found\x18\x02 \x01(\x0b\x32#.cockroach.proto.RangeNotFoundErrorH\x00\x12\x44\n\x12range_key_mismatch\x18\x03 \x01(\x0b\x32&.cockroach.proto.RangeKeyMismatchErrorH\x00\x12_\n read_within_uncertainty_interval\x18\x04 \x01(\x0b\x32\x33.cockroach.proto.ReadWithinUncertaintyIntervalErrorH\x00\x12G\n\x13transaction_aborted\x18\x05 \x01(\x0b\x32(.cockroach.proto.TransactionAbortedErrorH\x00\x12\x41\n\x10transaction_push\x18\x06 \x01(\x0b\x32%.cockroach.proto.TransactionPushErrorH\x00\x12\x43\n\x11transaction_retry\x18\x07 \x01(\x0b\x32&.cockroach.proto.TransactionRetryErrorH\x00\x12\x45\n\x12transaction_status\x18\x08 \x01(\x0b\x32\'.cockroach.proto.TransactionStatusErrorH\x00\x12\x39\n\x0cwrite_intent\x18\t \x01(\x0b\x32!.cockroach.proto.WriteIntentErrorH\x00\x12:\n\rwrite_too_old\x18\n \x01(\x0b\x32!.cockroach.proto.WriteTooOldErrorH\x00\x12>\n\x0fop_requires_txn\x18\x0b \x01(\x0b\x32#.cockroach.proto.OpRequiresTxnErrorH\x00\x12\x41\n\x10\x63ondition_failed\x18\x0c \x01(\x0b\x32%.cockroach.proto.ConditionFailedErrorH\x00\x42\x07\n\x05value\"\x9b\x01\n\x05\x45rror\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x11\n\tretryable\x18\x02 \x01(\x08\x12@\n\x13transaction_restart\x18\x04 \x01(\x0e\x32#.cockroach.proto.TransactionRestart\x12,\n\x06\x64\x65tail\x18\x03 \x01(\x0b\x32\x1c.cockroach.proto.ErrorDetail*;\n\x12TransactionRestart\x12\t\n\x05\x41\x42ORT\x10\x00\x12\x0b\n\x07\x42\x41\x43KOFF\x10\x01\x12\r\n\tIMMEDIATE\x10\x02\x42\x07Z\x05proto')
   ,
   dependencies=[cockroach.proto.config_pb2.DESCRIPTOR,cockroach.proto.data_pb2.DESCRIPTOR,])
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-
-
-
-_GENERICERROR = _descriptor.Descriptor(
-  name='GenericError',
-  full_name='cockroach.proto.GenericError',
+_TRANSACTIONRESTART = _descriptor.EnumDescriptor(
+  name='TransactionRestart',
+  full_name='cockroach.proto.TransactionRestart',
   filename=None,
   file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='ABORT', index=0, number=0,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='BACKOFF', index=1, number=1,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='IMMEDIATE', index=2, number=2,
+      options=None,
+      type=None),
+  ],
   containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='message', full_name='cockroach.proto.GenericError.message', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='retryable', full_name='cockroach.proto.GenericError.retryable', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
   options=None,
-  is_extendable=False,
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=107,
-  serialized_end=157,
+  serialized_start=2232,
+  serialized_end=2291,
 )
+_sym_db.RegisterEnumDescriptor(_TRANSACTIONRESTART)
+
+TransactionRestart = enum_type_wrapper.EnumTypeWrapper(_TRANSACTIONRESTART)
+ABORT = 0
+BACKOFF = 1
+IMMEDIATE = 2
+
 
 
 _NOTLEADERERROR = _descriptor.Descriptor(
@@ -73,8 +67,15 @@ _NOTLEADERERROR = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='leader', full_name='cockroach.proto.NotLeaderError.leader', index=0,
+      name='replica', full_name='cockroach.proto.NotLeaderError.replica', index=0,
       number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='leader', full_name='cockroach.proto.NotLeaderError.leader', index=1,
+      number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -90,8 +91,8 @@ _NOTLEADERERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=159,
-  serialized_end=217,
+  serialized_start=107,
+  serialized_end=208,
 )
 
 
@@ -120,8 +121,8 @@ _RANGENOTFOUNDERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=219,
-  serialized_end=256,
+  serialized_start=210,
+  serialized_end=247,
 )
 
 
@@ -164,8 +165,8 @@ _RANGEKEYMISMATCHERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=258,
-  serialized_end=382,
+  serialized_start=249,
+  serialized_end=373,
 )
 
 
@@ -201,8 +202,8 @@ _READWITHINUNCERTAINTYINTERVALERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=385,
-  serialized_end=524,
+  serialized_start=376,
+  serialized_end=515,
 )
 
 
@@ -231,8 +232,8 @@ _TRANSACTIONABORTEDERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=526,
-  serialized_end=594,
+  serialized_start=517,
+  serialized_end=585,
 )
 
 
@@ -268,8 +269,8 @@ _TRANSACTIONPUSHERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=596,
-  serialized_end=711,
+  serialized_start=587,
+  serialized_end=702,
 )
 
 
@@ -298,8 +299,8 @@ _TRANSACTIONRETRYERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=713,
-  serialized_end=779,
+  serialized_start=704,
+  serialized_end=770,
 )
 
 
@@ -335,36 +336,29 @@ _TRANSACTIONSTATUSERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=781,
-  serialized_end=861,
+  serialized_start=772,
+  serialized_end=852,
 )
 
 
-_WRITEINTENTERROR = _descriptor.Descriptor(
-  name='WriteIntentError',
-  full_name='cockroach.proto.WriteIntentError',
+_WRITEINTENTERROR_INTENT = _descriptor.Descriptor(
+  name='Intent',
+  full_name='cockroach.proto.WriteIntentError.Intent',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='cockroach.proto.WriteIntentError.key', index=0,
+      name='key', full_name='cockroach.proto.WriteIntentError.Intent.key', index=0,
       number=1, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='txn', full_name='cockroach.proto.WriteIntentError.txn', index=1,
+      name='txn', full_name='cockroach.proto.WriteIntentError.Intent.txn', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='resolved', full_name='cockroach.proto.WriteIntentError.resolved', index=2,
-      number=3, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -379,8 +373,44 @@ _WRITEINTENTERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=863,
-  serialized_end=955,
+  serialized_start=952,
+  serialized_end=1016,
+)
+
+_WRITEINTENTERROR = _descriptor.Descriptor(
+  name='WriteIntentError',
+  full_name='cockroach.proto.WriteIntentError',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='intents', full_name='cockroach.proto.WriteIntentError.intents', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='resolved', full_name='cockroach.proto.WriteIntentError.resolved', index=1,
+      number=2, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[_WRITEINTENTERROR_INTENT, ],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=855,
+  serialized_end=1016,
 )
 
 
@@ -416,8 +446,8 @@ _WRITETOOOLDERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=957,
-  serialized_end=1078,
+  serialized_start=1018,
+  serialized_end=1139,
 )
 
 
@@ -439,8 +469,8 @@ _OPREQUIRESTXNERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1080,
-  serialized_end=1100,
+  serialized_start=1141,
+  serialized_end=1161,
 )
 
 
@@ -469,8 +499,118 @@ _CONDITIONFAILEDERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1102,
-  serialized_end=1170,
+  serialized_start=1163,
+  serialized_end=1231,
+)
+
+
+_ERRORDETAIL = _descriptor.Descriptor(
+  name='ErrorDetail',
+  full_name='cockroach.proto.ErrorDetail',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='not_leader', full_name='cockroach.proto.ErrorDetail.not_leader', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='range_not_found', full_name='cockroach.proto.ErrorDetail.range_not_found', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='range_key_mismatch', full_name='cockroach.proto.ErrorDetail.range_key_mismatch', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='read_within_uncertainty_interval', full_name='cockroach.proto.ErrorDetail.read_within_uncertainty_interval', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='transaction_aborted', full_name='cockroach.proto.ErrorDetail.transaction_aborted', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='transaction_push', full_name='cockroach.proto.ErrorDetail.transaction_push', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='transaction_retry', full_name='cockroach.proto.ErrorDetail.transaction_retry', index=6,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='transaction_status', full_name='cockroach.proto.ErrorDetail.transaction_status', index=7,
+      number=8, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='write_intent', full_name='cockroach.proto.ErrorDetail.write_intent', index=8,
+      number=9, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='write_too_old', full_name='cockroach.proto.ErrorDetail.write_too_old', index=9,
+      number=10, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='op_requires_txn', full_name='cockroach.proto.ErrorDetail.op_requires_txn', index=10,
+      number=11, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='condition_failed', full_name='cockroach.proto.ErrorDetail.condition_failed', index=11,
+      number=12, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name='value', full_name='cockroach.proto.ErrorDetail.value',
+      index=0, containing_type=None, fields=[]),
+  ],
+  serialized_start=1234,
+  serialized_end=2072,
 )
 
 
@@ -482,92 +622,29 @@ _ERROR = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='generic', full_name='cockroach.proto.Error.generic', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='message', full_name='cockroach.proto.Error.message', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='not_leader', full_name='cockroach.proto.Error.not_leader', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='retryable', full_name='cockroach.proto.Error.retryable', index=1,
+      number=2, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='range_not_found', full_name='cockroach.proto.Error.range_not_found', index=2,
+      name='transaction_restart', full_name='cockroach.proto.Error.transaction_restart', index=2,
+      number=4, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='detail', full_name='cockroach.proto.Error.detail', index=3,
       number=3, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='range_key_mismatch', full_name='cockroach.proto.Error.range_key_mismatch', index=3,
-      number=4, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='read_within_uncertainty_interval', full_name='cockroach.proto.Error.read_within_uncertainty_interval', index=4,
-      number=5, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='transaction_aborted', full_name='cockroach.proto.Error.transaction_aborted', index=5,
-      number=6, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='transaction_push', full_name='cockroach.proto.Error.transaction_push', index=6,
-      number=7, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='transaction_retry', full_name='cockroach.proto.Error.transaction_retry', index=7,
-      number=8, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='transaction_status', full_name='cockroach.proto.Error.transaction_status', index=8,
-      number=9, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='write_intent', full_name='cockroach.proto.Error.write_intent', index=9,
-      number=10, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='write_too_old', full_name='cockroach.proto.Error.write_too_old', index=10,
-      number=11, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='op_requires_txn', full_name='cockroach.proto.Error.op_requires_txn', index=11,
-      number=12, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='condition_failed', full_name='cockroach.proto.Error.condition_failed', index=12,
-      number=13, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -583,10 +660,11 @@ _ERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1173,
-  serialized_end=2020,
+  serialized_start=2075,
+  serialized_end=2230,
 )
 
+_NOTLEADERERROR.fields_by_name['replica'].message_type = cockroach.proto.config_pb2._REPLICA
 _NOTLEADERERROR.fields_by_name['leader'].message_type = cockroach.proto.config_pb2._REPLICA
 _RANGEKEYMISMATCHERROR.fields_by_name['range'].message_type = cockroach.proto.config_pb2._RANGEDESCRIPTOR
 _READWITHINUNCERTAINTYINTERVALERROR.fields_by_name['timestamp'].message_type = cockroach.proto.data_pb2._TIMESTAMP
@@ -596,24 +674,62 @@ _TRANSACTIONPUSHERROR.fields_by_name['txn'].message_type = cockroach.proto.data_
 _TRANSACTIONPUSHERROR.fields_by_name['pushee_txn'].message_type = cockroach.proto.data_pb2._TRANSACTION
 _TRANSACTIONRETRYERROR.fields_by_name['txn'].message_type = cockroach.proto.data_pb2._TRANSACTION
 _TRANSACTIONSTATUSERROR.fields_by_name['txn'].message_type = cockroach.proto.data_pb2._TRANSACTION
-_WRITEINTENTERROR.fields_by_name['txn'].message_type = cockroach.proto.data_pb2._TRANSACTION
+_WRITEINTENTERROR_INTENT.fields_by_name['txn'].message_type = cockroach.proto.data_pb2._TRANSACTION
+_WRITEINTENTERROR_INTENT.containing_type = _WRITEINTENTERROR
+_WRITEINTENTERROR.fields_by_name['intents'].message_type = _WRITEINTENTERROR_INTENT
 _WRITETOOOLDERROR.fields_by_name['timestamp'].message_type = cockroach.proto.data_pb2._TIMESTAMP
 _WRITETOOOLDERROR.fields_by_name['existing_timestamp'].message_type = cockroach.proto.data_pb2._TIMESTAMP
 _CONDITIONFAILEDERROR.fields_by_name['actual_value'].message_type = cockroach.proto.data_pb2._VALUE
-_ERROR.fields_by_name['generic'].message_type = _GENERICERROR
-_ERROR.fields_by_name['not_leader'].message_type = _NOTLEADERERROR
-_ERROR.fields_by_name['range_not_found'].message_type = _RANGENOTFOUNDERROR
-_ERROR.fields_by_name['range_key_mismatch'].message_type = _RANGEKEYMISMATCHERROR
-_ERROR.fields_by_name['read_within_uncertainty_interval'].message_type = _READWITHINUNCERTAINTYINTERVALERROR
-_ERROR.fields_by_name['transaction_aborted'].message_type = _TRANSACTIONABORTEDERROR
-_ERROR.fields_by_name['transaction_push'].message_type = _TRANSACTIONPUSHERROR
-_ERROR.fields_by_name['transaction_retry'].message_type = _TRANSACTIONRETRYERROR
-_ERROR.fields_by_name['transaction_status'].message_type = _TRANSACTIONSTATUSERROR
-_ERROR.fields_by_name['write_intent'].message_type = _WRITEINTENTERROR
-_ERROR.fields_by_name['write_too_old'].message_type = _WRITETOOOLDERROR
-_ERROR.fields_by_name['op_requires_txn'].message_type = _OPREQUIRESTXNERROR
-_ERROR.fields_by_name['condition_failed'].message_type = _CONDITIONFAILEDERROR
-DESCRIPTOR.message_types_by_name['GenericError'] = _GENERICERROR
+_ERRORDETAIL.fields_by_name['not_leader'].message_type = _NOTLEADERERROR
+_ERRORDETAIL.fields_by_name['range_not_found'].message_type = _RANGENOTFOUNDERROR
+_ERRORDETAIL.fields_by_name['range_key_mismatch'].message_type = _RANGEKEYMISMATCHERROR
+_ERRORDETAIL.fields_by_name['read_within_uncertainty_interval'].message_type = _READWITHINUNCERTAINTYINTERVALERROR
+_ERRORDETAIL.fields_by_name['transaction_aborted'].message_type = _TRANSACTIONABORTEDERROR
+_ERRORDETAIL.fields_by_name['transaction_push'].message_type = _TRANSACTIONPUSHERROR
+_ERRORDETAIL.fields_by_name['transaction_retry'].message_type = _TRANSACTIONRETRYERROR
+_ERRORDETAIL.fields_by_name['transaction_status'].message_type = _TRANSACTIONSTATUSERROR
+_ERRORDETAIL.fields_by_name['write_intent'].message_type = _WRITEINTENTERROR
+_ERRORDETAIL.fields_by_name['write_too_old'].message_type = _WRITETOOOLDERROR
+_ERRORDETAIL.fields_by_name['op_requires_txn'].message_type = _OPREQUIRESTXNERROR
+_ERRORDETAIL.fields_by_name['condition_failed'].message_type = _CONDITIONFAILEDERROR
+_ERRORDETAIL.oneofs_by_name['value'].fields.append(
+  _ERRORDETAIL.fields_by_name['not_leader'])
+_ERRORDETAIL.fields_by_name['not_leader'].containing_oneof = _ERRORDETAIL.oneofs_by_name['value']
+_ERRORDETAIL.oneofs_by_name['value'].fields.append(
+  _ERRORDETAIL.fields_by_name['range_not_found'])
+_ERRORDETAIL.fields_by_name['range_not_found'].containing_oneof = _ERRORDETAIL.oneofs_by_name['value']
+_ERRORDETAIL.oneofs_by_name['value'].fields.append(
+  _ERRORDETAIL.fields_by_name['range_key_mismatch'])
+_ERRORDETAIL.fields_by_name['range_key_mismatch'].containing_oneof = _ERRORDETAIL.oneofs_by_name['value']
+_ERRORDETAIL.oneofs_by_name['value'].fields.append(
+  _ERRORDETAIL.fields_by_name['read_within_uncertainty_interval'])
+_ERRORDETAIL.fields_by_name['read_within_uncertainty_interval'].containing_oneof = _ERRORDETAIL.oneofs_by_name['value']
+_ERRORDETAIL.oneofs_by_name['value'].fields.append(
+  _ERRORDETAIL.fields_by_name['transaction_aborted'])
+_ERRORDETAIL.fields_by_name['transaction_aborted'].containing_oneof = _ERRORDETAIL.oneofs_by_name['value']
+_ERRORDETAIL.oneofs_by_name['value'].fields.append(
+  _ERRORDETAIL.fields_by_name['transaction_push'])
+_ERRORDETAIL.fields_by_name['transaction_push'].containing_oneof = _ERRORDETAIL.oneofs_by_name['value']
+_ERRORDETAIL.oneofs_by_name['value'].fields.append(
+  _ERRORDETAIL.fields_by_name['transaction_retry'])
+_ERRORDETAIL.fields_by_name['transaction_retry'].containing_oneof = _ERRORDETAIL.oneofs_by_name['value']
+_ERRORDETAIL.oneofs_by_name['value'].fields.append(
+  _ERRORDETAIL.fields_by_name['transaction_status'])
+_ERRORDETAIL.fields_by_name['transaction_status'].containing_oneof = _ERRORDETAIL.oneofs_by_name['value']
+_ERRORDETAIL.oneofs_by_name['value'].fields.append(
+  _ERRORDETAIL.fields_by_name['write_intent'])
+_ERRORDETAIL.fields_by_name['write_intent'].containing_oneof = _ERRORDETAIL.oneofs_by_name['value']
+_ERRORDETAIL.oneofs_by_name['value'].fields.append(
+  _ERRORDETAIL.fields_by_name['write_too_old'])
+_ERRORDETAIL.fields_by_name['write_too_old'].containing_oneof = _ERRORDETAIL.oneofs_by_name['value']
+_ERRORDETAIL.oneofs_by_name['value'].fields.append(
+  _ERRORDETAIL.fields_by_name['op_requires_txn'])
+_ERRORDETAIL.fields_by_name['op_requires_txn'].containing_oneof = _ERRORDETAIL.oneofs_by_name['value']
+_ERRORDETAIL.oneofs_by_name['value'].fields.append(
+  _ERRORDETAIL.fields_by_name['condition_failed'])
+_ERRORDETAIL.fields_by_name['condition_failed'].containing_oneof = _ERRORDETAIL.oneofs_by_name['value']
+_ERROR.fields_by_name['transaction_restart'].enum_type = _TRANSACTIONRESTART
+_ERROR.fields_by_name['detail'].message_type = _ERRORDETAIL
 DESCRIPTOR.message_types_by_name['NotLeaderError'] = _NOTLEADERERROR
 DESCRIPTOR.message_types_by_name['RangeNotFoundError'] = _RANGENOTFOUNDERROR
 DESCRIPTOR.message_types_by_name['RangeKeyMismatchError'] = _RANGEKEYMISMATCHERROR
@@ -626,14 +742,9 @@ DESCRIPTOR.message_types_by_name['WriteIntentError'] = _WRITEINTENTERROR
 DESCRIPTOR.message_types_by_name['WriteTooOldError'] = _WRITETOOOLDERROR
 DESCRIPTOR.message_types_by_name['OpRequiresTxnError'] = _OPREQUIRESTXNERROR
 DESCRIPTOR.message_types_by_name['ConditionFailedError'] = _CONDITIONFAILEDERROR
+DESCRIPTOR.message_types_by_name['ErrorDetail'] = _ERRORDETAIL
 DESCRIPTOR.message_types_by_name['Error'] = _ERROR
-
-GenericError = _reflection.GeneratedProtocolMessageType('GenericError', (_message.Message,), dict(
-  DESCRIPTOR = _GENERICERROR,
-  __module__ = 'cockroach.proto.errors_pb2'
-  # @@protoc_insertion_point(class_scope:cockroach.proto.GenericError)
-  ))
-_sym_db.RegisterMessage(GenericError)
+DESCRIPTOR.enum_types_by_name['TransactionRestart'] = _TRANSACTIONRESTART
 
 NotLeaderError = _reflection.GeneratedProtocolMessageType('NotLeaderError', (_message.Message,), dict(
   DESCRIPTOR = _NOTLEADERERROR,
@@ -692,11 +803,19 @@ TransactionStatusError = _reflection.GeneratedProtocolMessageType('TransactionSt
 _sym_db.RegisterMessage(TransactionStatusError)
 
 WriteIntentError = _reflection.GeneratedProtocolMessageType('WriteIntentError', (_message.Message,), dict(
+
+  Intent = _reflection.GeneratedProtocolMessageType('Intent', (_message.Message,), dict(
+    DESCRIPTOR = _WRITEINTENTERROR_INTENT,
+    __module__ = 'cockroach.proto.errors_pb2'
+    # @@protoc_insertion_point(class_scope:cockroach.proto.WriteIntentError.Intent)
+    ))
+  ,
   DESCRIPTOR = _WRITEINTENTERROR,
   __module__ = 'cockroach.proto.errors_pb2'
   # @@protoc_insertion_point(class_scope:cockroach.proto.WriteIntentError)
   ))
 _sym_db.RegisterMessage(WriteIntentError)
+_sym_db.RegisterMessage(WriteIntentError.Intent)
 
 WriteTooOldError = _reflection.GeneratedProtocolMessageType('WriteTooOldError', (_message.Message,), dict(
   DESCRIPTOR = _WRITETOOOLDERROR,
@@ -718,6 +837,13 @@ ConditionFailedError = _reflection.GeneratedProtocolMessageType('ConditionFailed
   # @@protoc_insertion_point(class_scope:cockroach.proto.ConditionFailedError)
   ))
 _sym_db.RegisterMessage(ConditionFailedError)
+
+ErrorDetail = _reflection.GeneratedProtocolMessageType('ErrorDetail', (_message.Message,), dict(
+  DESCRIPTOR = _ERRORDETAIL,
+  __module__ = 'cockroach.proto.errors_pb2'
+  # @@protoc_insertion_point(class_scope:cockroach.proto.ErrorDetail)
+  ))
+_sym_db.RegisterMessage(ErrorDetail)
 
 Error = _reflection.GeneratedProtocolMessageType('Error', (_message.Message,), dict(
   DESCRIPTOR = _ERROR,

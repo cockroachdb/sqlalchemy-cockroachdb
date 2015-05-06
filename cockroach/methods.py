@@ -33,8 +33,5 @@ class Methods(enum.Enum):
     DeleteRange = (True, api_pb2.DeleteRangeRequest, api_pb2.DeleteRangeResponse)
     Scan = (False, api_pb2.ScanRequest, api_pb2.ScanResponse)
     EndTransaction = (True, api_pb2.EndTransactionRequest, api_pb2.EndTransactionResponse)
-    ReapQueue = (True, api_pb2.ReapQueueRequest, api_pb2.ReapQueueResponse)
-    EnqueueUpdate = (True, api_pb2.EnqueueUpdateRequest, api_pb2.EnqueueUpdateResponse)
-    EnqueueMessage = (True, api_pb2.EnqueueMessageRequest, api_pb2.EnqueueMessageResponse)
     Batch = (True, api_pb2.BatchRequest, api_pb2.BatchResponse)
     AdminSplit = (False, api_pb2.AdminSplitRequest, api_pb2.AdminSplitResponse)

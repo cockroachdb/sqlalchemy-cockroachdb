@@ -145,15 +145,15 @@ class KVTest(unittest.TestCase):
     def test_retry_on_errors(self):
         # error proto, error class
         test_cases = [
-            (errors_pb2.Error(read_within_uncertainty_interval=errors_pb2.ReadWithinUncertaintyIntervalError()), None),
-            (errors_pb2.Error(transaction_aborted=errors_pb2.TransactionAbortedError()), None),
-            (errors_pb2.Error(transaction_push=errors_pb2.TransactionPushError()), None),
-            (errors_pb2.Error(generic=errors_pb2.GenericError()), errors.GenericError),
-            (errors_pb2.Error(range_not_found=errors_pb2.RangeNotFoundError()),
+            (errors_pb2.Error(detail=errors_pb2.ErrorDetail(read_within_uncertainty_interval=errors_pb2.ReadWithinUncertaintyIntervalError())), None),
+            (errors_pb2.Error(detail=errors_pb2.ErrorDetail(transaction_aborted=errors_pb2.TransactionAbortedError())), None),
+            (errors_pb2.Error(detail=errors_pb2.ErrorDetail(transaction_push=errors_pb2.TransactionPushError())), None),
+            (errors_pb2.Error(), errors.GenericError),
+            (errors_pb2.Error(detail=errors_pb2.ErrorDetail(range_not_found=errors_pb2.RangeNotFoundError())),
              errors.RangeNotFoundError),
-            (errors_pb2.Error(range_key_mismatch=errors_pb2.RangeKeyMismatchError()),
+            (errors_pb2.Error(detail=errors_pb2.ErrorDetail(range_key_mismatch=errors_pb2.RangeKeyMismatchError())),
              errors.RangeKeyMismatchError),
-            (errors_pb2.Error(transaction_status=errors_pb2.TransactionStatusError()),
+            (errors_pb2.Error(detail=errors_pb2.ErrorDetail(transaction_status=errors_pb2.TransactionStatusError())),
              errors.TransactionStatusError),
         ]
         for error_proto, error_class in test_cases:

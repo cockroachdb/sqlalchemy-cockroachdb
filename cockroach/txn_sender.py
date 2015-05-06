@@ -24,8 +24,8 @@ class TxnSender(KVSender):
         ret = self.wrapped.send(call)
         if call.reply.header.HasField('txn'):
             self._update_txn(call.reply.header.txn)
-        if call.reply.header.error.HasField('transaction_aborted'):
-            abort_err = call.reply.header.error.transaction_aborted
+        if call.reply.header.error.detail.HasField('transaction_aborted'):
+            abort_err = call.reply.header.error.detail.transaction_aborted
             # On Abort, reset the transaction so we start anew on restart.
             self.txn = data_pb2.Transaction(
                 name=self.txn.name, isolation=self.txn.isolation,

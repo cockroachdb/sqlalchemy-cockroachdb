@@ -66,7 +66,7 @@ class HTTPSender(KVSender):
             # TODO: Are there any non-generic errors we need to handle here?
             # Is it better to let exceptions escape instead of stuffing them into
             # the reply?
-            call.reply.header.error.generic.message = str(e)
+            call.reply.header.error.message = str(e)
         return call.reply
 
     def close(self):
