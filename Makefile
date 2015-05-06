@@ -19,7 +19,10 @@ test:
 dockertest:
 	-docker-compose stop
 	-docker-compose rm --force cockroach
+	-rm -rf /tmp/test-disk1
+	mkdir /tmp/test-disk1
 	docker-compose build
+	docker-compose run cockroach init /data
 	docker-compose start cockroach
 	docker-compose run cockroachpython
 	docker-compose stop

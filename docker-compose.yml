@@ -1,8 +1,10 @@
 cockroach:
   image: cockroachdb/cockroach-dev
-  command: init -stores=hdd=/tmp/disk1
+  command: start --stores=hdd=/data --gossip=self://
   expose:
     - "8080"
+  volumes:
+    - /tmp/test-disk1:/data
 cockroachpython:
   build: .
   links:

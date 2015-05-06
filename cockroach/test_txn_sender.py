@@ -71,7 +71,7 @@ class TxnSenderTest(unittest.TestCase):
             call.reply.header.txn.CopyFrom(call.args.header.txn)
             # This appears to be the least-clumsy way of setting the 'has'
             # bit without setting any field.
-            call.reply.header.error.transaction_aborted.CopyFrom(
+            call.reply.header.error.detail.transaction_aborted.CopyFrom(
                 errors_pb2.TransactionAbortedError())
         ts = TxnSender(TestSender(handler), TransactionOptions())
 

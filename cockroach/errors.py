@@ -89,32 +89,30 @@ def raise_from_header(header):
     """If the given ResponseHeader proto has an error, raise it."""
     if not header.HasField('error'):
         return
-    error = header.error
-    if error.HasField('generic'):
-        raise GenericError(error.generic)
-    elif error.HasField('not_leader'):
-        raise NotLeaderError(error.not_leader)
-    elif error.HasField('range_not_found'):
-        raise RangeNotFoundError(error.range_not_found)
-    elif error.HasField('range_key_mismatch'):
-        raise RangeKeyMismatchError(error.range_key_mismatch)
-    elif error.HasField('read_within_uncertainty_interval'):
-        raise ReadWithinUncertaintyIntervalError(error.read_within_uncertainty_interval)
-    elif error.HasField('transaction_aborted'):
-        raise TransactionAbortedError(error.transaction_aborted)
-    elif error.HasField('transaction_push'):
-        raise TransactionPushError(error.transaction_push)
-    elif error.HasField('transaction_retry'):
-        raise TransactionRetryError(error.transaction_retry)
-    elif error.HasField('transaction_status'):
-        raise TransactionStatusError(error.transaction_status)
-    elif error.HasField('write_intent'):
-        raise WriteIntentError(error.write_intent)
-    elif error.HasField('write_too_old'):
-        raise WriteTooOldError(error.write_too_old)
-    elif error.HasField('op_requires_txn'):
-        raise OpRequiresTxnError(error.op_requires_txn)
-    elif error.HasField('condition_failed'):
-        raise ConditionFailedError(error.condition_failed)
+    detail = header.error.detail
+    if detail.HasField('not_leader'):
+        raise NotLeaderError(detail.not_leader)
+    elif detail.HasField('range_not_found'):
+        raise RangeNotFoundError(detail.range_not_found)
+    elif detail.HasField('range_key_mismatch'):
+        raise RangeKeyMismatchError(detail.range_key_mismatch)
+    elif detail.HasField('read_within_uncertainty_interval'):
+        raise ReadWithinUncertaintyIntervalError(detail.read_within_uncertainty_interval)
+    elif detail.HasField('transaction_aborted'):
+        raise TransactionAbortedError(detail.transaction_aborted)
+    elif detail.HasField('transaction_push'):
+        raise TransactionPushError(detail.transaction_push)
+    elif detail.HasField('transaction_retry'):
+        raise TransactionRetryError(detail.transaction_retry)
+    elif detail.HasField('transaction_status'):
+        raise TransactionStatusError(detail.transaction_status)
+    elif detail.HasField('write_intent'):
+        raise WriteIntentError(detail.write_intent)
+    elif detail.HasField('write_too_old'):
+        raise WriteTooOldError(detail.write_too_old)
+    elif detail.HasField('op_requires_txn'):
+        raise OpRequiresTxnError(detail.op_requires_txn)
+    elif detail.HasField('condition_failed'):
+        raise ConditionFailedError(detail.condition_failed)
     else:
-        raise UnknownProtoError(error)
+        raise GenericError(header.error)
