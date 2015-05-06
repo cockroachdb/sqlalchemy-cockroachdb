@@ -18,7 +18,7 @@ _sym_db = _symbol_database.Default()
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='cockroach/proto/config.proto',
   package='cockroach.proto',
-  serialized_pb=_b('\n\x1c\x63ockroach/proto/config.proto\x12\x0f\x63ockroach.proto\"\x1b\n\nAttributes\x12\r\n\x05\x61ttrs\x18\x01 \x03(\t\"X\n\x07Replica\x12\x0f\n\x07node_id\x18\x01 \x01(\x05\x12\x10\n\x08store_id\x18\x02 \x01(\x05\x12*\n\x05\x61ttrs\x18\x03 \x01(\x0b\x32\x1b.cockroach.proto.Attributes\"r\n\x0fRangeDescriptor\x12\x0f\n\x07raft_id\x18\x01 \x01(\x03\x12\x11\n\tstart_key\x18\x02 \x01(\x0c\x12\x0f\n\x07\x65nd_key\x18\x03 \x01(\x0c\x12*\n\x08replicas\x18\x04 \x03(\x0b\x32\x18.cockroach.proto.Replica\"\x1f\n\x08GCPolicy\x12\x13\n\x0bttl_seconds\x18\x01 \x01(\x05\" \n\nAcctConfig\x12\x12\n\ncluster_id\x18\x01 \x01(\t\")\n\nPermConfig\x12\x0c\n\x04read\x18\x01 \x03(\t\x12\r\n\x05write\x18\x02 \x03(\t\"\x99\x01\n\nZoneConfig\x12\x32\n\rreplica_attrs\x18\x01 \x03(\x0b\x32\x1b.cockroach.proto.Attributes\x12\x17\n\x0frange_min_bytes\x18\x02 \x01(\x03\x12\x17\n\x0frange_max_bytes\x18\x03 \x01(\x03\x12%\n\x02gc\x18\x04 \x01(\x0b\x32\x19.cockroach.proto.GCPolicyB\x07Z\x05proto')
+  serialized_pb=_b('\n\x1c\x63ockroach/proto/config.proto\x12\x0f\x63ockroach.proto\"\x1b\n\nAttributes\x12\r\n\x05\x61ttrs\x18\x01 \x03(\t\"X\n\x07Replica\x12\x0f\n\x07node_id\x18\x01 \x01(\x05\x12\x10\n\x08store_id\x18\x02 \x01(\x05\x12*\n\x05\x61ttrs\x18\x03 \x01(\x0b\x32\x1b.cockroach.proto.Attributes\"r\n\x0fRangeDescriptor\x12\x0f\n\x07raft_id\x18\x01 \x01(\x03\x12\x11\n\tstart_key\x18\x02 \x01(\x0c\x12\x0f\n\x07\x65nd_key\x18\x03 \x01(\x0c\x12*\n\x08replicas\x18\x04 \x03(\x0b\x32\x18.cockroach.proto.Replica\"\x1f\n\x08GCPolicy\x12\x13\n\x0bttl_seconds\x18\x01 \x01(\x05\" \n\nAcctConfig\x12\x12\n\ncluster_id\x18\x01 \x01(\t\")\n\nPermConfig\x12\x0c\n\x04read\x18\x01 \x03(\t\x12\r\n\x05write\x18\x02 \x03(\t\"\x99\x01\n\nZoneConfig\x12\x32\n\rreplica_attrs\x18\x01 \x03(\x0b\x32\x1b.cockroach.proto.Attributes\x12\x17\n\x0frange_min_bytes\x18\x02 \x01(\x03\x12\x17\n\x0frange_max_bytes\x18\x03 \x01(\x03\x12%\n\x02gc\x18\x04 \x01(\x0b\x32\x19.cockroach.proto.GCPolicy\"\x1d\n\tRangeTree\x12\x10\n\x08root_key\x18\x01 \x01(\x0c\"d\n\rRangeTreeNode\x12\x0b\n\x03key\x18\x01 \x01(\x0c\x12\r\n\x05\x62lack\x18\x02 \x01(\x08\x12\x12\n\nparent_key\x18\x03 \x01(\x0c\x12\x10\n\x08left_key\x18\x04 \x01(\x0c\x12\x11\n\tright_key\x18\x05 \x01(\x0c\"(\n\x04\x41\x64\x64r\x12\x0f\n\x07network\x18\x01 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\"4\n\rStoreCapacity\x12\x10\n\x08\x43\x61pacity\x18\x01 \x01(\x03\x12\x11\n\tAvailable\x18\x02 \x01(\x03\"u\n\x0eNodeDescriptor\x12\x0f\n\x07node_id\x18\x01 \x01(\x05\x12&\n\x07\x61\x64\x64ress\x18\x02 \x01(\x0b\x32\x15.cockroach.proto.Addr\x12*\n\x05\x61ttrs\x18\x03 \x01(\x0b\x32\x1b.cockroach.proto.Attributes\"\xb0\x01\n\x0fStoreDescriptor\x12\x10\n\x08store_id\x18\x01 \x01(\x05\x12*\n\x05\x61ttrs\x18\x02 \x01(\x0b\x32\x1b.cockroach.proto.Attributes\x12-\n\x04node\x18\x03 \x01(\x0b\x32\x1f.cockroach.proto.NodeDescriptor\x12\x30\n\x08\x63\x61pacity\x18\x04 \x01(\x0b\x32\x1e.cockroach.proto.StoreCapacityB\x07Z\x05proto')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -297,10 +297,272 @@ _ZONECONFIG = _descriptor.Descriptor(
   serialized_end=548,
 )
 
+
+_RANGETREE = _descriptor.Descriptor(
+  name='RangeTree',
+  full_name='cockroach.proto.RangeTree',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='root_key', full_name='cockroach.proto.RangeTree.root_key', index=0,
+      number=1, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b(""),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=550,
+  serialized_end=579,
+)
+
+
+_RANGETREENODE = _descriptor.Descriptor(
+  name='RangeTreeNode',
+  full_name='cockroach.proto.RangeTreeNode',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='cockroach.proto.RangeTreeNode.key', index=0,
+      number=1, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b(""),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='black', full_name='cockroach.proto.RangeTreeNode.black', index=1,
+      number=2, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='parent_key', full_name='cockroach.proto.RangeTreeNode.parent_key', index=2,
+      number=3, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b(""),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='left_key', full_name='cockroach.proto.RangeTreeNode.left_key', index=3,
+      number=4, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b(""),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='right_key', full_name='cockroach.proto.RangeTreeNode.right_key', index=4,
+      number=5, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b(""),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=581,
+  serialized_end=681,
+)
+
+
+_ADDR = _descriptor.Descriptor(
+  name='Addr',
+  full_name='cockroach.proto.Addr',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='network', full_name='cockroach.proto.Addr.network', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='address', full_name='cockroach.proto.Addr.address', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=683,
+  serialized_end=723,
+)
+
+
+_STORECAPACITY = _descriptor.Descriptor(
+  name='StoreCapacity',
+  full_name='cockroach.proto.StoreCapacity',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='Capacity', full_name='cockroach.proto.StoreCapacity.Capacity', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Available', full_name='cockroach.proto.StoreCapacity.Available', index=1,
+      number=2, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=725,
+  serialized_end=777,
+)
+
+
+_NODEDESCRIPTOR = _descriptor.Descriptor(
+  name='NodeDescriptor',
+  full_name='cockroach.proto.NodeDescriptor',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='node_id', full_name='cockroach.proto.NodeDescriptor.node_id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='address', full_name='cockroach.proto.NodeDescriptor.address', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='attrs', full_name='cockroach.proto.NodeDescriptor.attrs', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=779,
+  serialized_end=896,
+)
+
+
+_STOREDESCRIPTOR = _descriptor.Descriptor(
+  name='StoreDescriptor',
+  full_name='cockroach.proto.StoreDescriptor',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='store_id', full_name='cockroach.proto.StoreDescriptor.store_id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='attrs', full_name='cockroach.proto.StoreDescriptor.attrs', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='node', full_name='cockroach.proto.StoreDescriptor.node', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='capacity', full_name='cockroach.proto.StoreDescriptor.capacity', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=899,
+  serialized_end=1075,
+)
+
 _REPLICA.fields_by_name['attrs'].message_type = _ATTRIBUTES
 _RANGEDESCRIPTOR.fields_by_name['replicas'].message_type = _REPLICA
 _ZONECONFIG.fields_by_name['replica_attrs'].message_type = _ATTRIBUTES
 _ZONECONFIG.fields_by_name['gc'].message_type = _GCPOLICY
+_NODEDESCRIPTOR.fields_by_name['address'].message_type = _ADDR
+_NODEDESCRIPTOR.fields_by_name['attrs'].message_type = _ATTRIBUTES
+_STOREDESCRIPTOR.fields_by_name['attrs'].message_type = _ATTRIBUTES
+_STOREDESCRIPTOR.fields_by_name['node'].message_type = _NODEDESCRIPTOR
+_STOREDESCRIPTOR.fields_by_name['capacity'].message_type = _STORECAPACITY
 DESCRIPTOR.message_types_by_name['Attributes'] = _ATTRIBUTES
 DESCRIPTOR.message_types_by_name['Replica'] = _REPLICA
 DESCRIPTOR.message_types_by_name['RangeDescriptor'] = _RANGEDESCRIPTOR
@@ -308,6 +570,12 @@ DESCRIPTOR.message_types_by_name['GCPolicy'] = _GCPOLICY
 DESCRIPTOR.message_types_by_name['AcctConfig'] = _ACCTCONFIG
 DESCRIPTOR.message_types_by_name['PermConfig'] = _PERMCONFIG
 DESCRIPTOR.message_types_by_name['ZoneConfig'] = _ZONECONFIG
+DESCRIPTOR.message_types_by_name['RangeTree'] = _RANGETREE
+DESCRIPTOR.message_types_by_name['RangeTreeNode'] = _RANGETREENODE
+DESCRIPTOR.message_types_by_name['Addr'] = _ADDR
+DESCRIPTOR.message_types_by_name['StoreCapacity'] = _STORECAPACITY
+DESCRIPTOR.message_types_by_name['NodeDescriptor'] = _NODEDESCRIPTOR
+DESCRIPTOR.message_types_by_name['StoreDescriptor'] = _STOREDESCRIPTOR
 
 Attributes = _reflection.GeneratedProtocolMessageType('Attributes', (_message.Message,), dict(
   DESCRIPTOR = _ATTRIBUTES,
@@ -357,6 +625,48 @@ ZoneConfig = _reflection.GeneratedProtocolMessageType('ZoneConfig', (_message.Me
   # @@protoc_insertion_point(class_scope:cockroach.proto.ZoneConfig)
   ))
 _sym_db.RegisterMessage(ZoneConfig)
+
+RangeTree = _reflection.GeneratedProtocolMessageType('RangeTree', (_message.Message,), dict(
+  DESCRIPTOR = _RANGETREE,
+  __module__ = 'cockroach.proto.config_pb2'
+  # @@protoc_insertion_point(class_scope:cockroach.proto.RangeTree)
+  ))
+_sym_db.RegisterMessage(RangeTree)
+
+RangeTreeNode = _reflection.GeneratedProtocolMessageType('RangeTreeNode', (_message.Message,), dict(
+  DESCRIPTOR = _RANGETREENODE,
+  __module__ = 'cockroach.proto.config_pb2'
+  # @@protoc_insertion_point(class_scope:cockroach.proto.RangeTreeNode)
+  ))
+_sym_db.RegisterMessage(RangeTreeNode)
+
+Addr = _reflection.GeneratedProtocolMessageType('Addr', (_message.Message,), dict(
+  DESCRIPTOR = _ADDR,
+  __module__ = 'cockroach.proto.config_pb2'
+  # @@protoc_insertion_point(class_scope:cockroach.proto.Addr)
+  ))
+_sym_db.RegisterMessage(Addr)
+
+StoreCapacity = _reflection.GeneratedProtocolMessageType('StoreCapacity', (_message.Message,), dict(
+  DESCRIPTOR = _STORECAPACITY,
+  __module__ = 'cockroach.proto.config_pb2'
+  # @@protoc_insertion_point(class_scope:cockroach.proto.StoreCapacity)
+  ))
+_sym_db.RegisterMessage(StoreCapacity)
+
+NodeDescriptor = _reflection.GeneratedProtocolMessageType('NodeDescriptor', (_message.Message,), dict(
+  DESCRIPTOR = _NODEDESCRIPTOR,
+  __module__ = 'cockroach.proto.config_pb2'
+  # @@protoc_insertion_point(class_scope:cockroach.proto.NodeDescriptor)
+  ))
+_sym_db.RegisterMessage(NodeDescriptor)
+
+StoreDescriptor = _reflection.GeneratedProtocolMessageType('StoreDescriptor', (_message.Message,), dict(
+  DESCRIPTOR = _STOREDESCRIPTOR,
+  __module__ = 'cockroach.proto.config_pb2'
+  # @@protoc_insertion_point(class_scope:cockroach.proto.StoreDescriptor)
+  ))
+_sym_db.RegisterMessage(StoreDescriptor)
 
 
 DESCRIPTOR.has_options = True

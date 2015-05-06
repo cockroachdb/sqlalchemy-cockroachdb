@@ -22,11 +22,38 @@ import cockroach.proto.data_pb2
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='cockroach/proto/internal.proto',
   package='cockroach.proto',
-  serialized_pb=_b('\n\x1e\x63ockroach/proto/internal.proto\x12\x0f\x63ockroach.proto\x1a\x19\x63ockroach/proto/api.proto\x1a\x1c\x63ockroach/proto/config.proto\x1a\x1a\x63ockroach/proto/data.proto\"`\n\x1aInternalRangeLookupRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12\x12\n\nmax_ranges\x18\x02 \x01(\x05\"\x80\x01\n\x1bInternalRangeLookupResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\x12\x30\n\x06ranges\x18\x02 \x03(\x0b\x32 .cockroach.proto.RangeDescriptor\"M\n\x1bInternalHeartbeatTxnRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\"O\n\x1cInternalHeartbeatTxnResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"\xee\x01\n\x11InternalGCRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12,\n\x07gc_meta\x18\x02 \x01(\x0b\x32\x1b.cockroach.proto.GCMetadata\x12\x36\n\x04keys\x18\x03 \x03(\x0b\x32(.cockroach.proto.InternalGCRequest.GCKey\x1a\x43\n\x05GCKey\x12\x0b\n\x03key\x18\x01 \x01(\x0c\x12-\n\ttimestamp\x18\x02 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\"E\n\x12InternalGCResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"\x89\x01\n\x16InternalPushTxnRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12\x30\n\npushee_txn\x18\x02 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\x12\r\n\x05\x41\x62ort\x18\x03 \x01(\x08\"|\n\x17InternalPushTxnResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\x12\x30\n\npushee_txn\x18\x02 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\"N\n\x1cInternalResolveIntentRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\"P\n\x1dInternalResolveIntentResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"m\n\x14InternalMergeRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.cockroach.proto.Value\"H\n\x15InternalMergeResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"[\n\x1aInternalTruncateLogRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12\r\n\x05index\x18\x02 \x01(\x04\"N\n\x1bInternalTruncateLogResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"\xcf\x07\n\x14ReadWriteCmdResponse\x12)\n\x03put\x18\x01 \x01(\x0b\x32\x1c.cockroach.proto.PutResponse\x12@\n\x0f\x63onditional_put\x18\x02 \x01(\x0b\x32\'.cockroach.proto.ConditionalPutResponse\x12\x35\n\tincrement\x18\x03 \x01(\x0b\x32\".cockroach.proto.IncrementResponse\x12/\n\x06\x64\x65lete\x18\x04 \x01(\x0b\x32\x1f.cockroach.proto.DeleteResponse\x12:\n\x0c\x64\x65lete_range\x18\x05 \x01(\x0b\x32$.cockroach.proto.DeleteRangeResponse\x12@\n\x0f\x65nd_transaction\x18\x06 \x01(\x0b\x32\'.cockroach.proto.EndTransactionResponse\x12\x36\n\nreap_queue\x18\x07 \x01(\x0b\x32\".cockroach.proto.ReapQueueResponse\x12>\n\x0e\x65nqueue_update\x18\x08 \x01(\x0b\x32&.cockroach.proto.EnqueueUpdateResponse\x12@\n\x0f\x65nqueue_message\x18\t \x01(\x0b\x32\'.cockroach.proto.EnqueueMessageResponse\x12M\n\x16internal_heartbeat_txn\x18\n \x01(\x0b\x32-.cockroach.proto.InternalHeartbeatTxnResponse\x12\x43\n\x11internal_push_txn\x18\x0b \x01(\x0b\x32(.cockroach.proto.InternalPushTxnResponse\x12O\n\x17internal_resolve_intent\x18\x0c \x01(\x0b\x32..cockroach.proto.InternalResolveIntentResponse\x12>\n\x0einternal_merge\x18\r \x01(\x0b\x32&.cockroach.proto.InternalMergeResponse\x12K\n\x15internal_truncate_log\x18\x0e \x01(\x0b\x32,.cockroach.proto.InternalTruncateLogResponse\x12\x38\n\x0binternal_gc\x18\x0f \x01(\x0b\x32#.cockroach.proto.InternalGCResponse\"\xd1\t\n\x18InternalRaftCommandUnion\x12\x32\n\x08\x63ontains\x18\x01 \x01(\x0b\x32 .cockroach.proto.ContainsRequest\x12(\n\x03get\x18\x02 \x01(\x0b\x32\x1b.cockroach.proto.GetRequest\x12(\n\x03put\x18\x03 \x01(\x0b\x32\x1b.cockroach.proto.PutRequest\x12?\n\x0f\x63onditional_put\x18\x04 \x01(\x0b\x32&.cockroach.proto.ConditionalPutRequest\x12\x34\n\tincrement\x18\x05 \x01(\x0b\x32!.cockroach.proto.IncrementRequest\x12.\n\x06\x64\x65lete\x18\x06 \x01(\x0b\x32\x1e.cockroach.proto.DeleteRequest\x12\x39\n\x0c\x64\x65lete_range\x18\x07 \x01(\x0b\x32#.cockroach.proto.DeleteRangeRequest\x12*\n\x04scan\x18\x08 \x01(\x0b\x32\x1c.cockroach.proto.ScanRequest\x12?\n\x0f\x65nd_transaction\x18\t \x01(\x0b\x32&.cockroach.proto.EndTransactionRequest\x12\x35\n\nreap_queue\x18\n \x01(\x0b\x32!.cockroach.proto.ReapQueueRequest\x12=\n\x0e\x65nqueue_update\x18\x0b \x01(\x0b\x32%.cockroach.proto.EnqueueUpdateRequest\x12?\n\x0f\x65nqueue_message\x18\x0c \x01(\x0b\x32&.cockroach.proto.EnqueueMessageRequest\x12,\n\x05\x62\x61tch\x18\x1e \x01(\x0b\x32\x1d.cockroach.proto.BatchRequest\x12J\n\x15internal_range_lookup\x18\x1f \x01(\x0b\x32+.cockroach.proto.InternalRangeLookupRequest\x12L\n\x16internal_heartbeat_txn\x18  \x01(\x0b\x32,.cockroach.proto.InternalHeartbeatTxnRequest\x12\x42\n\x11internal_push_txn\x18! \x01(\x0b\x32\'.cockroach.proto.InternalPushTxnRequest\x12N\n\x17internal_resolve_intent\x18\" \x01(\x0b\x32-.cockroach.proto.InternalResolveIntentRequest\x12\x46\n\x17internal_merge_response\x18# \x01(\x0b\x32%.cockroach.proto.InternalMergeRequest\x12J\n\x15internal_truncate_log\x18$ \x01(\x0b\x32+.cockroach.proto.InternalTruncateLogRequest\x12\x37\n\x0binternal_gc\x18% \x01(\x0b\x32\".cockroach.proto.InternalGCRequest\"^\n\x13InternalRaftCommand\x12\x0f\n\x07raft_id\x18\x02 \x01(\x03\x12\x36\n\x03\x63md\x18\x03 \x01(\x0b\x32).cockroach.proto.InternalRaftCommandUnion\"\x92\x01\n\x16InternalTimeSeriesData\x12\x1d\n\x15start_timestamp_nanos\x18\x01 \x01(\x03\x12\x1d\n\x15sample_duration_nanos\x18\x02 \x01(\x03\x12:\n\x07samples\x18\x03 \x03(\x0b\x32).cockroach.proto.InternalTimeSeriesSample\"\xbe\x01\n\x18InternalTimeSeriesSample\x12\x0e\n\x06offset\x18\x01 \x01(\x05\x12\x11\n\tint_count\x18\x02 \x01(\r\x12\x0f\n\x07int_sum\x18\x03 \x01(\x03\x12\x0f\n\x07int_max\x18\x04 \x01(\x03\x12\x0f\n\x07int_min\x18\x05 \x01(\x03\x12\x13\n\x0b\x66loat_count\x18\x06 \x01(\r\x12\x11\n\tfloat_sum\x18\x07 \x01(\x02\x12\x11\n\tfloat_max\x18\x08 \x01(\x02\x12\x11\n\tfloat_min\x18\t \x01(\x02*\x1f\n\x11InternalValueType\x12\n\n\x06_CR_TS\x10\x01\x42\x07Z\x05proto')
+  serialized_pb=_b('\n\x1e\x63ockroach/proto/internal.proto\x12\x0f\x63ockroach.proto\x1a\x19\x63ockroach/proto/api.proto\x1a\x1c\x63ockroach/proto/config.proto\x1a\x1a\x63ockroach/proto/data.proto\"x\n\x1aInternalRangeLookupRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12\x12\n\nmax_ranges\x18\x02 \x01(\x05\x12\x16\n\x0eignore_intents\x18\x03 \x01(\x08\"\x80\x01\n\x1bInternalRangeLookupResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\x12\x30\n\x06ranges\x18\x02 \x03(\x0b\x32 .cockroach.proto.RangeDescriptor\"M\n\x1bInternalHeartbeatTxnRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\"O\n\x1cInternalHeartbeatTxnResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"\xee\x01\n\x11InternalGCRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12,\n\x07gc_meta\x18\x02 \x01(\x0b\x32\x1b.cockroach.proto.GCMetadata\x12\x36\n\x04keys\x18\x03 \x03(\x0b\x32(.cockroach.proto.InternalGCRequest.GCKey\x1a\x43\n\x05GCKey\x12\x0b\n\x03key\x18\x01 \x01(\x0c\x12-\n\ttimestamp\x18\x02 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\"E\n\x12InternalGCResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"\xc1\x01\n\x16InternalPushTxnRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12\x30\n\npushee_txn\x18\x02 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\x12/\n\tpush_type\x18\x03 \x01(\x0e\x32\x1c.cockroach.proto.PushTxnType\x12\x14\n\x0crange_lookup\x18\x04 \x01(\x08\"|\n\x17InternalPushTxnResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\x12\x30\n\npushee_txn\x18\x02 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\"N\n\x1cInternalResolveIntentRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\"P\n\x1dInternalResolveIntentResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"m\n\x14InternalMergeRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.cockroach.proto.Value\"H\n\x15InternalMergeResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"[\n\x1aInternalTruncateLogRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12\r\n\x05index\x18\x02 \x01(\x04\"N\n\x1bInternalTruncateLogResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"s\n\x1aInternalLeaderLeaseRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12%\n\x05lease\x18\x02 \x01(\x0b\x32\x16.cockroach.proto.Lease\"N\n\x1bInternalLeaderLeaseResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"\xa0\x05\n\x14InternalRequestUnion\x12\x34\n\x08\x63ontains\x18\x01 \x01(\x0b\x32 .cockroach.proto.ContainsRequestH\x00\x12*\n\x03get\x18\x02 \x01(\x0b\x32\x1b.cockroach.proto.GetRequestH\x00\x12*\n\x03put\x18\x03 \x01(\x0b\x32\x1b.cockroach.proto.PutRequestH\x00\x12\x41\n\x0f\x63onditional_put\x18\x04 \x01(\x0b\x32&.cockroach.proto.ConditionalPutRequestH\x00\x12\x36\n\tincrement\x18\x05 \x01(\x0b\x32!.cockroach.proto.IncrementRequestH\x00\x12\x30\n\x06\x64\x65lete\x18\x06 \x01(\x0b\x32\x1e.cockroach.proto.DeleteRequestH\x00\x12;\n\x0c\x64\x65lete_range\x18\x07 \x01(\x0b\x32#.cockroach.proto.DeleteRangeRequestH\x00\x12,\n\x04scan\x18\x08 \x01(\x0b\x32\x1c.cockroach.proto.ScanRequestH\x00\x12\x41\n\x0f\x65nd_transaction\x18\t \x01(\x0b\x32&.cockroach.proto.EndTransactionRequestH\x00\x12\x44\n\x11internal_push_txn\x18\x1e \x01(\x0b\x32\'.cockroach.proto.InternalPushTxnRequestH\x00\x12P\n\x17internal_resolve_intent\x18\x1f \x01(\x0b\x32-.cockroach.proto.InternalResolveIntentRequestH\x00\x42\x07\n\x05value\"\xac\x05\n\x15InternalResponseUnion\x12\x35\n\x08\x63ontains\x18\x01 \x01(\x0b\x32!.cockroach.proto.ContainsResponseH\x00\x12+\n\x03get\x18\x02 \x01(\x0b\x32\x1c.cockroach.proto.GetResponseH\x00\x12+\n\x03put\x18\x03 \x01(\x0b\x32\x1c.cockroach.proto.PutResponseH\x00\x12\x42\n\x0f\x63onditional_put\x18\x04 \x01(\x0b\x32\'.cockroach.proto.ConditionalPutResponseH\x00\x12\x37\n\tincrement\x18\x05 \x01(\x0b\x32\".cockroach.proto.IncrementResponseH\x00\x12\x31\n\x06\x64\x65lete\x18\x06 \x01(\x0b\x32\x1f.cockroach.proto.DeleteResponseH\x00\x12<\n\x0c\x64\x65lete_range\x18\x07 \x01(\x0b\x32$.cockroach.proto.DeleteRangeResponseH\x00\x12-\n\x04scan\x18\x08 \x01(\x0b\x32\x1d.cockroach.proto.ScanResponseH\x00\x12\x42\n\x0f\x65nd_transaction\x18\t \x01(\x0b\x32\'.cockroach.proto.EndTransactionResponseH\x00\x12\x45\n\x11internal_push_txn\x18\x1e \x01(\x0b\x32(.cockroach.proto.InternalPushTxnResponseH\x00\x12Q\n\x17internal_resolve_intent\x18\x1f \x01(\x0b\x32..cockroach.proto.InternalResolveIntentResponseH\x00\x42\x07\n\x05value\"\x7f\n\x14InternalBatchRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12\x37\n\x08requests\x18\x02 \x03(\x0b\x32%.cockroach.proto.InternalRequestUnion\"\x83\x01\n\x15InternalBatchResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\x12\x39\n\tresponses\x18\x02 \x03(\x0b\x32&.cockroach.proto.InternalResponseUnion\"\x85\x07\n\x14ReadWriteCmdResponse\x12+\n\x03put\x18\x01 \x01(\x0b\x32\x1c.cockroach.proto.PutResponseH\x00\x12\x42\n\x0f\x63onditional_put\x18\x02 \x01(\x0b\x32\'.cockroach.proto.ConditionalPutResponseH\x00\x12\x37\n\tincrement\x18\x03 \x01(\x0b\x32\".cockroach.proto.IncrementResponseH\x00\x12\x31\n\x06\x64\x65lete\x18\x04 \x01(\x0b\x32\x1f.cockroach.proto.DeleteResponseH\x00\x12<\n\x0c\x64\x65lete_range\x18\x05 \x01(\x0b\x32$.cockroach.proto.DeleteRangeResponseH\x00\x12\x42\n\x0f\x65nd_transaction\x18\x06 \x01(\x0b\x32\'.cockroach.proto.EndTransactionResponseH\x00\x12O\n\x16internal_heartbeat_txn\x18\n \x01(\x0b\x32-.cockroach.proto.InternalHeartbeatTxnResponseH\x00\x12\x45\n\x11internal_push_txn\x18\x0b \x01(\x0b\x32(.cockroach.proto.InternalPushTxnResponseH\x00\x12Q\n\x17internal_resolve_intent\x18\x0c \x01(\x0b\x32..cockroach.proto.InternalResolveIntentResponseH\x00\x12@\n\x0einternal_merge\x18\r \x01(\x0b\x32&.cockroach.proto.InternalMergeResponseH\x00\x12M\n\x15internal_truncate_log\x18\x0e \x01(\x0b\x32,.cockroach.proto.InternalTruncateLogResponseH\x00\x12:\n\x0binternal_gc\x18\x0f \x01(\x0b\x32#.cockroach.proto.InternalGCResponseH\x00\x12M\n\x15internal_leader_lease\x18\x10 \x01(\x0b\x32,.cockroach.proto.InternalLeaderLeaseResponseH\x00\x42\x07\n\x05value\"\xcd\t\n\x18InternalRaftCommandUnion\x12\x34\n\x08\x63ontains\x18\x01 \x01(\x0b\x32 .cockroach.proto.ContainsRequestH\x00\x12*\n\x03get\x18\x02 \x01(\x0b\x32\x1b.cockroach.proto.GetRequestH\x00\x12*\n\x03put\x18\x03 \x01(\x0b\x32\x1b.cockroach.proto.PutRequestH\x00\x12\x41\n\x0f\x63onditional_put\x18\x04 \x01(\x0b\x32&.cockroach.proto.ConditionalPutRequestH\x00\x12\x36\n\tincrement\x18\x05 \x01(\x0b\x32!.cockroach.proto.IncrementRequestH\x00\x12\x30\n\x06\x64\x65lete\x18\x06 \x01(\x0b\x32\x1e.cockroach.proto.DeleteRequestH\x00\x12;\n\x0c\x64\x65lete_range\x18\x07 \x01(\x0b\x32#.cockroach.proto.DeleteRangeRequestH\x00\x12,\n\x04scan\x18\x08 \x01(\x0b\x32\x1c.cockroach.proto.ScanRequestH\x00\x12\x41\n\x0f\x65nd_transaction\x18\t \x01(\x0b\x32&.cockroach.proto.EndTransactionRequestH\x00\x12.\n\x05\x62\x61tch\x18\x1e \x01(\x0b\x32\x1d.cockroach.proto.BatchRequestH\x00\x12L\n\x15internal_range_lookup\x18\x1f \x01(\x0b\x32+.cockroach.proto.InternalRangeLookupRequestH\x00\x12N\n\x16internal_heartbeat_txn\x18  \x01(\x0b\x32,.cockroach.proto.InternalHeartbeatTxnRequestH\x00\x12\x44\n\x11internal_push_txn\x18! \x01(\x0b\x32\'.cockroach.proto.InternalPushTxnRequestH\x00\x12P\n\x17internal_resolve_intent\x18\" \x01(\x0b\x32-.cockroach.proto.InternalResolveIntentRequestH\x00\x12H\n\x17internal_merge_response\x18# \x01(\x0b\x32%.cockroach.proto.InternalMergeRequestH\x00\x12L\n\x15internal_truncate_log\x18$ \x01(\x0b\x32+.cockroach.proto.InternalTruncateLogRequestH\x00\x12\x39\n\x0binternal_gc\x18% \x01(\x0b\x32\".cockroach.proto.InternalGCRequestH\x00\x12\x45\n\x0einternal_lease\x18& \x01(\x0b\x32+.cockroach.proto.InternalLeaderLeaseRequestH\x00\x12?\n\x0einternal_batch\x18\' \x01(\x0b\x32%.cockroach.proto.InternalBatchRequestH\x00\x42\x07\n\x05value\"v\n\x13InternalRaftCommand\x12\x0f\n\x07raft_id\x18\x01 \x01(\x03\x12\x16\n\x0eorigin_node_id\x18\x02 \x01(\x04\x12\x36\n\x03\x63md\x18\x03 \x01(\x0b\x32).cockroach.proto.InternalRaftCommandUnion\"3\n\x12RaftMessageRequest\x12\x10\n\x08group_id\x18\x01 \x01(\x04\x12\x0b\n\x03msg\x18\x02 \x01(\x0c\"\x15\n\x13RaftMessageResponse\"\x92\x01\n\x16InternalTimeSeriesData\x12\x1d\n\x15start_timestamp_nanos\x18\x01 \x01(\x03\x12\x1d\n\x15sample_duration_nanos\x18\x02 \x01(\x03\x12:\n\x07samples\x18\x03 \x03(\x0b\x32).cockroach.proto.InternalTimeSeriesSample\"\xbe\x01\n\x18InternalTimeSeriesSample\x12\x0e\n\x06offset\x18\x01 \x01(\x05\x12\x11\n\tint_count\x18\x02 \x01(\r\x12\x0f\n\x07int_sum\x18\x03 \x01(\x03\x12\x0f\n\x07int_max\x18\x04 \x01(\x03\x12\x0f\n\x07int_min\x18\x05 \x01(\x03\x12\x13\n\x0b\x66loat_count\x18\x06 \x01(\r\x12\x11\n\tfloat_sum\x18\x07 \x01(\x02\x12\x11\n\tfloat_max\x18\x08 \x01(\x02\x12\x11\n\tfloat_min\x18\t \x01(\x02\"1\n\x12RaftTruncatedState\x12\r\n\x05index\x18\x01 \x01(\x04\x12\x0c\n\x04term\x18\x02 \x01(\x04\"r\n\x10RaftSnapshotData\x12\x36\n\x02KV\x18\x01 \x03(\x0b\x32*.cockroach.proto.RaftSnapshotData.KeyValue\x1a&\n\x08KeyValue\x12\x0b\n\x03key\x18\x01 \x01(\x0c\x12\r\n\x05value\x18\x02 \x01(\x0c*A\n\x0bPushTxnType\x12\x12\n\x0ePUSH_TIMESTAMP\x10\x00\x12\r\n\tABORT_TXN\x10\x01\x12\x0f\n\x0b\x43LEANUP_TXN\x10\x02*\x1f\n\x11InternalValueType\x12\n\n\x06_CR_TS\x10\x01\x42\x07Z\x05proto')
   ,
   dependencies=[cockroach.proto.api_pb2.DESCRIPTOR,cockroach.proto.config_pb2.DESCRIPTOR,cockroach.proto.data_pb2.DESCRIPTOR,])
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
+_PUSHTXNTYPE = _descriptor.EnumDescriptor(
+  name='PushTxnType',
+  full_name='cockroach.proto.PushTxnType',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='PUSH_TIMESTAMP', index=0, number=0,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='ABORT_TXN', index=1, number=1,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='CLEANUP_TXN', index=2, number=2,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=6366,
+  serialized_end=6431,
+)
+_sym_db.RegisterEnumDescriptor(_PUSHTXNTYPE)
+
+PushTxnType = enum_type_wrapper.EnumTypeWrapper(_PUSHTXNTYPE)
 _INTERNALVALUETYPE = _descriptor.EnumDescriptor(
   name='InternalValueType',
   full_name='cockroach.proto.InternalValueType',
@@ -40,12 +67,15 @@ _INTERNALVALUETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=4275,
-  serialized_end=4306,
+  serialized_start=6433,
+  serialized_end=6464,
 )
 _sym_db.RegisterEnumDescriptor(_INTERNALVALUETYPE)
 
 InternalValueType = enum_type_wrapper.EnumTypeWrapper(_INTERNALVALUETYPE)
+PUSH_TIMESTAMP = 0
+ABORT_TXN = 1
+CLEANUP_TXN = 2
 _CR_TS = 1
 
 
@@ -71,6 +101,13 @@ _INTERNALRANGELOOKUPREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='ignore_intents', full_name='cockroach.proto.InternalRangeLookupRequest.ignore_intents', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -83,7 +120,7 @@ _INTERNALRANGELOOKUPREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=136,
-  serialized_end=232,
+  serialized_end=256,
 )
 
 
@@ -119,8 +156,8 @@ _INTERNALRANGELOOKUPRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=235,
-  serialized_end=363,
+  serialized_start=259,
+  serialized_end=387,
 )
 
 
@@ -149,8 +186,8 @@ _INTERNALHEARTBEATTXNREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=365,
-  serialized_end=442,
+  serialized_start=389,
+  serialized_end=466,
 )
 
 
@@ -179,8 +216,8 @@ _INTERNALHEARTBEATTXNRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=444,
-  serialized_end=523,
+  serialized_start=468,
+  serialized_end=547,
 )
 
 
@@ -216,8 +253,8 @@ _INTERNALGCREQUEST_GCKEY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=697,
-  serialized_end=764,
+  serialized_start=721,
+  serialized_end=788,
 )
 
 _INTERNALGCREQUEST = _descriptor.Descriptor(
@@ -259,8 +296,8 @@ _INTERNALGCREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=526,
-  serialized_end=764,
+  serialized_start=550,
+  serialized_end=788,
 )
 
 
@@ -289,8 +326,8 @@ _INTERNALGCRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=766,
-  serialized_end=835,
+  serialized_start=790,
+  serialized_end=859,
 )
 
 
@@ -316,8 +353,15 @@ _INTERNALPUSHTXNREQUEST = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='Abort', full_name='cockroach.proto.InternalPushTxnRequest.Abort', index=2,
-      number=3, type=8, cpp_type=7, label=1,
+      name='push_type', full_name='cockroach.proto.InternalPushTxnRequest.push_type', index=2,
+      number=3, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='range_lookup', full_name='cockroach.proto.InternalPushTxnRequest.range_lookup', index=3,
+      number=4, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -333,8 +377,8 @@ _INTERNALPUSHTXNREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=838,
-  serialized_end=975,
+  serialized_start=862,
+  serialized_end=1055,
 )
 
 
@@ -370,8 +414,8 @@ _INTERNALPUSHTXNRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=977,
-  serialized_end=1101,
+  serialized_start=1057,
+  serialized_end=1181,
 )
 
 
@@ -400,8 +444,8 @@ _INTERNALRESOLVEINTENTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1103,
-  serialized_end=1181,
+  serialized_start=1183,
+  serialized_end=1261,
 )
 
 
@@ -430,8 +474,8 @@ _INTERNALRESOLVEINTENTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1183,
-  serialized_end=1263,
+  serialized_start=1263,
+  serialized_end=1343,
 )
 
 
@@ -467,8 +511,8 @@ _INTERNALMERGEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1265,
-  serialized_end=1374,
+  serialized_start=1345,
+  serialized_end=1454,
 )
 
 
@@ -497,8 +541,8 @@ _INTERNALMERGERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1376,
-  serialized_end=1448,
+  serialized_start=1456,
+  serialized_end=1528,
 )
 
 
@@ -534,8 +578,8 @@ _INTERNALTRUNCATELOGREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1450,
-  serialized_end=1541,
+  serialized_start=1530,
+  serialized_end=1621,
 )
 
 
@@ -564,8 +608,355 @@ _INTERNALTRUNCATELOGRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1543,
-  serialized_end=1621,
+  serialized_start=1623,
+  serialized_end=1701,
+)
+
+
+_INTERNALLEADERLEASEREQUEST = _descriptor.Descriptor(
+  name='InternalLeaderLeaseRequest',
+  full_name='cockroach.proto.InternalLeaderLeaseRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='header', full_name='cockroach.proto.InternalLeaderLeaseRequest.header', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='lease', full_name='cockroach.proto.InternalLeaderLeaseRequest.lease', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1703,
+  serialized_end=1818,
+)
+
+
+_INTERNALLEADERLEASERESPONSE = _descriptor.Descriptor(
+  name='InternalLeaderLeaseResponse',
+  full_name='cockroach.proto.InternalLeaderLeaseResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='header', full_name='cockroach.proto.InternalLeaderLeaseResponse.header', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1820,
+  serialized_end=1898,
+)
+
+
+_INTERNALREQUESTUNION = _descriptor.Descriptor(
+  name='InternalRequestUnion',
+  full_name='cockroach.proto.InternalRequestUnion',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='contains', full_name='cockroach.proto.InternalRequestUnion.contains', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='get', full_name='cockroach.proto.InternalRequestUnion.get', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='put', full_name='cockroach.proto.InternalRequestUnion.put', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='conditional_put', full_name='cockroach.proto.InternalRequestUnion.conditional_put', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='increment', full_name='cockroach.proto.InternalRequestUnion.increment', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='delete', full_name='cockroach.proto.InternalRequestUnion.delete', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='delete_range', full_name='cockroach.proto.InternalRequestUnion.delete_range', index=6,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='scan', full_name='cockroach.proto.InternalRequestUnion.scan', index=7,
+      number=8, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='end_transaction', full_name='cockroach.proto.InternalRequestUnion.end_transaction', index=8,
+      number=9, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='internal_push_txn', full_name='cockroach.proto.InternalRequestUnion.internal_push_txn', index=9,
+      number=30, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='internal_resolve_intent', full_name='cockroach.proto.InternalRequestUnion.internal_resolve_intent', index=10,
+      number=31, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name='value', full_name='cockroach.proto.InternalRequestUnion.value',
+      index=0, containing_type=None, fields=[]),
+  ],
+  serialized_start=1901,
+  serialized_end=2573,
+)
+
+
+_INTERNALRESPONSEUNION = _descriptor.Descriptor(
+  name='InternalResponseUnion',
+  full_name='cockroach.proto.InternalResponseUnion',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='contains', full_name='cockroach.proto.InternalResponseUnion.contains', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='get', full_name='cockroach.proto.InternalResponseUnion.get', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='put', full_name='cockroach.proto.InternalResponseUnion.put', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='conditional_put', full_name='cockroach.proto.InternalResponseUnion.conditional_put', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='increment', full_name='cockroach.proto.InternalResponseUnion.increment', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='delete', full_name='cockroach.proto.InternalResponseUnion.delete', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='delete_range', full_name='cockroach.proto.InternalResponseUnion.delete_range', index=6,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='scan', full_name='cockroach.proto.InternalResponseUnion.scan', index=7,
+      number=8, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='end_transaction', full_name='cockroach.proto.InternalResponseUnion.end_transaction', index=8,
+      number=9, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='internal_push_txn', full_name='cockroach.proto.InternalResponseUnion.internal_push_txn', index=9,
+      number=30, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='internal_resolve_intent', full_name='cockroach.proto.InternalResponseUnion.internal_resolve_intent', index=10,
+      number=31, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name='value', full_name='cockroach.proto.InternalResponseUnion.value',
+      index=0, containing_type=None, fields=[]),
+  ],
+  serialized_start=2576,
+  serialized_end=3260,
+)
+
+
+_INTERNALBATCHREQUEST = _descriptor.Descriptor(
+  name='InternalBatchRequest',
+  full_name='cockroach.proto.InternalBatchRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='header', full_name='cockroach.proto.InternalBatchRequest.header', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='requests', full_name='cockroach.proto.InternalBatchRequest.requests', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3262,
+  serialized_end=3389,
+)
+
+
+_INTERNALBATCHRESPONSE = _descriptor.Descriptor(
+  name='InternalBatchResponse',
+  full_name='cockroach.proto.InternalBatchResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='header', full_name='cockroach.proto.InternalBatchResponse.header', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='responses', full_name='cockroach.proto.InternalBatchResponse.responses', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3392,
+  serialized_end=3523,
 )
 
 
@@ -619,64 +1010,50 @@ _READWRITECMDRESPONSE = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='reap_queue', full_name='cockroach.proto.ReadWriteCmdResponse.reap_queue', index=6,
-      number=7, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='enqueue_update', full_name='cockroach.proto.ReadWriteCmdResponse.enqueue_update', index=7,
-      number=8, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='enqueue_message', full_name='cockroach.proto.ReadWriteCmdResponse.enqueue_message', index=8,
-      number=9, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='internal_heartbeat_txn', full_name='cockroach.proto.ReadWriteCmdResponse.internal_heartbeat_txn', index=9,
+      name='internal_heartbeat_txn', full_name='cockroach.proto.ReadWriteCmdResponse.internal_heartbeat_txn', index=6,
       number=10, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='internal_push_txn', full_name='cockroach.proto.ReadWriteCmdResponse.internal_push_txn', index=10,
+      name='internal_push_txn', full_name='cockroach.proto.ReadWriteCmdResponse.internal_push_txn', index=7,
       number=11, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='internal_resolve_intent', full_name='cockroach.proto.ReadWriteCmdResponse.internal_resolve_intent', index=11,
+      name='internal_resolve_intent', full_name='cockroach.proto.ReadWriteCmdResponse.internal_resolve_intent', index=8,
       number=12, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='internal_merge', full_name='cockroach.proto.ReadWriteCmdResponse.internal_merge', index=12,
+      name='internal_merge', full_name='cockroach.proto.ReadWriteCmdResponse.internal_merge', index=9,
       number=13, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='internal_truncate_log', full_name='cockroach.proto.ReadWriteCmdResponse.internal_truncate_log', index=13,
+      name='internal_truncate_log', full_name='cockroach.proto.ReadWriteCmdResponse.internal_truncate_log', index=10,
       number=14, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='internal_gc', full_name='cockroach.proto.ReadWriteCmdResponse.internal_gc', index=14,
+      name='internal_gc', full_name='cockroach.proto.ReadWriteCmdResponse.internal_gc', index=11,
       number=15, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='internal_leader_lease', full_name='cockroach.proto.ReadWriteCmdResponse.internal_leader_lease', index=12,
+      number=16, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -691,9 +1068,12 @@ _READWRITECMDRESPONSE = _descriptor.Descriptor(
   is_extendable=False,
   extension_ranges=[],
   oneofs=[
+    _descriptor.OneofDescriptor(
+      name='value', full_name='cockroach.proto.ReadWriteCmdResponse.value',
+      index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=1624,
-  serialized_end=2599,
+  serialized_start=3526,
+  serialized_end=4427,
 )
 
 
@@ -768,78 +1148,71 @@ _INTERNALRAFTCOMMANDUNION = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='reap_queue', full_name='cockroach.proto.InternalRaftCommandUnion.reap_queue', index=9,
-      number=10, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='enqueue_update', full_name='cockroach.proto.InternalRaftCommandUnion.enqueue_update', index=10,
-      number=11, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='enqueue_message', full_name='cockroach.proto.InternalRaftCommandUnion.enqueue_message', index=11,
-      number=12, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='batch', full_name='cockroach.proto.InternalRaftCommandUnion.batch', index=12,
+      name='batch', full_name='cockroach.proto.InternalRaftCommandUnion.batch', index=9,
       number=30, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='internal_range_lookup', full_name='cockroach.proto.InternalRaftCommandUnion.internal_range_lookup', index=13,
+      name='internal_range_lookup', full_name='cockroach.proto.InternalRaftCommandUnion.internal_range_lookup', index=10,
       number=31, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='internal_heartbeat_txn', full_name='cockroach.proto.InternalRaftCommandUnion.internal_heartbeat_txn', index=14,
+      name='internal_heartbeat_txn', full_name='cockroach.proto.InternalRaftCommandUnion.internal_heartbeat_txn', index=11,
       number=32, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='internal_push_txn', full_name='cockroach.proto.InternalRaftCommandUnion.internal_push_txn', index=15,
+      name='internal_push_txn', full_name='cockroach.proto.InternalRaftCommandUnion.internal_push_txn', index=12,
       number=33, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='internal_resolve_intent', full_name='cockroach.proto.InternalRaftCommandUnion.internal_resolve_intent', index=16,
+      name='internal_resolve_intent', full_name='cockroach.proto.InternalRaftCommandUnion.internal_resolve_intent', index=13,
       number=34, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='internal_merge_response', full_name='cockroach.proto.InternalRaftCommandUnion.internal_merge_response', index=17,
+      name='internal_merge_response', full_name='cockroach.proto.InternalRaftCommandUnion.internal_merge_response', index=14,
       number=35, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='internal_truncate_log', full_name='cockroach.proto.InternalRaftCommandUnion.internal_truncate_log', index=18,
+      name='internal_truncate_log', full_name='cockroach.proto.InternalRaftCommandUnion.internal_truncate_log', index=15,
       number=36, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='internal_gc', full_name='cockroach.proto.InternalRaftCommandUnion.internal_gc', index=19,
+      name='internal_gc', full_name='cockroach.proto.InternalRaftCommandUnion.internal_gc', index=16,
       number=37, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='internal_lease', full_name='cockroach.proto.InternalRaftCommandUnion.internal_lease', index=17,
+      number=38, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='internal_batch', full_name='cockroach.proto.InternalRaftCommandUnion.internal_batch', index=18,
+      number=39, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -854,9 +1227,12 @@ _INTERNALRAFTCOMMANDUNION = _descriptor.Descriptor(
   is_extendable=False,
   extension_ranges=[],
   oneofs=[
+    _descriptor.OneofDescriptor(
+      name='value', full_name='cockroach.proto.InternalRaftCommandUnion.value',
+      index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=2602,
-  serialized_end=3835,
+  serialized_start=4430,
+  serialized_end=5659,
 )
 
 
@@ -869,13 +1245,20 @@ _INTERNALRAFTCOMMAND = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='raft_id', full_name='cockroach.proto.InternalRaftCommand.raft_id', index=0,
-      number=2, type=3, cpp_type=2, label=1,
+      number=1, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='cmd', full_name='cockroach.proto.InternalRaftCommand.cmd', index=1,
+      name='origin_node_id', full_name='cockroach.proto.InternalRaftCommand.origin_node_id', index=1,
+      number=2, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='cmd', full_name='cockroach.proto.InternalRaftCommand.cmd', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -892,8 +1275,68 @@ _INTERNALRAFTCOMMAND = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3837,
-  serialized_end=3931,
+  serialized_start=5661,
+  serialized_end=5779,
+)
+
+
+_RAFTMESSAGEREQUEST = _descriptor.Descriptor(
+  name='RaftMessageRequest',
+  full_name='cockroach.proto.RaftMessageRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='group_id', full_name='cockroach.proto.RaftMessageRequest.group_id', index=0,
+      number=1, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='msg', full_name='cockroach.proto.RaftMessageRequest.msg', index=1,
+      number=2, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b(""),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=5781,
+  serialized_end=5832,
+)
+
+
+_RAFTMESSAGERESPONSE = _descriptor.Descriptor(
+  name='RaftMessageResponse',
+  full_name='cockroach.proto.RaftMessageResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=5834,
+  serialized_end=5855,
 )
 
 
@@ -936,8 +1379,8 @@ _INTERNALTIMESERIESDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3934,
-  serialized_end=4080,
+  serialized_start=5858,
+  serialized_end=6004,
 )
 
 
@@ -1022,8 +1465,111 @@ _INTERNALTIMESERIESSAMPLE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4083,
-  serialized_end=4273,
+  serialized_start=6007,
+  serialized_end=6197,
+)
+
+
+_RAFTTRUNCATEDSTATE = _descriptor.Descriptor(
+  name='RaftTruncatedState',
+  full_name='cockroach.proto.RaftTruncatedState',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='index', full_name='cockroach.proto.RaftTruncatedState.index', index=0,
+      number=1, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='term', full_name='cockroach.proto.RaftTruncatedState.term', index=1,
+      number=2, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6199,
+  serialized_end=6248,
+)
+
+
+_RAFTSNAPSHOTDATA_KEYVALUE = _descriptor.Descriptor(
+  name='KeyValue',
+  full_name='cockroach.proto.RaftSnapshotData.KeyValue',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='cockroach.proto.RaftSnapshotData.KeyValue.key', index=0,
+      number=1, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b(""),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='cockroach.proto.RaftSnapshotData.KeyValue.value', index=1,
+      number=2, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b(""),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6326,
+  serialized_end=6364,
+)
+
+_RAFTSNAPSHOTDATA = _descriptor.Descriptor(
+  name='RaftSnapshotData',
+  full_name='cockroach.proto.RaftSnapshotData',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='KV', full_name='cockroach.proto.RaftSnapshotData.KV', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[_RAFTSNAPSHOTDATA_KEYVALUE, ],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6250,
+  serialized_end=6364,
 )
 
 _INTERNALRANGELOOKUPREQUEST.fields_by_name['header'].message_type = cockroach.proto.api_pb2._REQUESTHEADER
@@ -1039,6 +1585,7 @@ _INTERNALGCREQUEST.fields_by_name['keys'].message_type = _INTERNALGCREQUEST_GCKE
 _INTERNALGCRESPONSE.fields_by_name['header'].message_type = cockroach.proto.api_pb2._RESPONSEHEADER
 _INTERNALPUSHTXNREQUEST.fields_by_name['header'].message_type = cockroach.proto.api_pb2._REQUESTHEADER
 _INTERNALPUSHTXNREQUEST.fields_by_name['pushee_txn'].message_type = cockroach.proto.data_pb2._TRANSACTION
+_INTERNALPUSHTXNREQUEST.fields_by_name['push_type'].enum_type = _PUSHTXNTYPE
 _INTERNALPUSHTXNRESPONSE.fields_by_name['header'].message_type = cockroach.proto.api_pb2._RESPONSEHEADER
 _INTERNALPUSHTXNRESPONSE.fields_by_name['pushee_txn'].message_type = cockroach.proto.data_pb2._TRANSACTION
 _INTERNALRESOLVEINTENTREQUEST.fields_by_name['header'].message_type = cockroach.proto.api_pb2._REQUESTHEADER
@@ -1048,21 +1595,153 @@ _INTERNALMERGEREQUEST.fields_by_name['value'].message_type = cockroach.proto.dat
 _INTERNALMERGERESPONSE.fields_by_name['header'].message_type = cockroach.proto.api_pb2._RESPONSEHEADER
 _INTERNALTRUNCATELOGREQUEST.fields_by_name['header'].message_type = cockroach.proto.api_pb2._REQUESTHEADER
 _INTERNALTRUNCATELOGRESPONSE.fields_by_name['header'].message_type = cockroach.proto.api_pb2._RESPONSEHEADER
+_INTERNALLEADERLEASEREQUEST.fields_by_name['header'].message_type = cockroach.proto.api_pb2._REQUESTHEADER
+_INTERNALLEADERLEASEREQUEST.fields_by_name['lease'].message_type = cockroach.proto.data_pb2._LEASE
+_INTERNALLEADERLEASERESPONSE.fields_by_name['header'].message_type = cockroach.proto.api_pb2._RESPONSEHEADER
+_INTERNALREQUESTUNION.fields_by_name['contains'].message_type = cockroach.proto.api_pb2._CONTAINSREQUEST
+_INTERNALREQUESTUNION.fields_by_name['get'].message_type = cockroach.proto.api_pb2._GETREQUEST
+_INTERNALREQUESTUNION.fields_by_name['put'].message_type = cockroach.proto.api_pb2._PUTREQUEST
+_INTERNALREQUESTUNION.fields_by_name['conditional_put'].message_type = cockroach.proto.api_pb2._CONDITIONALPUTREQUEST
+_INTERNALREQUESTUNION.fields_by_name['increment'].message_type = cockroach.proto.api_pb2._INCREMENTREQUEST
+_INTERNALREQUESTUNION.fields_by_name['delete'].message_type = cockroach.proto.api_pb2._DELETEREQUEST
+_INTERNALREQUESTUNION.fields_by_name['delete_range'].message_type = cockroach.proto.api_pb2._DELETERANGEREQUEST
+_INTERNALREQUESTUNION.fields_by_name['scan'].message_type = cockroach.proto.api_pb2._SCANREQUEST
+_INTERNALREQUESTUNION.fields_by_name['end_transaction'].message_type = cockroach.proto.api_pb2._ENDTRANSACTIONREQUEST
+_INTERNALREQUESTUNION.fields_by_name['internal_push_txn'].message_type = _INTERNALPUSHTXNREQUEST
+_INTERNALREQUESTUNION.fields_by_name['internal_resolve_intent'].message_type = _INTERNALRESOLVEINTENTREQUEST
+_INTERNALREQUESTUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALREQUESTUNION.fields_by_name['contains'])
+_INTERNALREQUESTUNION.fields_by_name['contains'].containing_oneof = _INTERNALREQUESTUNION.oneofs_by_name['value']
+_INTERNALREQUESTUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALREQUESTUNION.fields_by_name['get'])
+_INTERNALREQUESTUNION.fields_by_name['get'].containing_oneof = _INTERNALREQUESTUNION.oneofs_by_name['value']
+_INTERNALREQUESTUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALREQUESTUNION.fields_by_name['put'])
+_INTERNALREQUESTUNION.fields_by_name['put'].containing_oneof = _INTERNALREQUESTUNION.oneofs_by_name['value']
+_INTERNALREQUESTUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALREQUESTUNION.fields_by_name['conditional_put'])
+_INTERNALREQUESTUNION.fields_by_name['conditional_put'].containing_oneof = _INTERNALREQUESTUNION.oneofs_by_name['value']
+_INTERNALREQUESTUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALREQUESTUNION.fields_by_name['increment'])
+_INTERNALREQUESTUNION.fields_by_name['increment'].containing_oneof = _INTERNALREQUESTUNION.oneofs_by_name['value']
+_INTERNALREQUESTUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALREQUESTUNION.fields_by_name['delete'])
+_INTERNALREQUESTUNION.fields_by_name['delete'].containing_oneof = _INTERNALREQUESTUNION.oneofs_by_name['value']
+_INTERNALREQUESTUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALREQUESTUNION.fields_by_name['delete_range'])
+_INTERNALREQUESTUNION.fields_by_name['delete_range'].containing_oneof = _INTERNALREQUESTUNION.oneofs_by_name['value']
+_INTERNALREQUESTUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALREQUESTUNION.fields_by_name['scan'])
+_INTERNALREQUESTUNION.fields_by_name['scan'].containing_oneof = _INTERNALREQUESTUNION.oneofs_by_name['value']
+_INTERNALREQUESTUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALREQUESTUNION.fields_by_name['end_transaction'])
+_INTERNALREQUESTUNION.fields_by_name['end_transaction'].containing_oneof = _INTERNALREQUESTUNION.oneofs_by_name['value']
+_INTERNALREQUESTUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALREQUESTUNION.fields_by_name['internal_push_txn'])
+_INTERNALREQUESTUNION.fields_by_name['internal_push_txn'].containing_oneof = _INTERNALREQUESTUNION.oneofs_by_name['value']
+_INTERNALREQUESTUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALREQUESTUNION.fields_by_name['internal_resolve_intent'])
+_INTERNALREQUESTUNION.fields_by_name['internal_resolve_intent'].containing_oneof = _INTERNALREQUESTUNION.oneofs_by_name['value']
+_INTERNALRESPONSEUNION.fields_by_name['contains'].message_type = cockroach.proto.api_pb2._CONTAINSRESPONSE
+_INTERNALRESPONSEUNION.fields_by_name['get'].message_type = cockroach.proto.api_pb2._GETRESPONSE
+_INTERNALRESPONSEUNION.fields_by_name['put'].message_type = cockroach.proto.api_pb2._PUTRESPONSE
+_INTERNALRESPONSEUNION.fields_by_name['conditional_put'].message_type = cockroach.proto.api_pb2._CONDITIONALPUTRESPONSE
+_INTERNALRESPONSEUNION.fields_by_name['increment'].message_type = cockroach.proto.api_pb2._INCREMENTRESPONSE
+_INTERNALRESPONSEUNION.fields_by_name['delete'].message_type = cockroach.proto.api_pb2._DELETERESPONSE
+_INTERNALRESPONSEUNION.fields_by_name['delete_range'].message_type = cockroach.proto.api_pb2._DELETERANGERESPONSE
+_INTERNALRESPONSEUNION.fields_by_name['scan'].message_type = cockroach.proto.api_pb2._SCANRESPONSE
+_INTERNALRESPONSEUNION.fields_by_name['end_transaction'].message_type = cockroach.proto.api_pb2._ENDTRANSACTIONRESPONSE
+_INTERNALRESPONSEUNION.fields_by_name['internal_push_txn'].message_type = _INTERNALPUSHTXNRESPONSE
+_INTERNALRESPONSEUNION.fields_by_name['internal_resolve_intent'].message_type = _INTERNALRESOLVEINTENTRESPONSE
+_INTERNALRESPONSEUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRESPONSEUNION.fields_by_name['contains'])
+_INTERNALRESPONSEUNION.fields_by_name['contains'].containing_oneof = _INTERNALRESPONSEUNION.oneofs_by_name['value']
+_INTERNALRESPONSEUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRESPONSEUNION.fields_by_name['get'])
+_INTERNALRESPONSEUNION.fields_by_name['get'].containing_oneof = _INTERNALRESPONSEUNION.oneofs_by_name['value']
+_INTERNALRESPONSEUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRESPONSEUNION.fields_by_name['put'])
+_INTERNALRESPONSEUNION.fields_by_name['put'].containing_oneof = _INTERNALRESPONSEUNION.oneofs_by_name['value']
+_INTERNALRESPONSEUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRESPONSEUNION.fields_by_name['conditional_put'])
+_INTERNALRESPONSEUNION.fields_by_name['conditional_put'].containing_oneof = _INTERNALRESPONSEUNION.oneofs_by_name['value']
+_INTERNALRESPONSEUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRESPONSEUNION.fields_by_name['increment'])
+_INTERNALRESPONSEUNION.fields_by_name['increment'].containing_oneof = _INTERNALRESPONSEUNION.oneofs_by_name['value']
+_INTERNALRESPONSEUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRESPONSEUNION.fields_by_name['delete'])
+_INTERNALRESPONSEUNION.fields_by_name['delete'].containing_oneof = _INTERNALRESPONSEUNION.oneofs_by_name['value']
+_INTERNALRESPONSEUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRESPONSEUNION.fields_by_name['delete_range'])
+_INTERNALRESPONSEUNION.fields_by_name['delete_range'].containing_oneof = _INTERNALRESPONSEUNION.oneofs_by_name['value']
+_INTERNALRESPONSEUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRESPONSEUNION.fields_by_name['scan'])
+_INTERNALRESPONSEUNION.fields_by_name['scan'].containing_oneof = _INTERNALRESPONSEUNION.oneofs_by_name['value']
+_INTERNALRESPONSEUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRESPONSEUNION.fields_by_name['end_transaction'])
+_INTERNALRESPONSEUNION.fields_by_name['end_transaction'].containing_oneof = _INTERNALRESPONSEUNION.oneofs_by_name['value']
+_INTERNALRESPONSEUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRESPONSEUNION.fields_by_name['internal_push_txn'])
+_INTERNALRESPONSEUNION.fields_by_name['internal_push_txn'].containing_oneof = _INTERNALRESPONSEUNION.oneofs_by_name['value']
+_INTERNALRESPONSEUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRESPONSEUNION.fields_by_name['internal_resolve_intent'])
+_INTERNALRESPONSEUNION.fields_by_name['internal_resolve_intent'].containing_oneof = _INTERNALRESPONSEUNION.oneofs_by_name['value']
+_INTERNALBATCHREQUEST.fields_by_name['header'].message_type = cockroach.proto.api_pb2._REQUESTHEADER
+_INTERNALBATCHREQUEST.fields_by_name['requests'].message_type = _INTERNALREQUESTUNION
+_INTERNALBATCHRESPONSE.fields_by_name['header'].message_type = cockroach.proto.api_pb2._RESPONSEHEADER
+_INTERNALBATCHRESPONSE.fields_by_name['responses'].message_type = _INTERNALRESPONSEUNION
 _READWRITECMDRESPONSE.fields_by_name['put'].message_type = cockroach.proto.api_pb2._PUTRESPONSE
 _READWRITECMDRESPONSE.fields_by_name['conditional_put'].message_type = cockroach.proto.api_pb2._CONDITIONALPUTRESPONSE
 _READWRITECMDRESPONSE.fields_by_name['increment'].message_type = cockroach.proto.api_pb2._INCREMENTRESPONSE
 _READWRITECMDRESPONSE.fields_by_name['delete'].message_type = cockroach.proto.api_pb2._DELETERESPONSE
 _READWRITECMDRESPONSE.fields_by_name['delete_range'].message_type = cockroach.proto.api_pb2._DELETERANGERESPONSE
 _READWRITECMDRESPONSE.fields_by_name['end_transaction'].message_type = cockroach.proto.api_pb2._ENDTRANSACTIONRESPONSE
-_READWRITECMDRESPONSE.fields_by_name['reap_queue'].message_type = cockroach.proto.api_pb2._REAPQUEUERESPONSE
-_READWRITECMDRESPONSE.fields_by_name['enqueue_update'].message_type = cockroach.proto.api_pb2._ENQUEUEUPDATERESPONSE
-_READWRITECMDRESPONSE.fields_by_name['enqueue_message'].message_type = cockroach.proto.api_pb2._ENQUEUEMESSAGERESPONSE
 _READWRITECMDRESPONSE.fields_by_name['internal_heartbeat_txn'].message_type = _INTERNALHEARTBEATTXNRESPONSE
 _READWRITECMDRESPONSE.fields_by_name['internal_push_txn'].message_type = _INTERNALPUSHTXNRESPONSE
 _READWRITECMDRESPONSE.fields_by_name['internal_resolve_intent'].message_type = _INTERNALRESOLVEINTENTRESPONSE
 _READWRITECMDRESPONSE.fields_by_name['internal_merge'].message_type = _INTERNALMERGERESPONSE
 _READWRITECMDRESPONSE.fields_by_name['internal_truncate_log'].message_type = _INTERNALTRUNCATELOGRESPONSE
 _READWRITECMDRESPONSE.fields_by_name['internal_gc'].message_type = _INTERNALGCRESPONSE
+_READWRITECMDRESPONSE.fields_by_name['internal_leader_lease'].message_type = _INTERNALLEADERLEASERESPONSE
+_READWRITECMDRESPONSE.oneofs_by_name['value'].fields.append(
+  _READWRITECMDRESPONSE.fields_by_name['put'])
+_READWRITECMDRESPONSE.fields_by_name['put'].containing_oneof = _READWRITECMDRESPONSE.oneofs_by_name['value']
+_READWRITECMDRESPONSE.oneofs_by_name['value'].fields.append(
+  _READWRITECMDRESPONSE.fields_by_name['conditional_put'])
+_READWRITECMDRESPONSE.fields_by_name['conditional_put'].containing_oneof = _READWRITECMDRESPONSE.oneofs_by_name['value']
+_READWRITECMDRESPONSE.oneofs_by_name['value'].fields.append(
+  _READWRITECMDRESPONSE.fields_by_name['increment'])
+_READWRITECMDRESPONSE.fields_by_name['increment'].containing_oneof = _READWRITECMDRESPONSE.oneofs_by_name['value']
+_READWRITECMDRESPONSE.oneofs_by_name['value'].fields.append(
+  _READWRITECMDRESPONSE.fields_by_name['delete'])
+_READWRITECMDRESPONSE.fields_by_name['delete'].containing_oneof = _READWRITECMDRESPONSE.oneofs_by_name['value']
+_READWRITECMDRESPONSE.oneofs_by_name['value'].fields.append(
+  _READWRITECMDRESPONSE.fields_by_name['delete_range'])
+_READWRITECMDRESPONSE.fields_by_name['delete_range'].containing_oneof = _READWRITECMDRESPONSE.oneofs_by_name['value']
+_READWRITECMDRESPONSE.oneofs_by_name['value'].fields.append(
+  _READWRITECMDRESPONSE.fields_by_name['end_transaction'])
+_READWRITECMDRESPONSE.fields_by_name['end_transaction'].containing_oneof = _READWRITECMDRESPONSE.oneofs_by_name['value']
+_READWRITECMDRESPONSE.oneofs_by_name['value'].fields.append(
+  _READWRITECMDRESPONSE.fields_by_name['internal_heartbeat_txn'])
+_READWRITECMDRESPONSE.fields_by_name['internal_heartbeat_txn'].containing_oneof = _READWRITECMDRESPONSE.oneofs_by_name['value']
+_READWRITECMDRESPONSE.oneofs_by_name['value'].fields.append(
+  _READWRITECMDRESPONSE.fields_by_name['internal_push_txn'])
+_READWRITECMDRESPONSE.fields_by_name['internal_push_txn'].containing_oneof = _READWRITECMDRESPONSE.oneofs_by_name['value']
+_READWRITECMDRESPONSE.oneofs_by_name['value'].fields.append(
+  _READWRITECMDRESPONSE.fields_by_name['internal_resolve_intent'])
+_READWRITECMDRESPONSE.fields_by_name['internal_resolve_intent'].containing_oneof = _READWRITECMDRESPONSE.oneofs_by_name['value']
+_READWRITECMDRESPONSE.oneofs_by_name['value'].fields.append(
+  _READWRITECMDRESPONSE.fields_by_name['internal_merge'])
+_READWRITECMDRESPONSE.fields_by_name['internal_merge'].containing_oneof = _READWRITECMDRESPONSE.oneofs_by_name['value']
+_READWRITECMDRESPONSE.oneofs_by_name['value'].fields.append(
+  _READWRITECMDRESPONSE.fields_by_name['internal_truncate_log'])
+_READWRITECMDRESPONSE.fields_by_name['internal_truncate_log'].containing_oneof = _READWRITECMDRESPONSE.oneofs_by_name['value']
+_READWRITECMDRESPONSE.oneofs_by_name['value'].fields.append(
+  _READWRITECMDRESPONSE.fields_by_name['internal_gc'])
+_READWRITECMDRESPONSE.fields_by_name['internal_gc'].containing_oneof = _READWRITECMDRESPONSE.oneofs_by_name['value']
+_READWRITECMDRESPONSE.oneofs_by_name['value'].fields.append(
+  _READWRITECMDRESPONSE.fields_by_name['internal_leader_lease'])
+_READWRITECMDRESPONSE.fields_by_name['internal_leader_lease'].containing_oneof = _READWRITECMDRESPONSE.oneofs_by_name['value']
 _INTERNALRAFTCOMMANDUNION.fields_by_name['contains'].message_type = cockroach.proto.api_pb2._CONTAINSREQUEST
 _INTERNALRAFTCOMMANDUNION.fields_by_name['get'].message_type = cockroach.proto.api_pb2._GETREQUEST
 _INTERNALRAFTCOMMANDUNION.fields_by_name['put'].message_type = cockroach.proto.api_pb2._PUTREQUEST
@@ -1072,9 +1751,6 @@ _INTERNALRAFTCOMMANDUNION.fields_by_name['delete'].message_type = cockroach.prot
 _INTERNALRAFTCOMMANDUNION.fields_by_name['delete_range'].message_type = cockroach.proto.api_pb2._DELETERANGEREQUEST
 _INTERNALRAFTCOMMANDUNION.fields_by_name['scan'].message_type = cockroach.proto.api_pb2._SCANREQUEST
 _INTERNALRAFTCOMMANDUNION.fields_by_name['end_transaction'].message_type = cockroach.proto.api_pb2._ENDTRANSACTIONREQUEST
-_INTERNALRAFTCOMMANDUNION.fields_by_name['reap_queue'].message_type = cockroach.proto.api_pb2._REAPQUEUEREQUEST
-_INTERNALRAFTCOMMANDUNION.fields_by_name['enqueue_update'].message_type = cockroach.proto.api_pb2._ENQUEUEUPDATEREQUEST
-_INTERNALRAFTCOMMANDUNION.fields_by_name['enqueue_message'].message_type = cockroach.proto.api_pb2._ENQUEUEMESSAGEREQUEST
 _INTERNALRAFTCOMMANDUNION.fields_by_name['batch'].message_type = cockroach.proto.api_pb2._BATCHREQUEST
 _INTERNALRAFTCOMMANDUNION.fields_by_name['internal_range_lookup'].message_type = _INTERNALRANGELOOKUPREQUEST
 _INTERNALRAFTCOMMANDUNION.fields_by_name['internal_heartbeat_txn'].message_type = _INTERNALHEARTBEATTXNREQUEST
@@ -1083,8 +1759,69 @@ _INTERNALRAFTCOMMANDUNION.fields_by_name['internal_resolve_intent'].message_type
 _INTERNALRAFTCOMMANDUNION.fields_by_name['internal_merge_response'].message_type = _INTERNALMERGEREQUEST
 _INTERNALRAFTCOMMANDUNION.fields_by_name['internal_truncate_log'].message_type = _INTERNALTRUNCATELOGREQUEST
 _INTERNALRAFTCOMMANDUNION.fields_by_name['internal_gc'].message_type = _INTERNALGCREQUEST
+_INTERNALRAFTCOMMANDUNION.fields_by_name['internal_lease'].message_type = _INTERNALLEADERLEASEREQUEST
+_INTERNALRAFTCOMMANDUNION.fields_by_name['internal_batch'].message_type = _INTERNALBATCHREQUEST
+_INTERNALRAFTCOMMANDUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRAFTCOMMANDUNION.fields_by_name['contains'])
+_INTERNALRAFTCOMMANDUNION.fields_by_name['contains'].containing_oneof = _INTERNALRAFTCOMMANDUNION.oneofs_by_name['value']
+_INTERNALRAFTCOMMANDUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRAFTCOMMANDUNION.fields_by_name['get'])
+_INTERNALRAFTCOMMANDUNION.fields_by_name['get'].containing_oneof = _INTERNALRAFTCOMMANDUNION.oneofs_by_name['value']
+_INTERNALRAFTCOMMANDUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRAFTCOMMANDUNION.fields_by_name['put'])
+_INTERNALRAFTCOMMANDUNION.fields_by_name['put'].containing_oneof = _INTERNALRAFTCOMMANDUNION.oneofs_by_name['value']
+_INTERNALRAFTCOMMANDUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRAFTCOMMANDUNION.fields_by_name['conditional_put'])
+_INTERNALRAFTCOMMANDUNION.fields_by_name['conditional_put'].containing_oneof = _INTERNALRAFTCOMMANDUNION.oneofs_by_name['value']
+_INTERNALRAFTCOMMANDUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRAFTCOMMANDUNION.fields_by_name['increment'])
+_INTERNALRAFTCOMMANDUNION.fields_by_name['increment'].containing_oneof = _INTERNALRAFTCOMMANDUNION.oneofs_by_name['value']
+_INTERNALRAFTCOMMANDUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRAFTCOMMANDUNION.fields_by_name['delete'])
+_INTERNALRAFTCOMMANDUNION.fields_by_name['delete'].containing_oneof = _INTERNALRAFTCOMMANDUNION.oneofs_by_name['value']
+_INTERNALRAFTCOMMANDUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRAFTCOMMANDUNION.fields_by_name['delete_range'])
+_INTERNALRAFTCOMMANDUNION.fields_by_name['delete_range'].containing_oneof = _INTERNALRAFTCOMMANDUNION.oneofs_by_name['value']
+_INTERNALRAFTCOMMANDUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRAFTCOMMANDUNION.fields_by_name['scan'])
+_INTERNALRAFTCOMMANDUNION.fields_by_name['scan'].containing_oneof = _INTERNALRAFTCOMMANDUNION.oneofs_by_name['value']
+_INTERNALRAFTCOMMANDUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRAFTCOMMANDUNION.fields_by_name['end_transaction'])
+_INTERNALRAFTCOMMANDUNION.fields_by_name['end_transaction'].containing_oneof = _INTERNALRAFTCOMMANDUNION.oneofs_by_name['value']
+_INTERNALRAFTCOMMANDUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRAFTCOMMANDUNION.fields_by_name['batch'])
+_INTERNALRAFTCOMMANDUNION.fields_by_name['batch'].containing_oneof = _INTERNALRAFTCOMMANDUNION.oneofs_by_name['value']
+_INTERNALRAFTCOMMANDUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRAFTCOMMANDUNION.fields_by_name['internal_range_lookup'])
+_INTERNALRAFTCOMMANDUNION.fields_by_name['internal_range_lookup'].containing_oneof = _INTERNALRAFTCOMMANDUNION.oneofs_by_name['value']
+_INTERNALRAFTCOMMANDUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRAFTCOMMANDUNION.fields_by_name['internal_heartbeat_txn'])
+_INTERNALRAFTCOMMANDUNION.fields_by_name['internal_heartbeat_txn'].containing_oneof = _INTERNALRAFTCOMMANDUNION.oneofs_by_name['value']
+_INTERNALRAFTCOMMANDUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRAFTCOMMANDUNION.fields_by_name['internal_push_txn'])
+_INTERNALRAFTCOMMANDUNION.fields_by_name['internal_push_txn'].containing_oneof = _INTERNALRAFTCOMMANDUNION.oneofs_by_name['value']
+_INTERNALRAFTCOMMANDUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRAFTCOMMANDUNION.fields_by_name['internal_resolve_intent'])
+_INTERNALRAFTCOMMANDUNION.fields_by_name['internal_resolve_intent'].containing_oneof = _INTERNALRAFTCOMMANDUNION.oneofs_by_name['value']
+_INTERNALRAFTCOMMANDUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRAFTCOMMANDUNION.fields_by_name['internal_merge_response'])
+_INTERNALRAFTCOMMANDUNION.fields_by_name['internal_merge_response'].containing_oneof = _INTERNALRAFTCOMMANDUNION.oneofs_by_name['value']
+_INTERNALRAFTCOMMANDUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRAFTCOMMANDUNION.fields_by_name['internal_truncate_log'])
+_INTERNALRAFTCOMMANDUNION.fields_by_name['internal_truncate_log'].containing_oneof = _INTERNALRAFTCOMMANDUNION.oneofs_by_name['value']
+_INTERNALRAFTCOMMANDUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRAFTCOMMANDUNION.fields_by_name['internal_gc'])
+_INTERNALRAFTCOMMANDUNION.fields_by_name['internal_gc'].containing_oneof = _INTERNALRAFTCOMMANDUNION.oneofs_by_name['value']
+_INTERNALRAFTCOMMANDUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRAFTCOMMANDUNION.fields_by_name['internal_lease'])
+_INTERNALRAFTCOMMANDUNION.fields_by_name['internal_lease'].containing_oneof = _INTERNALRAFTCOMMANDUNION.oneofs_by_name['value']
+_INTERNALRAFTCOMMANDUNION.oneofs_by_name['value'].fields.append(
+  _INTERNALRAFTCOMMANDUNION.fields_by_name['internal_batch'])
+_INTERNALRAFTCOMMANDUNION.fields_by_name['internal_batch'].containing_oneof = _INTERNALRAFTCOMMANDUNION.oneofs_by_name['value']
 _INTERNALRAFTCOMMAND.fields_by_name['cmd'].message_type = _INTERNALRAFTCOMMANDUNION
 _INTERNALTIMESERIESDATA.fields_by_name['samples'].message_type = _INTERNALTIMESERIESSAMPLE
+_RAFTSNAPSHOTDATA_KEYVALUE.containing_type = _RAFTSNAPSHOTDATA
+_RAFTSNAPSHOTDATA.fields_by_name['KV'].message_type = _RAFTSNAPSHOTDATA_KEYVALUE
 DESCRIPTOR.message_types_by_name['InternalRangeLookupRequest'] = _INTERNALRANGELOOKUPREQUEST
 DESCRIPTOR.message_types_by_name['InternalRangeLookupResponse'] = _INTERNALRANGELOOKUPRESPONSE
 DESCRIPTOR.message_types_by_name['InternalHeartbeatTxnRequest'] = _INTERNALHEARTBEATTXNREQUEST
@@ -1099,11 +1836,22 @@ DESCRIPTOR.message_types_by_name['InternalMergeRequest'] = _INTERNALMERGEREQUEST
 DESCRIPTOR.message_types_by_name['InternalMergeResponse'] = _INTERNALMERGERESPONSE
 DESCRIPTOR.message_types_by_name['InternalTruncateLogRequest'] = _INTERNALTRUNCATELOGREQUEST
 DESCRIPTOR.message_types_by_name['InternalTruncateLogResponse'] = _INTERNALTRUNCATELOGRESPONSE
+DESCRIPTOR.message_types_by_name['InternalLeaderLeaseRequest'] = _INTERNALLEADERLEASEREQUEST
+DESCRIPTOR.message_types_by_name['InternalLeaderLeaseResponse'] = _INTERNALLEADERLEASERESPONSE
+DESCRIPTOR.message_types_by_name['InternalRequestUnion'] = _INTERNALREQUESTUNION
+DESCRIPTOR.message_types_by_name['InternalResponseUnion'] = _INTERNALRESPONSEUNION
+DESCRIPTOR.message_types_by_name['InternalBatchRequest'] = _INTERNALBATCHREQUEST
+DESCRIPTOR.message_types_by_name['InternalBatchResponse'] = _INTERNALBATCHRESPONSE
 DESCRIPTOR.message_types_by_name['ReadWriteCmdResponse'] = _READWRITECMDRESPONSE
 DESCRIPTOR.message_types_by_name['InternalRaftCommandUnion'] = _INTERNALRAFTCOMMANDUNION
 DESCRIPTOR.message_types_by_name['InternalRaftCommand'] = _INTERNALRAFTCOMMAND
+DESCRIPTOR.message_types_by_name['RaftMessageRequest'] = _RAFTMESSAGEREQUEST
+DESCRIPTOR.message_types_by_name['RaftMessageResponse'] = _RAFTMESSAGERESPONSE
 DESCRIPTOR.message_types_by_name['InternalTimeSeriesData'] = _INTERNALTIMESERIESDATA
 DESCRIPTOR.message_types_by_name['InternalTimeSeriesSample'] = _INTERNALTIMESERIESSAMPLE
+DESCRIPTOR.message_types_by_name['RaftTruncatedState'] = _RAFTTRUNCATEDSTATE
+DESCRIPTOR.message_types_by_name['RaftSnapshotData'] = _RAFTSNAPSHOTDATA
+DESCRIPTOR.enum_types_by_name['PushTxnType'] = _PUSHTXNTYPE
 DESCRIPTOR.enum_types_by_name['InternalValueType'] = _INTERNALVALUETYPE
 
 InternalRangeLookupRequest = _reflection.GeneratedProtocolMessageType('InternalRangeLookupRequest', (_message.Message,), dict(
@@ -1212,6 +1960,48 @@ InternalTruncateLogResponse = _reflection.GeneratedProtocolMessageType('Internal
   ))
 _sym_db.RegisterMessage(InternalTruncateLogResponse)
 
+InternalLeaderLeaseRequest = _reflection.GeneratedProtocolMessageType('InternalLeaderLeaseRequest', (_message.Message,), dict(
+  DESCRIPTOR = _INTERNALLEADERLEASEREQUEST,
+  __module__ = 'cockroach.proto.internal_pb2'
+  # @@protoc_insertion_point(class_scope:cockroach.proto.InternalLeaderLeaseRequest)
+  ))
+_sym_db.RegisterMessage(InternalLeaderLeaseRequest)
+
+InternalLeaderLeaseResponse = _reflection.GeneratedProtocolMessageType('InternalLeaderLeaseResponse', (_message.Message,), dict(
+  DESCRIPTOR = _INTERNALLEADERLEASERESPONSE,
+  __module__ = 'cockroach.proto.internal_pb2'
+  # @@protoc_insertion_point(class_scope:cockroach.proto.InternalLeaderLeaseResponse)
+  ))
+_sym_db.RegisterMessage(InternalLeaderLeaseResponse)
+
+InternalRequestUnion = _reflection.GeneratedProtocolMessageType('InternalRequestUnion', (_message.Message,), dict(
+  DESCRIPTOR = _INTERNALREQUESTUNION,
+  __module__ = 'cockroach.proto.internal_pb2'
+  # @@protoc_insertion_point(class_scope:cockroach.proto.InternalRequestUnion)
+  ))
+_sym_db.RegisterMessage(InternalRequestUnion)
+
+InternalResponseUnion = _reflection.GeneratedProtocolMessageType('InternalResponseUnion', (_message.Message,), dict(
+  DESCRIPTOR = _INTERNALRESPONSEUNION,
+  __module__ = 'cockroach.proto.internal_pb2'
+  # @@protoc_insertion_point(class_scope:cockroach.proto.InternalResponseUnion)
+  ))
+_sym_db.RegisterMessage(InternalResponseUnion)
+
+InternalBatchRequest = _reflection.GeneratedProtocolMessageType('InternalBatchRequest', (_message.Message,), dict(
+  DESCRIPTOR = _INTERNALBATCHREQUEST,
+  __module__ = 'cockroach.proto.internal_pb2'
+  # @@protoc_insertion_point(class_scope:cockroach.proto.InternalBatchRequest)
+  ))
+_sym_db.RegisterMessage(InternalBatchRequest)
+
+InternalBatchResponse = _reflection.GeneratedProtocolMessageType('InternalBatchResponse', (_message.Message,), dict(
+  DESCRIPTOR = _INTERNALBATCHRESPONSE,
+  __module__ = 'cockroach.proto.internal_pb2'
+  # @@protoc_insertion_point(class_scope:cockroach.proto.InternalBatchResponse)
+  ))
+_sym_db.RegisterMessage(InternalBatchResponse)
+
 ReadWriteCmdResponse = _reflection.GeneratedProtocolMessageType('ReadWriteCmdResponse', (_message.Message,), dict(
   DESCRIPTOR = _READWRITECMDRESPONSE,
   __module__ = 'cockroach.proto.internal_pb2'
@@ -1233,6 +2023,20 @@ InternalRaftCommand = _reflection.GeneratedProtocolMessageType('InternalRaftComm
   ))
 _sym_db.RegisterMessage(InternalRaftCommand)
 
+RaftMessageRequest = _reflection.GeneratedProtocolMessageType('RaftMessageRequest', (_message.Message,), dict(
+  DESCRIPTOR = _RAFTMESSAGEREQUEST,
+  __module__ = 'cockroach.proto.internal_pb2'
+  # @@protoc_insertion_point(class_scope:cockroach.proto.RaftMessageRequest)
+  ))
+_sym_db.RegisterMessage(RaftMessageRequest)
+
+RaftMessageResponse = _reflection.GeneratedProtocolMessageType('RaftMessageResponse', (_message.Message,), dict(
+  DESCRIPTOR = _RAFTMESSAGERESPONSE,
+  __module__ = 'cockroach.proto.internal_pb2'
+  # @@protoc_insertion_point(class_scope:cockroach.proto.RaftMessageResponse)
+  ))
+_sym_db.RegisterMessage(RaftMessageResponse)
+
 InternalTimeSeriesData = _reflection.GeneratedProtocolMessageType('InternalTimeSeriesData', (_message.Message,), dict(
   DESCRIPTOR = _INTERNALTIMESERIESDATA,
   __module__ = 'cockroach.proto.internal_pb2'
@@ -1246,6 +2050,28 @@ InternalTimeSeriesSample = _reflection.GeneratedProtocolMessageType('InternalTim
   # @@protoc_insertion_point(class_scope:cockroach.proto.InternalTimeSeriesSample)
   ))
 _sym_db.RegisterMessage(InternalTimeSeriesSample)
+
+RaftTruncatedState = _reflection.GeneratedProtocolMessageType('RaftTruncatedState', (_message.Message,), dict(
+  DESCRIPTOR = _RAFTTRUNCATEDSTATE,
+  __module__ = 'cockroach.proto.internal_pb2'
+  # @@protoc_insertion_point(class_scope:cockroach.proto.RaftTruncatedState)
+  ))
+_sym_db.RegisterMessage(RaftTruncatedState)
+
+RaftSnapshotData = _reflection.GeneratedProtocolMessageType('RaftSnapshotData', (_message.Message,), dict(
+
+  KeyValue = _reflection.GeneratedProtocolMessageType('KeyValue', (_message.Message,), dict(
+    DESCRIPTOR = _RAFTSNAPSHOTDATA_KEYVALUE,
+    __module__ = 'cockroach.proto.internal_pb2'
+    # @@protoc_insertion_point(class_scope:cockroach.proto.RaftSnapshotData.KeyValue)
+    ))
+  ,
+  DESCRIPTOR = _RAFTSNAPSHOTDATA,
+  __module__ = 'cockroach.proto.internal_pb2'
+  # @@protoc_insertion_point(class_scope:cockroach.proto.RaftSnapshotData)
+  ))
+_sym_db.RegisterMessage(RaftSnapshotData)
+_sym_db.RegisterMessage(RaftSnapshotData.KeyValue)
 
 
 DESCRIPTOR.has_options = True

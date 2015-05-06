@@ -3,6 +3,7 @@
 
 import sys
 _b=sys.version_info[0]<3 and (lambda x:x) or (lambda x:x.encode('latin1'))
+from google.protobuf.internal import enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
@@ -21,11 +22,41 @@ import cockroach.proto.errors_pb2
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='cockroach/proto/api.proto',
   package='cockroach.proto',
-  serialized_pb=_b('\n\x19\x63ockroach/proto/api.proto\x12\x0f\x63ockroach.proto\x1a\x1c\x63ockroach/proto/config.proto\x1a\x1a\x63ockroach/proto/data.proto\x1a\x1c\x63ockroach/proto/errors.proto\"0\n\x0b\x43lientCmdID\x12\x11\n\twall_time\x18\x01 \x01(\x03\x12\x0e\n\x06random\x18\x02 \x01(\x03\"\x99\x02\n\rRequestHeader\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12,\n\x06\x63md_id\x18\x02 \x01(\x0b\x32\x1c.cockroach.proto.ClientCmdID\x12\x0b\n\x03key\x18\x03 \x01(\x0c\x12\x0f\n\x07\x65nd_key\x18\x04 \x01(\x0c\x12\x0c\n\x04user\x18\x05 \x01(\t\x12)\n\x07replica\x18\x06 \x01(\x0b\x32\x18.cockroach.proto.Replica\x12\x0f\n\x07raft_id\x18\x07 \x01(\x03\x12\x18\n\ruser_priority\x18\x08 \x01(\x05:\x01\x31\x12)\n\x03txn\x18\t \x01(\x0b\x32\x1c.cockroach.proto.Transaction\"\x91\x01\n\x0eResponseHeader\x12%\n\x05\x65rror\x18\x01 \x01(\x0b\x32\x16.cockroach.proto.Error\x12-\n\ttimestamp\x18\x02 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12)\n\x03txn\x18\x03 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\"A\n\x0f\x43ontainsRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\"S\n\x10\x43ontainsResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\x12\x0e\n\x06\x65xists\x18\x02 \x01(\x08\"<\n\nGetRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\"e\n\x0bGetResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.cockroach.proto.Value\"c\n\nPutRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.cockroach.proto.Value\">\n\x0bPutResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"\x99\x01\n\x15\x43onditionalPutRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.cockroach.proto.Value\x12)\n\texp_value\x18\x03 \x01(\x0b\x32\x16.cockroach.proto.Value\"I\n\x16\x43onditionalPutResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"U\n\x10IncrementRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12\x11\n\tincrement\x18\x02 \x01(\x03\"W\n\x11IncrementResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\x12\x11\n\tnew_value\x18\x02 \x01(\x03\"?\n\rDeleteRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\"A\n\x0e\x44\x65leteResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"c\n\x12\x44\x65leteRangeRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12\x1d\n\x15max_entries_to_delete\x18\x02 \x01(\x03\"[\n\x13\x44\x65leteRangeResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\x12\x13\n\x0bnum_deleted\x18\x02 \x01(\x03\"R\n\x0bScanRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12\x13\n\x0bmax_results\x18\x02 \x01(\x03\"h\n\x0cScanResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\x12\'\n\x04rows\x18\x02 \x03(\x0b\x32\x19.cockroach.proto.KeyValue\"\xa0\x01\n\x15\x45ndTransactionRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12\x0e\n\x06\x63ommit\x18\x02 \x01(\x08\x12G\n\x17internal_commit_trigger\x18\x03 \x01(\x0b\x32&.cockroach.proto.InternalCommitTrigger\"^\n\x16\x45ndTransactionResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\x12\x13\n\x0b\x63ommit_wait\x18\x02 \x01(\x03\"W\n\x10ReapQueueRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12\x13\n\x0bmax_results\x18\x02 \x01(\x03\"n\n\x11ReapQueueResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\x12(\n\x08messages\x18\x02 \x03(\x0b\x32\x16.cockroach.proto.Value\"F\n\x14\x45nqueueUpdateRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\"H\n\x15\x45nqueueUpdateResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"l\n\x15\x45nqueueMessageRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12#\n\x03msg\x18\x02 \x01(\x0b\x32\x16.cockroach.proto.Value\"I\n\x16\x45nqueueMessageResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"\x9c\x05\n\x0cRequestUnion\x12\x32\n\x08\x63ontains\x18\x01 \x01(\x0b\x32 .cockroach.proto.ContainsRequest\x12(\n\x03get\x18\x02 \x01(\x0b\x32\x1b.cockroach.proto.GetRequest\x12(\n\x03put\x18\x03 \x01(\x0b\x32\x1b.cockroach.proto.PutRequest\x12?\n\x0f\x63onditional_put\x18\x04 \x01(\x0b\x32&.cockroach.proto.ConditionalPutRequest\x12\x34\n\tincrement\x18\x05 \x01(\x0b\x32!.cockroach.proto.IncrementRequest\x12.\n\x06\x64\x65lete\x18\x06 \x01(\x0b\x32\x1e.cockroach.proto.DeleteRequest\x12\x39\n\x0c\x64\x65lete_range\x18\x07 \x01(\x0b\x32#.cockroach.proto.DeleteRangeRequest\x12*\n\x04scan\x18\x08 \x01(\x0b\x32\x1c.cockroach.proto.ScanRequest\x12?\n\x0f\x65nd_transaction\x18\t \x01(\x0b\x32&.cockroach.proto.EndTransactionRequest\x12\x35\n\nreap_queue\x18\n \x01(\x0b\x32!.cockroach.proto.ReapQueueRequest\x12=\n\x0e\x65nqueue_update\x18\x0b \x01(\x0b\x32%.cockroach.proto.EnqueueUpdateRequest\x12?\n\x0f\x65nqueue_message\x18\x0c \x01(\x0b\x32&.cockroach.proto.EnqueueMessageRequest\"\xa9\x05\n\rResponseUnion\x12\x33\n\x08\x63ontains\x18\x01 \x01(\x0b\x32!.cockroach.proto.ContainsResponse\x12)\n\x03get\x18\x02 \x01(\x0b\x32\x1c.cockroach.proto.GetResponse\x12)\n\x03put\x18\x03 \x01(\x0b\x32\x1c.cockroach.proto.PutResponse\x12@\n\x0f\x63onditional_put\x18\x04 \x01(\x0b\x32\'.cockroach.proto.ConditionalPutResponse\x12\x35\n\tincrement\x18\x05 \x01(\x0b\x32\".cockroach.proto.IncrementResponse\x12/\n\x06\x64\x65lete\x18\x06 \x01(\x0b\x32\x1f.cockroach.proto.DeleteResponse\x12:\n\x0c\x64\x65lete_range\x18\x07 \x01(\x0b\x32$.cockroach.proto.DeleteRangeResponse\x12+\n\x04scan\x18\x08 \x01(\x0b\x32\x1d.cockroach.proto.ScanResponse\x12@\n\x0f\x65nd_transaction\x18\t \x01(\x0b\x32\'.cockroach.proto.EndTransactionResponse\x12\x36\n\nreap_queue\x18\n \x01(\x0b\x32\".cockroach.proto.ReapQueueResponse\x12>\n\x0e\x65nqueue_update\x18\x0b \x01(\x0b\x32&.cockroach.proto.EnqueueUpdateResponse\x12@\n\x0f\x65nqueue_message\x18\x0c \x01(\x0b\x32\'.cockroach.proto.EnqueueMessageResponse\"o\n\x0c\x42\x61tchRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12/\n\x08requests\x18\x02 \x03(\x0b\x32\x1d.cockroach.proto.RequestUnion\"s\n\rBatchResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\x12\x31\n\tresponses\x18\x02 \x03(\x0b\x32\x1e.cockroach.proto.ResponseUnion\"V\n\x11\x41\x64minSplitRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12\x11\n\tsplit_key\x18\x02 \x01(\x0c\"E\n\x12\x41\x64minSplitResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"}\n\x11\x41\x64minMergeRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12\x38\n\x0esubsumed_range\x18\x02 \x01(\x0b\x32 .cockroach.proto.RangeDescriptor\"E\n\x12\x41\x64minMergeResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeaderB\x07Z\x05proto')
+  serialized_pb=_b('\n\x19\x63ockroach/proto/api.proto\x12\x0f\x63ockroach.proto\x1a\x1c\x63ockroach/proto/config.proto\x1a\x1a\x63ockroach/proto/data.proto\x1a\x1c\x63ockroach/proto/errors.proto\"0\n\x0b\x43lientCmdID\x12\x11\n\twall_time\x18\x01 \x01(\x03\x12\x0e\n\x06random\x18\x02 \x01(\x03\"\xd9\x02\n\rRequestHeader\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12,\n\x06\x63md_id\x18\x02 \x01(\x0b\x32\x1c.cockroach.proto.ClientCmdID\x12\x0b\n\x03key\x18\x03 \x01(\x0c\x12\x0f\n\x07\x65nd_key\x18\x04 \x01(\x0c\x12\x0c\n\x04user\x18\x05 \x01(\t\x12)\n\x07replica\x18\x06 \x01(\x0b\x32\x18.cockroach.proto.Replica\x12\x0f\n\x07raft_id\x18\x07 \x01(\x03\x12\x18\n\ruser_priority\x18\x08 \x01(\x05:\x01\x31\x12)\n\x03txn\x18\t \x01(\x0b\x32\x1c.cockroach.proto.Transaction\x12>\n\x10read_consistency\x18\n \x01(\x0e\x32$.cockroach.proto.ReadConsistencyType\"\x91\x01\n\x0eResponseHeader\x12%\n\x05\x65rror\x18\x01 \x01(\x0b\x32\x16.cockroach.proto.Error\x12-\n\ttimestamp\x18\x02 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12)\n\x03txn\x18\x03 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\"A\n\x0f\x43ontainsRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\"S\n\x10\x43ontainsResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\x12\x0e\n\x06\x65xists\x18\x02 \x01(\x08\"<\n\nGetRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\"e\n\x0bGetResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.cockroach.proto.Value\"c\n\nPutRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.cockroach.proto.Value\">\n\x0bPutResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"\x99\x01\n\x15\x43onditionalPutRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.cockroach.proto.Value\x12)\n\texp_value\x18\x03 \x01(\x0b\x32\x16.cockroach.proto.Value\"I\n\x16\x43onditionalPutResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"U\n\x10IncrementRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12\x11\n\tincrement\x18\x02 \x01(\x03\"W\n\x11IncrementResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\x12\x11\n\tnew_value\x18\x02 \x01(\x03\"?\n\rDeleteRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\"A\n\x0e\x44\x65leteResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"c\n\x12\x44\x65leteRangeRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12\x1d\n\x15max_entries_to_delete\x18\x02 \x01(\x03\"[\n\x13\x44\x65leteRangeResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\x12\x13\n\x0bnum_deleted\x18\x02 \x01(\x03\"R\n\x0bScanRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12\x13\n\x0bmax_results\x18\x02 \x01(\x03\"h\n\x0cScanResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\x12\'\n\x04rows\x18\x02 \x03(\x0b\x32\x19.cockroach.proto.KeyValue\"\xa0\x01\n\x15\x45ndTransactionRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12\x0e\n\x06\x63ommit\x18\x02 \x01(\x08\x12G\n\x17internal_commit_trigger\x18\x03 \x01(\x0b\x32&.cockroach.proto.InternalCommitTrigger\"p\n\x16\x45ndTransactionResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\x12\x13\n\x0b\x63ommit_wait\x18\x02 \x01(\x03\x12\x10\n\x08resolved\x18\x03 \x03(\x0c\"\x80\x04\n\x0cRequestUnion\x12\x34\n\x08\x63ontains\x18\x01 \x01(\x0b\x32 .cockroach.proto.ContainsRequestH\x00\x12*\n\x03get\x18\x02 \x01(\x0b\x32\x1b.cockroach.proto.GetRequestH\x00\x12*\n\x03put\x18\x03 \x01(\x0b\x32\x1b.cockroach.proto.PutRequestH\x00\x12\x41\n\x0f\x63onditional_put\x18\x04 \x01(\x0b\x32&.cockroach.proto.ConditionalPutRequestH\x00\x12\x36\n\tincrement\x18\x05 \x01(\x0b\x32!.cockroach.proto.IncrementRequestH\x00\x12\x30\n\x06\x64\x65lete\x18\x06 \x01(\x0b\x32\x1e.cockroach.proto.DeleteRequestH\x00\x12;\n\x0c\x64\x65lete_range\x18\x07 \x01(\x0b\x32#.cockroach.proto.DeleteRangeRequestH\x00\x12,\n\x04scan\x18\x08 \x01(\x0b\x32\x1c.cockroach.proto.ScanRequestH\x00\x12\x41\n\x0f\x65nd_transaction\x18\t \x01(\x0b\x32&.cockroach.proto.EndTransactionRequestH\x00\x42\x07\n\x05value\"\x8a\x04\n\rResponseUnion\x12\x35\n\x08\x63ontains\x18\x01 \x01(\x0b\x32!.cockroach.proto.ContainsResponseH\x00\x12+\n\x03get\x18\x02 \x01(\x0b\x32\x1c.cockroach.proto.GetResponseH\x00\x12+\n\x03put\x18\x03 \x01(\x0b\x32\x1c.cockroach.proto.PutResponseH\x00\x12\x42\n\x0f\x63onditional_put\x18\x04 \x01(\x0b\x32\'.cockroach.proto.ConditionalPutResponseH\x00\x12\x37\n\tincrement\x18\x05 \x01(\x0b\x32\".cockroach.proto.IncrementResponseH\x00\x12\x31\n\x06\x64\x65lete\x18\x06 \x01(\x0b\x32\x1f.cockroach.proto.DeleteResponseH\x00\x12<\n\x0c\x64\x65lete_range\x18\x07 \x01(\x0b\x32$.cockroach.proto.DeleteRangeResponseH\x00\x12-\n\x04scan\x18\x08 \x01(\x0b\x32\x1d.cockroach.proto.ScanResponseH\x00\x12\x42\n\x0f\x65nd_transaction\x18\t \x01(\x0b\x32\'.cockroach.proto.EndTransactionResponseH\x00\x42\x07\n\x05value\"o\n\x0c\x42\x61tchRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12/\n\x08requests\x18\x02 \x03(\x0b\x32\x1d.cockroach.proto.RequestUnion\"s\n\rBatchResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\x12\x31\n\tresponses\x18\x02 \x03(\x0b\x32\x1e.cockroach.proto.ResponseUnion\"V\n\x11\x41\x64minSplitRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\x12\x11\n\tsplit_key\x18\x02 \x01(\x0c\"E\n\x12\x41\x64minSplitResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader\"C\n\x11\x41\x64minMergeRequest\x12.\n\x06header\x18\x01 \x01(\x0b\x32\x1e.cockroach.proto.RequestHeader\"E\n\x12\x41\x64minMergeResponse\x12/\n\x06header\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.ResponseHeader*F\n\x13ReadConsistencyType\x12\x0e\n\nCONSISTENT\x10\x00\x12\r\n\tCONSENSUS\x10\x01\x12\x10\n\x0cINCONSISTENT\x10\x02\x42\x07Z\x05proto')
   ,
   dependencies=[cockroach.proto.config_pb2.DESCRIPTOR,cockroach.proto.data_pb2.DESCRIPTOR,cockroach.proto.errors_pb2.DESCRIPTOR,])
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
+_READCONSISTENCYTYPE = _descriptor.EnumDescriptor(
+  name='ReadConsistencyType',
+  full_name='cockroach.proto.ReadConsistencyType',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='CONSISTENT', index=0, number=0,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='CONSENSUS', index=1, number=1,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='INCONSISTENT', index=2, number=2,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=3931,
+  serialized_end=4001,
+)
+_sym_db.RegisterEnumDescriptor(_READCONSISTENCYTYPE)
+
+ReadConsistencyType = enum_type_wrapper.EnumTypeWrapper(_READCONSISTENCYTYPE)
+CONSISTENT = 0
+CONSENSUS = 1
+INCONSISTENT = 2
 
 
 
@@ -136,6 +167,13 @@ _REQUESTHEADER = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='read_consistency', full_name='cockroach.proto.RequestHeader.read_consistency', index=9,
+      number=10, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -148,7 +186,7 @@ _REQUESTHEADER = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=185,
-  serialized_end=466,
+  serialized_end=530,
 )
 
 
@@ -191,8 +229,8 @@ _RESPONSEHEADER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=469,
-  serialized_end=614,
+  serialized_start=533,
+  serialized_end=678,
 )
 
 
@@ -221,8 +259,8 @@ _CONTAINSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=616,
-  serialized_end=681,
+  serialized_start=680,
+  serialized_end=745,
 )
 
 
@@ -258,8 +296,8 @@ _CONTAINSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=683,
-  serialized_end=766,
+  serialized_start=747,
+  serialized_end=830,
 )
 
 
@@ -288,8 +326,8 @@ _GETREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=768,
-  serialized_end=828,
+  serialized_start=832,
+  serialized_end=892,
 )
 
 
@@ -325,8 +363,8 @@ _GETRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=830,
-  serialized_end=931,
+  serialized_start=894,
+  serialized_end=995,
 )
 
 
@@ -362,8 +400,8 @@ _PUTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=933,
-  serialized_end=1032,
+  serialized_start=997,
+  serialized_end=1096,
 )
 
 
@@ -392,8 +430,8 @@ _PUTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1034,
-  serialized_end=1096,
+  serialized_start=1098,
+  serialized_end=1160,
 )
 
 
@@ -436,8 +474,8 @@ _CONDITIONALPUTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1099,
-  serialized_end=1252,
+  serialized_start=1163,
+  serialized_end=1316,
 )
 
 
@@ -466,8 +504,8 @@ _CONDITIONALPUTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1254,
-  serialized_end=1327,
+  serialized_start=1318,
+  serialized_end=1391,
 )
 
 
@@ -503,8 +541,8 @@ _INCREMENTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1329,
-  serialized_end=1414,
+  serialized_start=1393,
+  serialized_end=1478,
 )
 
 
@@ -540,8 +578,8 @@ _INCREMENTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1416,
-  serialized_end=1503,
+  serialized_start=1480,
+  serialized_end=1567,
 )
 
 
@@ -570,8 +608,8 @@ _DELETEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1505,
-  serialized_end=1568,
+  serialized_start=1569,
+  serialized_end=1632,
 )
 
 
@@ -600,8 +638,8 @@ _DELETERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1570,
-  serialized_end=1635,
+  serialized_start=1634,
+  serialized_end=1699,
 )
 
 
@@ -637,8 +675,8 @@ _DELETERANGEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1637,
-  serialized_end=1736,
+  serialized_start=1701,
+  serialized_end=1800,
 )
 
 
@@ -674,8 +712,8 @@ _DELETERANGERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1738,
-  serialized_end=1829,
+  serialized_start=1802,
+  serialized_end=1893,
 )
 
 
@@ -711,8 +749,8 @@ _SCANREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1831,
-  serialized_end=1913,
+  serialized_start=1895,
+  serialized_end=1977,
 )
 
 
@@ -748,8 +786,8 @@ _SCANRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1915,
-  serialized_end=2019,
+  serialized_start=1979,
+  serialized_end=2083,
 )
 
 
@@ -792,8 +830,8 @@ _ENDTRANSACTIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2022,
-  serialized_end=2182,
+  serialized_start=2086,
+  serialized_end=2246,
 )
 
 
@@ -818,76 +856,9 @@ _ENDTRANSACTIONRESPONSE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2184,
-  serialized_end=2278,
-)
-
-
-_REAPQUEUEREQUEST = _descriptor.Descriptor(
-  name='ReapQueueRequest',
-  full_name='cockroach.proto.ReapQueueRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
     _descriptor.FieldDescriptor(
-      name='header', full_name='cockroach.proto.ReapQueueRequest.header', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='max_results', full_name='cockroach.proto.ReapQueueRequest.max_results', index=1,
-      number=2, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2280,
-  serialized_end=2367,
-)
-
-
-_REAPQUEUERESPONSE = _descriptor.Descriptor(
-  name='ReapQueueResponse',
-  full_name='cockroach.proto.ReapQueueResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='header', full_name='cockroach.proto.ReapQueueResponse.header', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='messages', full_name='cockroach.proto.ReapQueueResponse.messages', index=1,
-      number=2, type=11, cpp_type=10, label=3,
+      name='resolved', full_name='cockroach.proto.EndTransactionResponse.resolved', index=2,
+      number=3, type=12, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -903,135 +874,8 @@ _REAPQUEUERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2369,
-  serialized_end=2479,
-)
-
-
-_ENQUEUEUPDATEREQUEST = _descriptor.Descriptor(
-  name='EnqueueUpdateRequest',
-  full_name='cockroach.proto.EnqueueUpdateRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='header', full_name='cockroach.proto.EnqueueUpdateRequest.header', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2481,
-  serialized_end=2551,
-)
-
-
-_ENQUEUEUPDATERESPONSE = _descriptor.Descriptor(
-  name='EnqueueUpdateResponse',
-  full_name='cockroach.proto.EnqueueUpdateResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='header', full_name='cockroach.proto.EnqueueUpdateResponse.header', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2553,
-  serialized_end=2625,
-)
-
-
-_ENQUEUEMESSAGEREQUEST = _descriptor.Descriptor(
-  name='EnqueueMessageRequest',
-  full_name='cockroach.proto.EnqueueMessageRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='header', full_name='cockroach.proto.EnqueueMessageRequest.header', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='msg', full_name='cockroach.proto.EnqueueMessageRequest.msg', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2627,
-  serialized_end=2735,
-)
-
-
-_ENQUEUEMESSAGERESPONSE = _descriptor.Descriptor(
-  name='EnqueueMessageResponse',
-  full_name='cockroach.proto.EnqueueMessageResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='header', full_name='cockroach.proto.EnqueueMessageResponse.header', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2737,
-  serialized_end=2810,
+  serialized_start=2248,
+  serialized_end=2360,
 )
 
 
@@ -1105,27 +949,6 @@ _REQUESTUNION = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
-    _descriptor.FieldDescriptor(
-      name='reap_queue', full_name='cockroach.proto.RequestUnion.reap_queue', index=9,
-      number=10, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='enqueue_update', full_name='cockroach.proto.RequestUnion.enqueue_update', index=10,
-      number=11, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='enqueue_message', full_name='cockroach.proto.RequestUnion.enqueue_message', index=11,
-      number=12, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
   ],
   extensions=[
   ],
@@ -1136,9 +959,12 @@ _REQUESTUNION = _descriptor.Descriptor(
   is_extendable=False,
   extension_ranges=[],
   oneofs=[
+    _descriptor.OneofDescriptor(
+      name='value', full_name='cockroach.proto.RequestUnion.value',
+      index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=2813,
-  serialized_end=3481,
+  serialized_start=2363,
+  serialized_end=2875,
 )
 
 
@@ -1212,27 +1038,6 @@ _RESPONSEUNION = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
-    _descriptor.FieldDescriptor(
-      name='reap_queue', full_name='cockroach.proto.ResponseUnion.reap_queue', index=9,
-      number=10, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='enqueue_update', full_name='cockroach.proto.ResponseUnion.enqueue_update', index=10,
-      number=11, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='enqueue_message', full_name='cockroach.proto.ResponseUnion.enqueue_message', index=11,
-      number=12, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
   ],
   extensions=[
   ],
@@ -1243,9 +1048,12 @@ _RESPONSEUNION = _descriptor.Descriptor(
   is_extendable=False,
   extension_ranges=[],
   oneofs=[
+    _descriptor.OneofDescriptor(
+      name='value', full_name='cockroach.proto.ResponseUnion.value',
+      index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=3484,
-  serialized_end=4165,
+  serialized_start=2878,
+  serialized_end=3400,
 )
 
 
@@ -1281,8 +1089,8 @@ _BATCHREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4167,
-  serialized_end=4278,
+  serialized_start=3402,
+  serialized_end=3513,
 )
 
 
@@ -1318,8 +1126,8 @@ _BATCHRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4280,
-  serialized_end=4395,
+  serialized_start=3515,
+  serialized_end=3630,
 )
 
 
@@ -1355,8 +1163,8 @@ _ADMINSPLITREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4397,
-  serialized_end=4483,
+  serialized_start=3632,
+  serialized_end=3718,
 )
 
 
@@ -1385,8 +1193,8 @@ _ADMINSPLITRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4485,
-  serialized_end=4554,
+  serialized_start=3720,
+  serialized_end=3789,
 )
 
 
@@ -1404,13 +1212,6 @@ _ADMINMERGEREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
-    _descriptor.FieldDescriptor(
-      name='subsumed_range', full_name='cockroach.proto.AdminMergeRequest.subsumed_range', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
   ],
   extensions=[
   ],
@@ -1422,8 +1223,8 @@ _ADMINMERGEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4556,
-  serialized_end=4681,
+  serialized_start=3791,
+  serialized_end=3858,
 )
 
 
@@ -1452,14 +1253,15 @@ _ADMINMERGERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4683,
-  serialized_end=4752,
+  serialized_start=3860,
+  serialized_end=3929,
 )
 
 _REQUESTHEADER.fields_by_name['timestamp'].message_type = cockroach.proto.data_pb2._TIMESTAMP
 _REQUESTHEADER.fields_by_name['cmd_id'].message_type = _CLIENTCMDID
 _REQUESTHEADER.fields_by_name['replica'].message_type = cockroach.proto.config_pb2._REPLICA
 _REQUESTHEADER.fields_by_name['txn'].message_type = cockroach.proto.data_pb2._TRANSACTION
+_REQUESTHEADER.fields_by_name['read_consistency'].enum_type = _READCONSISTENCYTYPE
 _RESPONSEHEADER.fields_by_name['error'].message_type = cockroach.proto.errors_pb2._ERROR
 _RESPONSEHEADER.fields_by_name['timestamp'].message_type = cockroach.proto.data_pb2._TIMESTAMP
 _RESPONSEHEADER.fields_by_name['txn'].message_type = cockroach.proto.data_pb2._TRANSACTION
@@ -1487,14 +1289,6 @@ _SCANRESPONSE.fields_by_name['rows'].message_type = cockroach.proto.data_pb2._KE
 _ENDTRANSACTIONREQUEST.fields_by_name['header'].message_type = _REQUESTHEADER
 _ENDTRANSACTIONREQUEST.fields_by_name['internal_commit_trigger'].message_type = cockroach.proto.data_pb2._INTERNALCOMMITTRIGGER
 _ENDTRANSACTIONRESPONSE.fields_by_name['header'].message_type = _RESPONSEHEADER
-_REAPQUEUEREQUEST.fields_by_name['header'].message_type = _REQUESTHEADER
-_REAPQUEUERESPONSE.fields_by_name['header'].message_type = _RESPONSEHEADER
-_REAPQUEUERESPONSE.fields_by_name['messages'].message_type = cockroach.proto.data_pb2._VALUE
-_ENQUEUEUPDATEREQUEST.fields_by_name['header'].message_type = _REQUESTHEADER
-_ENQUEUEUPDATERESPONSE.fields_by_name['header'].message_type = _RESPONSEHEADER
-_ENQUEUEMESSAGEREQUEST.fields_by_name['header'].message_type = _REQUESTHEADER
-_ENQUEUEMESSAGEREQUEST.fields_by_name['msg'].message_type = cockroach.proto.data_pb2._VALUE
-_ENQUEUEMESSAGERESPONSE.fields_by_name['header'].message_type = _RESPONSEHEADER
 _REQUESTUNION.fields_by_name['contains'].message_type = _CONTAINSREQUEST
 _REQUESTUNION.fields_by_name['get'].message_type = _GETREQUEST
 _REQUESTUNION.fields_by_name['put'].message_type = _PUTREQUEST
@@ -1504,9 +1298,33 @@ _REQUESTUNION.fields_by_name['delete'].message_type = _DELETEREQUEST
 _REQUESTUNION.fields_by_name['delete_range'].message_type = _DELETERANGEREQUEST
 _REQUESTUNION.fields_by_name['scan'].message_type = _SCANREQUEST
 _REQUESTUNION.fields_by_name['end_transaction'].message_type = _ENDTRANSACTIONREQUEST
-_REQUESTUNION.fields_by_name['reap_queue'].message_type = _REAPQUEUEREQUEST
-_REQUESTUNION.fields_by_name['enqueue_update'].message_type = _ENQUEUEUPDATEREQUEST
-_REQUESTUNION.fields_by_name['enqueue_message'].message_type = _ENQUEUEMESSAGEREQUEST
+_REQUESTUNION.oneofs_by_name['value'].fields.append(
+  _REQUESTUNION.fields_by_name['contains'])
+_REQUESTUNION.fields_by_name['contains'].containing_oneof = _REQUESTUNION.oneofs_by_name['value']
+_REQUESTUNION.oneofs_by_name['value'].fields.append(
+  _REQUESTUNION.fields_by_name['get'])
+_REQUESTUNION.fields_by_name['get'].containing_oneof = _REQUESTUNION.oneofs_by_name['value']
+_REQUESTUNION.oneofs_by_name['value'].fields.append(
+  _REQUESTUNION.fields_by_name['put'])
+_REQUESTUNION.fields_by_name['put'].containing_oneof = _REQUESTUNION.oneofs_by_name['value']
+_REQUESTUNION.oneofs_by_name['value'].fields.append(
+  _REQUESTUNION.fields_by_name['conditional_put'])
+_REQUESTUNION.fields_by_name['conditional_put'].containing_oneof = _REQUESTUNION.oneofs_by_name['value']
+_REQUESTUNION.oneofs_by_name['value'].fields.append(
+  _REQUESTUNION.fields_by_name['increment'])
+_REQUESTUNION.fields_by_name['increment'].containing_oneof = _REQUESTUNION.oneofs_by_name['value']
+_REQUESTUNION.oneofs_by_name['value'].fields.append(
+  _REQUESTUNION.fields_by_name['delete'])
+_REQUESTUNION.fields_by_name['delete'].containing_oneof = _REQUESTUNION.oneofs_by_name['value']
+_REQUESTUNION.oneofs_by_name['value'].fields.append(
+  _REQUESTUNION.fields_by_name['delete_range'])
+_REQUESTUNION.fields_by_name['delete_range'].containing_oneof = _REQUESTUNION.oneofs_by_name['value']
+_REQUESTUNION.oneofs_by_name['value'].fields.append(
+  _REQUESTUNION.fields_by_name['scan'])
+_REQUESTUNION.fields_by_name['scan'].containing_oneof = _REQUESTUNION.oneofs_by_name['value']
+_REQUESTUNION.oneofs_by_name['value'].fields.append(
+  _REQUESTUNION.fields_by_name['end_transaction'])
+_REQUESTUNION.fields_by_name['end_transaction'].containing_oneof = _REQUESTUNION.oneofs_by_name['value']
 _RESPONSEUNION.fields_by_name['contains'].message_type = _CONTAINSRESPONSE
 _RESPONSEUNION.fields_by_name['get'].message_type = _GETRESPONSE
 _RESPONSEUNION.fields_by_name['put'].message_type = _PUTRESPONSE
@@ -1516,9 +1334,33 @@ _RESPONSEUNION.fields_by_name['delete'].message_type = _DELETERESPONSE
 _RESPONSEUNION.fields_by_name['delete_range'].message_type = _DELETERANGERESPONSE
 _RESPONSEUNION.fields_by_name['scan'].message_type = _SCANRESPONSE
 _RESPONSEUNION.fields_by_name['end_transaction'].message_type = _ENDTRANSACTIONRESPONSE
-_RESPONSEUNION.fields_by_name['reap_queue'].message_type = _REAPQUEUERESPONSE
-_RESPONSEUNION.fields_by_name['enqueue_update'].message_type = _ENQUEUEUPDATERESPONSE
-_RESPONSEUNION.fields_by_name['enqueue_message'].message_type = _ENQUEUEMESSAGERESPONSE
+_RESPONSEUNION.oneofs_by_name['value'].fields.append(
+  _RESPONSEUNION.fields_by_name['contains'])
+_RESPONSEUNION.fields_by_name['contains'].containing_oneof = _RESPONSEUNION.oneofs_by_name['value']
+_RESPONSEUNION.oneofs_by_name['value'].fields.append(
+  _RESPONSEUNION.fields_by_name['get'])
+_RESPONSEUNION.fields_by_name['get'].containing_oneof = _RESPONSEUNION.oneofs_by_name['value']
+_RESPONSEUNION.oneofs_by_name['value'].fields.append(
+  _RESPONSEUNION.fields_by_name['put'])
+_RESPONSEUNION.fields_by_name['put'].containing_oneof = _RESPONSEUNION.oneofs_by_name['value']
+_RESPONSEUNION.oneofs_by_name['value'].fields.append(
+  _RESPONSEUNION.fields_by_name['conditional_put'])
+_RESPONSEUNION.fields_by_name['conditional_put'].containing_oneof = _RESPONSEUNION.oneofs_by_name['value']
+_RESPONSEUNION.oneofs_by_name['value'].fields.append(
+  _RESPONSEUNION.fields_by_name['increment'])
+_RESPONSEUNION.fields_by_name['increment'].containing_oneof = _RESPONSEUNION.oneofs_by_name['value']
+_RESPONSEUNION.oneofs_by_name['value'].fields.append(
+  _RESPONSEUNION.fields_by_name['delete'])
+_RESPONSEUNION.fields_by_name['delete'].containing_oneof = _RESPONSEUNION.oneofs_by_name['value']
+_RESPONSEUNION.oneofs_by_name['value'].fields.append(
+  _RESPONSEUNION.fields_by_name['delete_range'])
+_RESPONSEUNION.fields_by_name['delete_range'].containing_oneof = _RESPONSEUNION.oneofs_by_name['value']
+_RESPONSEUNION.oneofs_by_name['value'].fields.append(
+  _RESPONSEUNION.fields_by_name['scan'])
+_RESPONSEUNION.fields_by_name['scan'].containing_oneof = _RESPONSEUNION.oneofs_by_name['value']
+_RESPONSEUNION.oneofs_by_name['value'].fields.append(
+  _RESPONSEUNION.fields_by_name['end_transaction'])
+_RESPONSEUNION.fields_by_name['end_transaction'].containing_oneof = _RESPONSEUNION.oneofs_by_name['value']
 _BATCHREQUEST.fields_by_name['header'].message_type = _REQUESTHEADER
 _BATCHREQUEST.fields_by_name['requests'].message_type = _REQUESTUNION
 _BATCHRESPONSE.fields_by_name['header'].message_type = _RESPONSEHEADER
@@ -1526,7 +1368,6 @@ _BATCHRESPONSE.fields_by_name['responses'].message_type = _RESPONSEUNION
 _ADMINSPLITREQUEST.fields_by_name['header'].message_type = _REQUESTHEADER
 _ADMINSPLITRESPONSE.fields_by_name['header'].message_type = _RESPONSEHEADER
 _ADMINMERGEREQUEST.fields_by_name['header'].message_type = _REQUESTHEADER
-_ADMINMERGEREQUEST.fields_by_name['subsumed_range'].message_type = cockroach.proto.config_pb2._RANGEDESCRIPTOR
 _ADMINMERGERESPONSE.fields_by_name['header'].message_type = _RESPONSEHEADER
 DESCRIPTOR.message_types_by_name['ClientCmdID'] = _CLIENTCMDID
 DESCRIPTOR.message_types_by_name['RequestHeader'] = _REQUESTHEADER
@@ -1549,12 +1390,6 @@ DESCRIPTOR.message_types_by_name['ScanRequest'] = _SCANREQUEST
 DESCRIPTOR.message_types_by_name['ScanResponse'] = _SCANRESPONSE
 DESCRIPTOR.message_types_by_name['EndTransactionRequest'] = _ENDTRANSACTIONREQUEST
 DESCRIPTOR.message_types_by_name['EndTransactionResponse'] = _ENDTRANSACTIONRESPONSE
-DESCRIPTOR.message_types_by_name['ReapQueueRequest'] = _REAPQUEUEREQUEST
-DESCRIPTOR.message_types_by_name['ReapQueueResponse'] = _REAPQUEUERESPONSE
-DESCRIPTOR.message_types_by_name['EnqueueUpdateRequest'] = _ENQUEUEUPDATEREQUEST
-DESCRIPTOR.message_types_by_name['EnqueueUpdateResponse'] = _ENQUEUEUPDATERESPONSE
-DESCRIPTOR.message_types_by_name['EnqueueMessageRequest'] = _ENQUEUEMESSAGEREQUEST
-DESCRIPTOR.message_types_by_name['EnqueueMessageResponse'] = _ENQUEUEMESSAGERESPONSE
 DESCRIPTOR.message_types_by_name['RequestUnion'] = _REQUESTUNION
 DESCRIPTOR.message_types_by_name['ResponseUnion'] = _RESPONSEUNION
 DESCRIPTOR.message_types_by_name['BatchRequest'] = _BATCHREQUEST
@@ -1563,6 +1398,7 @@ DESCRIPTOR.message_types_by_name['AdminSplitRequest'] = _ADMINSPLITREQUEST
 DESCRIPTOR.message_types_by_name['AdminSplitResponse'] = _ADMINSPLITRESPONSE
 DESCRIPTOR.message_types_by_name['AdminMergeRequest'] = _ADMINMERGEREQUEST
 DESCRIPTOR.message_types_by_name['AdminMergeResponse'] = _ADMINMERGERESPONSE
+DESCRIPTOR.enum_types_by_name['ReadConsistencyType'] = _READCONSISTENCYTYPE
 
 ClientCmdID = _reflection.GeneratedProtocolMessageType('ClientCmdID', (_message.Message,), dict(
   DESCRIPTOR = _CLIENTCMDID,
@@ -1710,48 +1546,6 @@ EndTransactionResponse = _reflection.GeneratedProtocolMessageType('EndTransactio
   # @@protoc_insertion_point(class_scope:cockroach.proto.EndTransactionResponse)
   ))
 _sym_db.RegisterMessage(EndTransactionResponse)
-
-ReapQueueRequest = _reflection.GeneratedProtocolMessageType('ReapQueueRequest', (_message.Message,), dict(
-  DESCRIPTOR = _REAPQUEUEREQUEST,
-  __module__ = 'cockroach.proto.api_pb2'
-  # @@protoc_insertion_point(class_scope:cockroach.proto.ReapQueueRequest)
-  ))
-_sym_db.RegisterMessage(ReapQueueRequest)
-
-ReapQueueResponse = _reflection.GeneratedProtocolMessageType('ReapQueueResponse', (_message.Message,), dict(
-  DESCRIPTOR = _REAPQUEUERESPONSE,
-  __module__ = 'cockroach.proto.api_pb2'
-  # @@protoc_insertion_point(class_scope:cockroach.proto.ReapQueueResponse)
-  ))
-_sym_db.RegisterMessage(ReapQueueResponse)
-
-EnqueueUpdateRequest = _reflection.GeneratedProtocolMessageType('EnqueueUpdateRequest', (_message.Message,), dict(
-  DESCRIPTOR = _ENQUEUEUPDATEREQUEST,
-  __module__ = 'cockroach.proto.api_pb2'
-  # @@protoc_insertion_point(class_scope:cockroach.proto.EnqueueUpdateRequest)
-  ))
-_sym_db.RegisterMessage(EnqueueUpdateRequest)
-
-EnqueueUpdateResponse = _reflection.GeneratedProtocolMessageType('EnqueueUpdateResponse', (_message.Message,), dict(
-  DESCRIPTOR = _ENQUEUEUPDATERESPONSE,
-  __module__ = 'cockroach.proto.api_pb2'
-  # @@protoc_insertion_point(class_scope:cockroach.proto.EnqueueUpdateResponse)
-  ))
-_sym_db.RegisterMessage(EnqueueUpdateResponse)
-
-EnqueueMessageRequest = _reflection.GeneratedProtocolMessageType('EnqueueMessageRequest', (_message.Message,), dict(
-  DESCRIPTOR = _ENQUEUEMESSAGEREQUEST,
-  __module__ = 'cockroach.proto.api_pb2'
-  # @@protoc_insertion_point(class_scope:cockroach.proto.EnqueueMessageRequest)
-  ))
-_sym_db.RegisterMessage(EnqueueMessageRequest)
-
-EnqueueMessageResponse = _reflection.GeneratedProtocolMessageType('EnqueueMessageResponse', (_message.Message,), dict(
-  DESCRIPTOR = _ENQUEUEMESSAGERESPONSE,
-  __module__ = 'cockroach.proto.api_pb2'
-  # @@protoc_insertion_point(class_scope:cockroach.proto.EnqueueMessageResponse)
-  ))
-_sym_db.RegisterMessage(EnqueueMessageResponse)
 
 RequestUnion = _reflection.GeneratedProtocolMessageType('RequestUnion', (_message.Message,), dict(
   DESCRIPTOR = _REQUESTUNION,
