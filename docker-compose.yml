@@ -1,6 +1,7 @@
 cockroach:
   image: cockroachdb/cockroach-dev
-  command: start --stores=hdd=/data --gossip=self://
+  # TODO client should speak TLS, remove --insecure.
+  command: start --stores=hdd=/data --gossip=self:// --certs=/data --insecure
   expose:
     - "8080"
   volumes:
