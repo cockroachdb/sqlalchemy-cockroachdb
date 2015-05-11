@@ -18,11 +18,14 @@ test:
 .PHONY: dockertest
 dockertest:
 	-docker-compose stop
-	-docker-compose rm --force cockroach
+	-docker-compose rm --force -v cockroach
 	-rm -rf /tmp/test-disk1
 	mkdir /tmp/test-disk1
 	docker-compose build
-	docker-compose run cockroach init /data
+	# TODO: ditch the --insecure; client needs to learn TLS for that.
+	# docker-compose run cockroach cert create-ca --certs=/data
+	# docker-compose run cockroach cert create-node --certs=/data localhost 127.0.0.1 $(hostname)
+	docker-compose run cockroach init --stores=hdd=/data
 	docker-compose start cockroach
 	docker-compose run cockroachpython
 	docker-compose stop
