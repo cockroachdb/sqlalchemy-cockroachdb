@@ -18,7 +18,7 @@ test:
 .PHONY: dockertest
 dockertest:
 	-docker-compose stop
-	-docker-compose rm --force cockroach
+	-docker-compose rm --force -v cockroach
 	-rm -rf /tmp/test-disk1
 	mkdir /tmp/test-disk1
 	docker-compose build
