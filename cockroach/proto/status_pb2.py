@@ -20,7 +20,7 @@ import cockroach.proto.config_pb2
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='cockroach/proto/status.proto',
   package='cockroach.proto',
-  serialized_pb=_b('\n\x1c\x63ockroach/proto/status.proto\x12\x0f\x63ockroach.proto\x1a\x1a\x63ockroach/proto/data.proto\x1a\x1c\x63ockroach/proto/config.proto\"\xb6\x01\n\x0bStoreStatus\x12.\n\x04\x64\x65sc\x18\x01 \x01(\x0b\x32 .cockroach.proto.StoreDescriptor\x12\x0f\n\x07node_id\x18\x02 \x01(\x05\x12\x13\n\x0brange_count\x18\x03 \x01(\x05\x12\x12\n\nstarted_at\x18\x04 \x01(\x03\x12\x12\n\nupdated_at\x18\x05 \x01(\x03\x12)\n\x05stats\x18\x06 \x01(\x0b\x32\x1a.cockroach.proto.MVCCStats\"\xb6\x01\n\nNodeStatus\x12-\n\x04\x64\x65sc\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.NodeDescriptor\x12\x11\n\tstore_ids\x18\x02 \x03(\x05\x12\x13\n\x0brange_count\x18\x03 \x01(\x05\x12\x12\n\nstarted_at\x18\x04 \x01(\x03\x12\x12\n\nupdated_at\x18\x05 \x01(\x03\x12)\n\x05stats\x18\x06 \x01(\x0b\x32\x1a.cockroach.proto.MVCCStatsB\x07Z\x05proto')
+  serialized_pb=_b('\n\x1c\x63ockroach/proto/status.proto\x12\x0f\x63ockroach.proto\x1a\x1a\x63ockroach/proto/data.proto\x1a\x1c\x63ockroach/proto/config.proto\"\x91\x02\n\x0bStoreStatus\x12.\n\x04\x64\x65sc\x18\x01 \x01(\x0b\x32 .cockroach.proto.StoreDescriptor\x12\x0f\n\x07node_id\x18\x02 \x01(\x05\x12\x13\n\x0brange_count\x18\x03 \x01(\x05\x12\x12\n\nstarted_at\x18\x04 \x01(\x03\x12\x12\n\nupdated_at\x18\x05 \x01(\x03\x12)\n\x05stats\x18\x06 \x01(\x0b\x32\x1a.cockroach.proto.MVCCStats\x12\x1a\n\x12leader_range_count\x18\x07 \x01(\x05\x12\x1e\n\x16replicated_range_count\x18\x08 \x01(\x05\x12\x1d\n\x15\x61vailable_range_count\x18\t \x01(\x05\"\x91\x02\n\nNodeStatus\x12-\n\x04\x64\x65sc\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.NodeDescriptor\x12\x11\n\tstore_ids\x18\x02 \x03(\x05\x12\x13\n\x0brange_count\x18\x03 \x01(\x05\x12\x12\n\nstarted_at\x18\x04 \x01(\x03\x12\x12\n\nupdated_at\x18\x05 \x01(\x03\x12)\n\x05stats\x18\x06 \x01(\x0b\x32\x1a.cockroach.proto.MVCCStats\x12\x1a\n\x12leader_range_count\x18\x07 \x01(\x05\x12\x1e\n\x16replicated_range_count\x18\x08 \x01(\x05\x12\x1d\n\x15\x61vailable_range_count\x18\t \x01(\x05\x42\x07Z\x05proto')
   ,
   dependencies=[cockroach.proto.data_pb2.DESCRIPTOR,cockroach.proto.config_pb2.DESCRIPTOR,])
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -77,6 +77,27 @@ _STORESTATUS = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='leader_range_count', full_name='cockroach.proto.StoreStatus.leader_range_count', index=6,
+      number=7, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='replicated_range_count', full_name='cockroach.proto.StoreStatus.replicated_range_count', index=7,
+      number=8, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='available_range_count', full_name='cockroach.proto.StoreStatus.available_range_count', index=8,
+      number=9, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -89,7 +110,7 @@ _STORESTATUS = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=108,
-  serialized_end=290,
+  serialized_end=381,
 )
 
 
@@ -142,6 +163,27 @@ _NODESTATUS = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='leader_range_count', full_name='cockroach.proto.NodeStatus.leader_range_count', index=6,
+      number=7, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='replicated_range_count', full_name='cockroach.proto.NodeStatus.replicated_range_count', index=7,
+      number=8, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='available_range_count', full_name='cockroach.proto.NodeStatus.available_range_count', index=8,
+      number=9, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -153,8 +195,8 @@ _NODESTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=293,
-  serialized_end=475,
+  serialized_start=384,
+  serialized_end=657,
 )
 
 _STORESTATUS.fields_by_name['desc'].message_type = cockroach.proto.config_pb2._STOREDESCRIPTOR

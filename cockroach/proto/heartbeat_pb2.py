@@ -18,7 +18,7 @@ _sym_db = _symbol_database.Default()
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='cockroach/proto/heartbeat.proto',
   package='cockroach.proto',
-  serialized_pb=_b('\n\x1f\x63ockroach/proto/heartbeat.proto\x12\x0f\x63ockroach.proto\"B\n\x0cRemoteOffset\x12\x0e\n\x06offset\x18\x01 \x01(\x03\x12\r\n\x05\x65rror\x18\x02 \x01(\x03\x12\x13\n\x0bmeasured_at\x18\x03 \x01(\x03\"X\n\x0bPingRequest\x12\x0c\n\x04ping\x18\x01 \x01(\t\x12-\n\x06offset\x18\x02 \x01(\x0b\x32\x1d.cockroach.proto.RemoteOffset\x12\x0c\n\x04\x61\x64\x64r\x18\x03 \x01(\t\"1\n\x0cPingResponse\x12\x0c\n\x04pong\x18\x01 \x01(\t\x12\x13\n\x0bserver_time\x18\x02 \x01(\x03\x42\x07Z\x05proto')
+  serialized_pb=_b('\n\x1f\x63ockroach/proto/heartbeat.proto\x12\x0f\x63ockroach.proto\"H\n\x0cRemoteOffset\x12\x0e\n\x06offset\x18\x01 \x01(\x03\x12\x13\n\x0buncertainty\x18\x02 \x01(\x03\x12\x13\n\x0bmeasured_at\x18\x03 \x01(\x03\"X\n\x0bPingRequest\x12\x0c\n\x04ping\x18\x01 \x01(\t\x12-\n\x06offset\x18\x02 \x01(\x0b\x32\x1d.cockroach.proto.RemoteOffset\x12\x0c\n\x04\x61\x64\x64r\x18\x03 \x01(\t\"1\n\x0cPingResponse\x12\x0c\n\x04pong\x18\x01 \x01(\t\x12\x13\n\x0bserver_time\x18\x02 \x01(\x03\x42\x07Z\x05proto')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -40,7 +40,7 @@ _REMOTEOFFSET = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='error', full_name='cockroach.proto.RemoteOffset.error', index=1,
+      name='uncertainty', full_name='cockroach.proto.RemoteOffset.uncertainty', index=1,
       number=2, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -65,7 +65,7 @@ _REMOTEOFFSET = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=52,
-  serialized_end=118,
+  serialized_end=124,
 )
 
 
@@ -108,8 +108,8 @@ _PINGREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=120,
-  serialized_end=208,
+  serialized_start=126,
+  serialized_end=214,
 )
 
 
@@ -145,8 +145,8 @@ _PINGRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=210,
-  serialized_end=259,
+  serialized_start=216,
+  serialized_end=265,
 )
 
 _PINGREQUEST.fields_by_name['offset'].message_type = _REMOTEOFFSET
