@@ -1,0 +1,12 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  post:
+    - pip install docker-compose
+
+test:
+  override:
+    - make test
+    - make dockertest
