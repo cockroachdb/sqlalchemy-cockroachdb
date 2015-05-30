@@ -18,7 +18,7 @@ _sym_db = _symbol_database.Default()
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='cockroach/proto/config.proto',
   package='cockroach.proto',
-  serialized_pb=_b('\n\x1c\x63ockroach/proto/config.proto\x12\x0f\x63ockroach.proto\"\x1b\n\nAttributes\x12\r\n\x05\x61ttrs\x18\x01 \x03(\t\"X\n\x07Replica\x12\x0f\n\x07node_id\x18\x01 \x01(\x05\x12\x10\n\x08store_id\x18\x02 \x01(\x05\x12*\n\x05\x61ttrs\x18\x03 \x01(\x0b\x32\x1b.cockroach.proto.Attributes\"r\n\x0fRangeDescriptor\x12\x0f\n\x07raft_id\x18\x01 \x01(\x03\x12\x11\n\tstart_key\x18\x02 \x01(\x0c\x12\x0f\n\x07\x65nd_key\x18\x03 \x01(\x0c\x12*\n\x08replicas\x18\x04 \x03(\x0b\x32\x18.cockroach.proto.Replica\"\x1f\n\x08GCPolicy\x12\x13\n\x0bttl_seconds\x18\x01 \x01(\x05\" \n\nAcctConfig\x12\x12\n\ncluster_id\x18\x01 \x01(\t\")\n\nPermConfig\x12\x0c\n\x04read\x18\x01 \x03(\t\x12\r\n\x05write\x18\x02 \x03(\t\"\x99\x01\n\nZoneConfig\x12\x32\n\rreplica_attrs\x18\x01 \x03(\x0b\x32\x1b.cockroach.proto.Attributes\x12\x17\n\x0frange_min_bytes\x18\x02 \x01(\x03\x12\x17\n\x0frange_max_bytes\x18\x03 \x01(\x03\x12%\n\x02gc\x18\x04 \x01(\x0b\x32\x19.cockroach.proto.GCPolicy\"\x1d\n\tRangeTree\x12\x10\n\x08root_key\x18\x01 \x01(\x0c\"d\n\rRangeTreeNode\x12\x0b\n\x03key\x18\x01 \x01(\x0c\x12\r\n\x05\x62lack\x18\x02 \x01(\x08\x12\x12\n\nparent_key\x18\x03 \x01(\x0c\x12\x10\n\x08left_key\x18\x04 \x01(\x0c\x12\x11\n\tright_key\x18\x05 \x01(\x0c\"(\n\x04\x41\x64\x64r\x12\x0f\n\x07network\x18\x01 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\"4\n\rStoreCapacity\x12\x10\n\x08\x43\x61pacity\x18\x01 \x01(\x03\x12\x11\n\tAvailable\x18\x02 \x01(\x03\"u\n\x0eNodeDescriptor\x12\x0f\n\x07node_id\x18\x01 \x01(\x05\x12&\n\x07\x61\x64\x64ress\x18\x02 \x01(\x0b\x32\x15.cockroach.proto.Addr\x12*\n\x05\x61ttrs\x18\x03 \x01(\x0b\x32\x1b.cockroach.proto.Attributes\"\xb0\x01\n\x0fStoreDescriptor\x12\x10\n\x08store_id\x18\x01 \x01(\x05\x12*\n\x05\x61ttrs\x18\x02 \x01(\x0b\x32\x1b.cockroach.proto.Attributes\x12-\n\x04node\x18\x03 \x01(\x0b\x32\x1f.cockroach.proto.NodeDescriptor\x12\x30\n\x08\x63\x61pacity\x18\x04 \x01(\x0b\x32\x1e.cockroach.proto.StoreCapacityB\x07Z\x05proto')
+  serialized_pb=_b('\n\x1c\x63ockroach/proto/config.proto\x12\x0f\x63ockroach.proto\"\x1b\n\nAttributes\x12\r\n\x05\x61ttrs\x18\x01 \x03(\t\"X\n\x07Replica\x12\x0f\n\x07node_id\x18\x01 \x01(\x05\x12\x10\n\x08store_id\x18\x02 \x01(\x05\x12*\n\x05\x61ttrs\x18\x03 \x01(\x0b\x32\x1b.cockroach.proto.Attributes\"r\n\x0fRangeDescriptor\x12\x0f\n\x07raft_id\x18\x01 \x01(\x03\x12\x11\n\tstart_key\x18\x02 \x01(\x0c\x12\x0f\n\x07\x65nd_key\x18\x03 \x01(\x0c\x12*\n\x08replicas\x18\x04 \x03(\x0b\x32\x18.cockroach.proto.Replica\"\x1f\n\x08GCPolicy\x12\x13\n\x0bttl_seconds\x18\x01 \x01(\x05\" \n\nAcctConfig\x12\x12\n\ncluster_id\x18\x01 \x01(\t\")\n\nPermConfig\x12\x0c\n\x04read\x18\x01 \x03(\t\x12\r\n\x05write\x18\x02 \x03(\t\"\x99\x01\n\nZoneConfig\x12\x32\n\rreplica_attrs\x18\x01 \x03(\x0b\x32\x1b.cockroach.proto.Attributes\x12\x17\n\x0frange_min_bytes\x18\x02 \x01(\x03\x12\x17\n\x0frange_max_bytes\x18\x03 \x01(\x03\x12%\n\x02gc\x18\x04 \x01(\x0b\x32\x19.cockroach.proto.GCPolicy\"\x1d\n\tRangeTree\x12\x10\n\x08root_key\x18\x01 \x01(\x0c\"d\n\rRangeTreeNode\x12\x0b\n\x03key\x18\x01 \x01(\x0c\x12\r\n\x05\x62lack\x18\x02 \x01(\x08\x12\x12\n\nparent_key\x18\x03 \x01(\x0c\x12\x10\n\x08left_key\x18\x04 \x01(\x0c\x12\x11\n\tright_key\x18\x05 \x01(\x0c\"(\n\x04\x41\x64\x64r\x12\x0f\n\x07network\x18\x01 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\"H\n\rStoreCapacity\x12\x10\n\x08\x43\x61pacity\x18\x01 \x01(\x03\x12\x11\n\tAvailable\x18\x02 \x01(\x03\x12\x12\n\nRangeCount\x18\x03 \x01(\x05\"u\n\x0eNodeDescriptor\x12\x0f\n\x07node_id\x18\x01 \x01(\x05\x12&\n\x07\x61\x64\x64ress\x18\x02 \x01(\x0b\x32\x15.cockroach.proto.Addr\x12*\n\x05\x61ttrs\x18\x03 \x01(\x0b\x32\x1b.cockroach.proto.Attributes\"\xb0\x01\n\x0fStoreDescriptor\x12\x10\n\x08store_id\x18\x01 \x01(\x05\x12*\n\x05\x61ttrs\x18\x02 \x01(\x0b\x32\x1b.cockroach.proto.Attributes\x12-\n\x04node\x18\x03 \x01(\x0b\x32\x1f.cockroach.proto.NodeDescriptor\x12\x30\n\x08\x63\x61pacity\x18\x04 \x01(\x0b\x32\x1e.cockroach.proto.StoreCapacityB\x07Z\x05proto')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -444,6 +444,13 @@ _STORECAPACITY = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='RangeCount', full_name='cockroach.proto.StoreCapacity.RangeCount', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -456,7 +463,7 @@ _STORECAPACITY = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=725,
-  serialized_end=777,
+  serialized_end=797,
 )
 
 
@@ -499,8 +506,8 @@ _NODEDESCRIPTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=779,
-  serialized_end=896,
+  serialized_start=799,
+  serialized_end=916,
 )
 
 
@@ -550,8 +557,8 @@ _STOREDESCRIPTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=899,
-  serialized_end=1075,
+  serialized_start=919,
+  serialized_end=1095,
 )
 
 _REPLICA.fields_by_name['attrs'].message_type = _ATTRIBUTES

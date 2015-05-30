@@ -20,7 +20,7 @@ import cockroach.proto.config_pb2
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='cockroach/proto/data.proto',
   package='cockroach.proto',
-  serialized_pb=_b('\n\x1a\x63ockroach/proto/data.proto\x12\x0f\x63ockroach.proto\x1a\x1c\x63ockroach/proto/config.proto\"/\n\tTimestamp\x12\x11\n\twall_time\x18\x01 \x01(\x03\x12\x0f\n\x07logical\x18\x02 \x01(\x05\"u\n\x05Value\x12\r\n\x05\x62ytes\x18\x01 \x01(\x0c\x12\x0f\n\x07integer\x18\x02 \x01(\x03\x12\x10\n\x08\x63hecksum\x18\x03 \x01(\x07\x12-\n\ttimestamp\x18\x04 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12\x0b\n\x03tag\x18\x05 \x01(\t\"C\n\tMVCCValue\x12\x0f\n\x07\x64\x65leted\x18\x01 \x01(\x08\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.cockroach.proto.Value\">\n\x08KeyValue\x12\x0b\n\x03key\x18\x01 \x01(\x0c\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.cockroach.proto.Value\")\n\x0bRawKeyValue\x12\x0b\n\x03key\x18\x01 \x01(\x0c\x12\r\n\x05value\x18\x02 \x01(\x0c\"C\n\nStoreIdent\x12\x12\n\ncluster_id\x18\x01 \x01(\t\x12\x0f\n\x07node_id\x18\x02 \x01(\x05\x12\x10\n\x08store_id\x18\x03 \x01(\x05\"z\n\x0cSplitTrigger\x12\x36\n\x0cupdated_desc\x18\x01 \x01(\x0b\x32 .cockroach.proto.RangeDescriptor\x12\x32\n\x08new_desc\x18\x02 \x01(\x0b\x32 .cockroach.proto.RangeDescriptor\"`\n\x0cMergeTrigger\x12\x36\n\x0cupdated_desc\x18\x01 \x01(\x0b\x32 .cockroach.proto.RangeDescriptor\x12\x18\n\x10subsumed_raft_id\x18\x02 \x01(\x03\"\xa7\x01\n\x15\x43hangeReplicasTrigger\x12\x0f\n\x07node_id\x18\x01 \x01(\x05\x12\x10\n\x08store_id\x18\x02 \x01(\x05\x12\x37\n\x0b\x63hange_type\x18\x03 \x01(\x0e\x32\".cockroach.proto.ReplicaChangeType\x12\x32\n\x10updated_replicas\x18\x04 \x03(\x0b\x32\x18.cockroach.proto.Replica\"\xdd\x01\n\x15InternalCommitTrigger\x12\x34\n\rsplit_trigger\x18\x01 \x01(\x0b\x32\x1d.cockroach.proto.SplitTrigger\x12\x34\n\rmerge_trigger\x18\x02 \x01(\x0b\x32\x1d.cockroach.proto.MergeTrigger\x12G\n\x17\x63hange_replicas_trigger\x18\x03 \x01(\x0b\x32&.cockroach.proto.ChangeReplicasTrigger\x12\x0f\n\x07intents\x18\x04 \x03(\x0c\"\x1d\n\x08NodeList\x12\x11\n\x05nodes\x18\x01 \x03(\x05\x42\x02\x10\x01\"\xb8\x03\n\x0bTransaction\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0b\n\x03key\x18\x02 \x01(\x0c\x12\n\n\x02id\x18\x03 \x01(\x0c\x12\x10\n\x08priority\x18\x04 \x01(\x05\x12\x31\n\tisolation\x18\x05 \x01(\x0e\x32\x1e.cockroach.proto.IsolationType\x12\x32\n\x06status\x18\x06 \x01(\x0e\x32\".cockroach.proto.TransactionStatus\x12\r\n\x05\x65poch\x18\x07 \x01(\x05\x12\x32\n\x0elast_heartbeat\x18\x08 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12-\n\ttimestamp\x18\t \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12\x32\n\x0eorig_timestamp\x18\n \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12\x31\n\rmax_timestamp\x18\x0b \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12\x30\n\rcertain_nodes\x18\x0c \x01(\x0b\x32\x19.cockroach.proto.NodeList\"x\n\x05Lease\x12)\n\x05start\x18\x01 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12.\n\nexpiration\x18\x02 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12\x14\n\x0craft_node_id\x18\x03 \x01(\x04\"\xc6\x01\n\x0cMVCCMetadata\x12)\n\x03txn\x18\x01 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\x12-\n\ttimestamp\x18\x02 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12\x0f\n\x07\x64\x65leted\x18\x03 \x01(\x08\x12\x11\n\tkey_bytes\x18\x04 \x01(\x03\x12\x11\n\tval_bytes\x18\x05 \x01(\x03\x12%\n\x05value\x18\x06 \x01(\x0b\x32\x16.cockroach.proto.Value\"B\n\nGCMetadata\x12\x17\n\x0flast_scan_nanos\x18\x01 \x01(\x03\x12\x1b\n\x13oldest_intent_nanos\x18\x02 \x01(\x03\"V\n\x13TimeSeriesDatapoint\x12\x17\n\x0ftimestamp_nanos\x18\x01 \x01(\x03\x12\x11\n\tint_value\x18\x02 \x01(\x03\x12\x13\n\x0b\x66loat_value\x18\x03 \x01(\x02\"h\n\x0eTimeSeriesData\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06source\x18\x02 \x01(\t\x12\x38\n\ndatapoints\x18\x03 \x03(\x0b\x32$.cockroach.proto.TimeSeriesDatapoint\"\xf0\x01\n\tMVCCStats\x12\x12\n\nlive_bytes\x18\x01 \x01(\x03\x12\x11\n\tkey_bytes\x18\x02 \x01(\x03\x12\x11\n\tval_bytes\x18\x03 \x01(\x03\x12\x14\n\x0cintent_bytes\x18\x04 \x01(\x03\x12\x12\n\nlive_count\x18\x05 \x01(\x03\x12\x11\n\tkey_count\x18\x06 \x01(\x03\x12\x11\n\tval_count\x18\x07 \x01(\x03\x12\x14\n\x0cintent_count\x18\x08 \x01(\x03\x12\x12\n\nintent_age\x18\t \x01(\x03\x12\x14\n\x0cgc_bytes_age\x18\n \x01(\x03\x12\x19\n\x11last_update_nanos\x18\x0b \x01(\x03*8\n\x11ReplicaChangeType\x12\x0f\n\x0b\x41\x44\x44_REPLICA\x10\x00\x12\x12\n\x0eREMOVE_REPLICA\x10\x01*/\n\rIsolationType\x12\x10\n\x0cSERIALIZABLE\x10\x00\x12\x0c\n\x08SNAPSHOT\x10\x01*<\n\x11TransactionStatus\x12\x0b\n\x07PENDING\x10\x00\x12\r\n\tCOMMITTED\x10\x01\x12\x0b\n\x07\x41\x42ORTED\x10\x02\x42\x07Z\x05proto')
+  serialized_pb=_b('\n\x1a\x63ockroach/proto/data.proto\x12\x0f\x63ockroach.proto\x1a\x1c\x63ockroach/proto/config.proto\"/\n\tTimestamp\x12\x11\n\twall_time\x18\x01 \x01(\x03\x12\x0f\n\x07logical\x18\x02 \x01(\x05\"\x82\x01\n\x05Value\x12\x0f\n\x05\x62ytes\x18\x01 \x01(\x0cH\x00\x12\x11\n\x07integer\x18\x02 \x01(\x03H\x00\x12\x10\n\x08\x63hecksum\x18\x03 \x01(\x07\x12-\n\ttimestamp\x18\x04 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12\x0b\n\x03tag\x18\x05 \x01(\tB\x07\n\x05value\"C\n\tMVCCValue\x12\x0f\n\x07\x64\x65leted\x18\x01 \x01(\x08\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.cockroach.proto.Value\">\n\x08KeyValue\x12\x0b\n\x03key\x18\x01 \x01(\x0c\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.cockroach.proto.Value\")\n\x0bRawKeyValue\x12\x0b\n\x03key\x18\x01 \x01(\x0c\x12\r\n\x05value\x18\x02 \x01(\x0c\"C\n\nStoreIdent\x12\x12\n\ncluster_id\x18\x01 \x01(\t\x12\x0f\n\x07node_id\x18\x02 \x01(\x05\x12\x10\n\x08store_id\x18\x03 \x01(\x05\"z\n\x0cSplitTrigger\x12\x36\n\x0cupdated_desc\x18\x01 \x01(\x0b\x32 .cockroach.proto.RangeDescriptor\x12\x32\n\x08new_desc\x18\x02 \x01(\x0b\x32 .cockroach.proto.RangeDescriptor\"`\n\x0cMergeTrigger\x12\x36\n\x0cupdated_desc\x18\x01 \x01(\x0b\x32 .cockroach.proto.RangeDescriptor\x12\x18\n\x10subsumed_raft_id\x18\x02 \x01(\x03\"\xa7\x01\n\x15\x43hangeReplicasTrigger\x12\x0f\n\x07node_id\x18\x01 \x01(\x05\x12\x10\n\x08store_id\x18\x02 \x01(\x05\x12\x37\n\x0b\x63hange_type\x18\x03 \x01(\x0e\x32\".cockroach.proto.ReplicaChangeType\x12\x32\n\x10updated_replicas\x18\x04 \x03(\x0b\x32\x18.cockroach.proto.Replica\"\xdd\x01\n\x15InternalCommitTrigger\x12\x34\n\rsplit_trigger\x18\x01 \x01(\x0b\x32\x1d.cockroach.proto.SplitTrigger\x12\x34\n\rmerge_trigger\x18\x02 \x01(\x0b\x32\x1d.cockroach.proto.MergeTrigger\x12G\n\x17\x63hange_replicas_trigger\x18\x03 \x01(\x0b\x32&.cockroach.proto.ChangeReplicasTrigger\x12\x0f\n\x07intents\x18\x04 \x03(\x0c\"\x1d\n\x08NodeList\x12\x11\n\x05nodes\x18\x01 \x03(\x05\x42\x02\x10\x01\"\xb8\x03\n\x0bTransaction\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0b\n\x03key\x18\x02 \x01(\x0c\x12\n\n\x02id\x18\x03 \x01(\x0c\x12\x10\n\x08priority\x18\x04 \x01(\x05\x12\x31\n\tisolation\x18\x05 \x01(\x0e\x32\x1e.cockroach.proto.IsolationType\x12\x32\n\x06status\x18\x06 \x01(\x0e\x32\".cockroach.proto.TransactionStatus\x12\r\n\x05\x65poch\x18\x07 \x01(\x05\x12\x32\n\x0elast_heartbeat\x18\x08 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12-\n\ttimestamp\x18\t \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12\x32\n\x0eorig_timestamp\x18\n \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12\x31\n\rmax_timestamp\x18\x0b \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12\x30\n\rcertain_nodes\x18\x0c \x01(\x0b\x32\x19.cockroach.proto.NodeList\"x\n\x05Lease\x12)\n\x05start\x18\x01 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12.\n\nexpiration\x18\x02 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12\x14\n\x0craft_node_id\x18\x03 \x01(\x04\"\xc6\x01\n\x0cMVCCMetadata\x12)\n\x03txn\x18\x01 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\x12-\n\ttimestamp\x18\x02 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12\x0f\n\x07\x64\x65leted\x18\x03 \x01(\x08\x12\x11\n\tkey_bytes\x18\x04 \x01(\x03\x12\x11\n\tval_bytes\x18\x05 \x01(\x03\x12%\n\x05value\x18\x06 \x01(\x0b\x32\x16.cockroach.proto.Value\"B\n\nGCMetadata\x12\x17\n\x0flast_scan_nanos\x18\x01 \x01(\x03\x12\x1b\n\x13oldest_intent_nanos\x18\x02 \x01(\x03\"\x96\x02\n\tMVCCStats\x12\x12\n\nlive_bytes\x18\x01 \x01(\x03\x12\x11\n\tkey_bytes\x18\x02 \x01(\x03\x12\x11\n\tval_bytes\x18\x03 \x01(\x03\x12\x14\n\x0cintent_bytes\x18\x04 \x01(\x03\x12\x12\n\nlive_count\x18\x05 \x01(\x03\x12\x11\n\tkey_count\x18\x06 \x01(\x03\x12\x11\n\tval_count\x18\x07 \x01(\x03\x12\x14\n\x0cintent_count\x18\x08 \x01(\x03\x12\x12\n\nintent_age\x18\t \x01(\x03\x12\x14\n\x0cgc_bytes_age\x18\n \x01(\x03\x12\x11\n\tsys_bytes\x18\x0c \x01(\x03\x12\x11\n\tsys_count\x18\r \x01(\x03\x12\x19\n\x11last_update_nanos\x18\x1e \x01(\x03*8\n\x11ReplicaChangeType\x12\x0f\n\x0b\x41\x44\x44_REPLICA\x10\x00\x12\x12\n\x0eREMOVE_REPLICA\x10\x01*/\n\rIsolationType\x12\x10\n\x0cSERIALIZABLE\x10\x00\x12\x0c\n\x08SNAPSHOT\x10\x01*<\n\x11TransactionStatus\x12\x0b\n\x07PENDING\x10\x00\x12\r\n\tCOMMITTED\x10\x01\x12\x0b\n\x07\x41\x42ORTED\x10\x02\x42\x07Z\x05proto')
   ,
   dependencies=[cockroach.proto.config_pb2.DESCRIPTOR,])
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -42,8 +42,8 @@ _REPLICACHANGETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2408,
-  serialized_end=2464,
+  serialized_start=2266,
+  serialized_end=2322,
 )
 _sym_db.RegisterEnumDescriptor(_REPLICACHANGETYPE)
 
@@ -65,8 +65,8 @@ _ISOLATIONTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2466,
-  serialized_end=2513,
+  serialized_start=2324,
+  serialized_end=2371,
 )
 _sym_db.RegisterEnumDescriptor(_ISOLATIONTYPE)
 
@@ -92,8 +92,8 @@ _TRANSACTIONSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2515,
-  serialized_end=2575,
+  serialized_start=2373,
+  serialized_end=2433,
 )
 _sym_db.RegisterEnumDescriptor(_TRANSACTIONSTATUS)
 
@@ -197,9 +197,12 @@ _VALUE = _descriptor.Descriptor(
   is_extendable=False,
   extension_ranges=[],
   oneofs=[
+    _descriptor.OneofDescriptor(
+      name='value', full_name='cockroach.proto.Value.value',
+      index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=126,
-  serialized_end=243,
+  serialized_start=127,
+  serialized_end=257,
 )
 
 
@@ -235,8 +238,8 @@ _MVCCVALUE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=245,
-  serialized_end=312,
+  serialized_start=259,
+  serialized_end=326,
 )
 
 
@@ -272,8 +275,8 @@ _KEYVALUE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=314,
-  serialized_end=376,
+  serialized_start=328,
+  serialized_end=390,
 )
 
 
@@ -309,8 +312,8 @@ _RAWKEYVALUE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=378,
-  serialized_end=419,
+  serialized_start=392,
+  serialized_end=433,
 )
 
 
@@ -353,8 +356,8 @@ _STOREIDENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=421,
-  serialized_end=488,
+  serialized_start=435,
+  serialized_end=502,
 )
 
 
@@ -390,8 +393,8 @@ _SPLITTRIGGER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=490,
-  serialized_end=612,
+  serialized_start=504,
+  serialized_end=626,
 )
 
 
@@ -427,8 +430,8 @@ _MERGETRIGGER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=614,
-  serialized_end=710,
+  serialized_start=628,
+  serialized_end=724,
 )
 
 
@@ -478,8 +481,8 @@ _CHANGEREPLICASTRIGGER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=713,
-  serialized_end=880,
+  serialized_start=727,
+  serialized_end=894,
 )
 
 
@@ -529,8 +532,8 @@ _INTERNALCOMMITTRIGGER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=883,
-  serialized_end=1104,
+  serialized_start=897,
+  serialized_end=1118,
 )
 
 
@@ -559,8 +562,8 @@ _NODELIST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1106,
-  serialized_end=1135,
+  serialized_start=1120,
+  serialized_end=1149,
 )
 
 
@@ -666,8 +669,8 @@ _TRANSACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1138,
-  serialized_end=1578,
+  serialized_start=1152,
+  serialized_end=1592,
 )
 
 
@@ -710,8 +713,8 @@ _LEASE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1580,
-  serialized_end=1700,
+  serialized_start=1594,
+  serialized_end=1714,
 )
 
 
@@ -775,8 +778,8 @@ _MVCCMETADATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1703,
-  serialized_end=1901,
+  serialized_start=1717,
+  serialized_end=1915,
 )
 
 
@@ -812,96 +815,8 @@ _GCMETADATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1903,
-  serialized_end=1969,
-)
-
-
-_TIMESERIESDATAPOINT = _descriptor.Descriptor(
-  name='TimeSeriesDatapoint',
-  full_name='cockroach.proto.TimeSeriesDatapoint',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='timestamp_nanos', full_name='cockroach.proto.TimeSeriesDatapoint.timestamp_nanos', index=0,
-      number=1, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='int_value', full_name='cockroach.proto.TimeSeriesDatapoint.int_value', index=1,
-      number=2, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='float_value', full_name='cockroach.proto.TimeSeriesDatapoint.float_value', index=2,
-      number=3, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1971,
-  serialized_end=2057,
-)
-
-
-_TIMESERIESDATA = _descriptor.Descriptor(
-  name='TimeSeriesData',
-  full_name='cockroach.proto.TimeSeriesData',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='name', full_name='cockroach.proto.TimeSeriesData.name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='source', full_name='cockroach.proto.TimeSeriesData.source', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='datapoints', full_name='cockroach.proto.TimeSeriesData.datapoints', index=2,
-      number=3, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2059,
-  serialized_end=2163,
+  serialized_start=1917,
+  serialized_end=1983,
 )
 
 
@@ -983,8 +898,22 @@ _MVCCSTATS = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='last_update_nanos', full_name='cockroach.proto.MVCCStats.last_update_nanos', index=10,
-      number=11, type=3, cpp_type=2, label=1,
+      name='sys_bytes', full_name='cockroach.proto.MVCCStats.sys_bytes', index=10,
+      number=12, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='sys_count', full_name='cockroach.proto.MVCCStats.sys_count', index=11,
+      number=13, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='last_update_nanos', full_name='cockroach.proto.MVCCStats.last_update_nanos', index=12,
+      number=30, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1000,11 +929,17 @@ _MVCCSTATS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2166,
-  serialized_end=2406,
+  serialized_start=1986,
+  serialized_end=2264,
 )
 
 _VALUE.fields_by_name['timestamp'].message_type = _TIMESTAMP
+_VALUE.oneofs_by_name['value'].fields.append(
+  _VALUE.fields_by_name['bytes'])
+_VALUE.fields_by_name['bytes'].containing_oneof = _VALUE.oneofs_by_name['value']
+_VALUE.oneofs_by_name['value'].fields.append(
+  _VALUE.fields_by_name['integer'])
+_VALUE.fields_by_name['integer'].containing_oneof = _VALUE.oneofs_by_name['value']
 _MVCCVALUE.fields_by_name['value'].message_type = _VALUE
 _KEYVALUE.fields_by_name['value'].message_type = _VALUE
 _SPLITTRIGGER.fields_by_name['updated_desc'].message_type = cockroach.proto.config_pb2._RANGEDESCRIPTOR
@@ -1027,7 +962,6 @@ _LEASE.fields_by_name['expiration'].message_type = _TIMESTAMP
 _MVCCMETADATA.fields_by_name['txn'].message_type = _TRANSACTION
 _MVCCMETADATA.fields_by_name['timestamp'].message_type = _TIMESTAMP
 _MVCCMETADATA.fields_by_name['value'].message_type = _VALUE
-_TIMESERIESDATA.fields_by_name['datapoints'].message_type = _TIMESERIESDATAPOINT
 DESCRIPTOR.message_types_by_name['Timestamp'] = _TIMESTAMP
 DESCRIPTOR.message_types_by_name['Value'] = _VALUE
 DESCRIPTOR.message_types_by_name['MVCCValue'] = _MVCCVALUE
@@ -1043,8 +977,6 @@ DESCRIPTOR.message_types_by_name['Transaction'] = _TRANSACTION
 DESCRIPTOR.message_types_by_name['Lease'] = _LEASE
 DESCRIPTOR.message_types_by_name['MVCCMetadata'] = _MVCCMETADATA
 DESCRIPTOR.message_types_by_name['GCMetadata'] = _GCMETADATA
-DESCRIPTOR.message_types_by_name['TimeSeriesDatapoint'] = _TIMESERIESDATAPOINT
-DESCRIPTOR.message_types_by_name['TimeSeriesData'] = _TIMESERIESDATA
 DESCRIPTOR.message_types_by_name['MVCCStats'] = _MVCCSTATS
 DESCRIPTOR.enum_types_by_name['ReplicaChangeType'] = _REPLICACHANGETYPE
 DESCRIPTOR.enum_types_by_name['IsolationType'] = _ISOLATIONTYPE
@@ -1154,20 +1086,6 @@ GCMetadata = _reflection.GeneratedProtocolMessageType('GCMetadata', (_message.Me
   # @@protoc_insertion_point(class_scope:cockroach.proto.GCMetadata)
   ))
 _sym_db.RegisterMessage(GCMetadata)
-
-TimeSeriesDatapoint = _reflection.GeneratedProtocolMessageType('TimeSeriesDatapoint', (_message.Message,), dict(
-  DESCRIPTOR = _TIMESERIESDATAPOINT,
-  __module__ = 'cockroach.proto.data_pb2'
-  # @@protoc_insertion_point(class_scope:cockroach.proto.TimeSeriesDatapoint)
-  ))
-_sym_db.RegisterMessage(TimeSeriesDatapoint)
-
-TimeSeriesData = _reflection.GeneratedProtocolMessageType('TimeSeriesData', (_message.Message,), dict(
-  DESCRIPTOR = _TIMESERIESDATA,
-  __module__ = 'cockroach.proto.data_pb2'
-  # @@protoc_insertion_point(class_scope:cockroach.proto.TimeSeriesData)
-  ))
-_sym_db.RegisterMessage(TimeSeriesData)
 
 MVCCStats = _reflection.GeneratedProtocolMessageType('MVCCStats', (_message.Message,), dict(
   DESCRIPTOR = _MVCCSTATS,

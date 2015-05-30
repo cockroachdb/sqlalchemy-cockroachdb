@@ -21,7 +21,7 @@ import cockroach.proto.data_pb2
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='cockroach/proto/errors.proto',
   package='cockroach.proto',
-  serialized_pb=_b('\n\x1c\x63ockroach/proto/errors.proto\x12\x0f\x63ockroach.proto\x1a\x1c\x63ockroach/proto/config.proto\x1a\x1a\x63ockroach/proto/data.proto\"e\n\x0eNotLeaderError\x12)\n\x07replica\x18\x01 \x01(\x0b\x32\x18.cockroach.proto.Replica\x12(\n\x06leader\x18\x02 \x01(\x0b\x32\x18.cockroach.proto.Replica\"%\n\x12RangeNotFoundError\x12\x0f\n\x07raft_id\x18\x01 \x01(\x03\"|\n\x15RangeKeyMismatchError\x12\x19\n\x11request_start_key\x18\x01 \x01(\x0c\x12\x17\n\x0frequest_end_key\x18\x02 \x01(\x0c\x12/\n\x05range\x18\x03 \x01(\x0b\x32 .cockroach.proto.RangeDescriptor\"\x8b\x01\n\"ReadWithinUncertaintyIntervalError\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12\x36\n\x12\x65xisting_timestamp\x18\x02 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\"D\n\x17TransactionAbortedError\x12)\n\x03txn\x18\x01 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\"s\n\x14TransactionPushError\x12)\n\x03txn\x18\x01 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\x12\x30\n\npushee_txn\x18\x02 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\"B\n\x15TransactionRetryError\x12)\n\x03txn\x18\x01 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\"P\n\x16TransactionStatusError\x12)\n\x03txn\x18\x01 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\x12\x0b\n\x03msg\x18\x02 \x01(\t\"\xa1\x01\n\x10WriteIntentError\x12\x39\n\x07intents\x18\x01 \x03(\x0b\x32(.cockroach.proto.WriteIntentError.Intent\x12\x10\n\x08resolved\x18\x02 \x01(\x08\x1a@\n\x06Intent\x12\x0b\n\x03key\x18\x01 \x01(\x0c\x12)\n\x03txn\x18\x02 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\"y\n\x10WriteTooOldError\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12\x36\n\x12\x65xisting_timestamp\x18\x02 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\"\x14\n\x12OpRequiresTxnError\"D\n\x14\x43onditionFailedError\x12,\n\x0c\x61\x63tual_value\x18\x01 \x01(\x0b\x32\x16.cockroach.proto.Value\"\xc6\x06\n\x0b\x45rrorDetail\x12\x35\n\nnot_leader\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.NotLeaderErrorH\x00\x12>\n\x0frange_not_found\x18\x02 \x01(\x0b\x32#.cockroach.proto.RangeNotFoundErrorH\x00\x12\x44\n\x12range_key_mismatch\x18\x03 \x01(\x0b\x32&.cockroach.proto.RangeKeyMismatchErrorH\x00\x12_\n read_within_uncertainty_interval\x18\x04 \x01(\x0b\x32\x33.cockroach.proto.ReadWithinUncertaintyIntervalErrorH\x00\x12G\n\x13transaction_aborted\x18\x05 \x01(\x0b\x32(.cockroach.proto.TransactionAbortedErrorH\x00\x12\x41\n\x10transaction_push\x18\x06 \x01(\x0b\x32%.cockroach.proto.TransactionPushErrorH\x00\x12\x43\n\x11transaction_retry\x18\x07 \x01(\x0b\x32&.cockroach.proto.TransactionRetryErrorH\x00\x12\x45\n\x12transaction_status\x18\x08 \x01(\x0b\x32\'.cockroach.proto.TransactionStatusErrorH\x00\x12\x39\n\x0cwrite_intent\x18\t \x01(\x0b\x32!.cockroach.proto.WriteIntentErrorH\x00\x12:\n\rwrite_too_old\x18\n \x01(\x0b\x32!.cockroach.proto.WriteTooOldErrorH\x00\x12>\n\x0fop_requires_txn\x18\x0b \x01(\x0b\x32#.cockroach.proto.OpRequiresTxnErrorH\x00\x12\x41\n\x10\x63ondition_failed\x18\x0c \x01(\x0b\x32%.cockroach.proto.ConditionFailedErrorH\x00\x42\x07\n\x05value\"\x9b\x01\n\x05\x45rror\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x11\n\tretryable\x18\x02 \x01(\x08\x12@\n\x13transaction_restart\x18\x04 \x01(\x0e\x32#.cockroach.proto.TransactionRestart\x12,\n\x06\x64\x65tail\x18\x03 \x01(\x0b\x32\x1c.cockroach.proto.ErrorDetail*;\n\x12TransactionRestart\x12\t\n\x05\x41\x42ORT\x10\x00\x12\x0b\n\x07\x42\x41\x43KOFF\x10\x01\x12\r\n\tIMMEDIATE\x10\x02\x42\x07Z\x05proto')
+  serialized_pb=_b('\n\x1c\x63ockroach/proto/errors.proto\x12\x0f\x63ockroach.proto\x1a\x1c\x63ockroach/proto/config.proto\x1a\x1a\x63ockroach/proto/data.proto\"e\n\x0eNotLeaderError\x12)\n\x07replica\x18\x01 \x01(\x0b\x32\x18.cockroach.proto.Replica\x12(\n\x06leader\x18\x02 \x01(\x0b\x32\x18.cockroach.proto.Replica\"%\n\x12RangeNotFoundError\x12\x0f\n\x07raft_id\x18\x01 \x01(\x03\"|\n\x15RangeKeyMismatchError\x12\x19\n\x11request_start_key\x18\x01 \x01(\x0c\x12\x17\n\x0frequest_end_key\x18\x02 \x01(\x0c\x12/\n\x05range\x18\x03 \x01(\x0b\x32 .cockroach.proto.RangeDescriptor\"\x8b\x01\n\"ReadWithinUncertaintyIntervalError\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12\x36\n\x12\x65xisting_timestamp\x18\x02 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\"D\n\x17TransactionAbortedError\x12)\n\x03txn\x18\x01 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\"s\n\x14TransactionPushError\x12)\n\x03txn\x18\x01 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\x12\x30\n\npushee_txn\x18\x02 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\"B\n\x15TransactionRetryError\x12)\n\x03txn\x18\x01 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\"P\n\x16TransactionStatusError\x12)\n\x03txn\x18\x01 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\x12\x0b\n\x03msg\x18\x02 \x01(\t\"\xa1\x01\n\x10WriteIntentError\x12\x39\n\x07intents\x18\x01 \x03(\x0b\x32(.cockroach.proto.WriteIntentError.Intent\x12\x10\n\x08resolved\x18\x02 \x01(\x08\x1a@\n\x06Intent\x12\x0b\n\x03key\x18\x01 \x01(\x0c\x12)\n\x03txn\x18\x02 \x01(\x0b\x32\x1c.cockroach.proto.Transaction\"y\n\x10WriteTooOldError\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\x12\x36\n\x12\x65xisting_timestamp\x18\x02 \x01(\x0b\x32\x1a.cockroach.proto.Timestamp\"\x14\n\x12OpRequiresTxnError\"D\n\x14\x43onditionFailedError\x12,\n\x0c\x61\x63tual_value\x18\x01 \x01(\x0b\x32\x16.cockroach.proto.Value\"i\n\x12LeaseRejectedError\x12)\n\tRequested\x18\x01 \x01(\x0b\x32\x16.cockroach.proto.Lease\x12(\n\x08\x45xisting\x18\x02 \x01(\x0b\x32\x16.cockroach.proto.Lease\"\x85\x07\n\x0b\x45rrorDetail\x12\x35\n\nnot_leader\x18\x01 \x01(\x0b\x32\x1f.cockroach.proto.NotLeaderErrorH\x00\x12>\n\x0frange_not_found\x18\x02 \x01(\x0b\x32#.cockroach.proto.RangeNotFoundErrorH\x00\x12\x44\n\x12range_key_mismatch\x18\x03 \x01(\x0b\x32&.cockroach.proto.RangeKeyMismatchErrorH\x00\x12_\n read_within_uncertainty_interval\x18\x04 \x01(\x0b\x32\x33.cockroach.proto.ReadWithinUncertaintyIntervalErrorH\x00\x12G\n\x13transaction_aborted\x18\x05 \x01(\x0b\x32(.cockroach.proto.TransactionAbortedErrorH\x00\x12\x41\n\x10transaction_push\x18\x06 \x01(\x0b\x32%.cockroach.proto.TransactionPushErrorH\x00\x12\x43\n\x11transaction_retry\x18\x07 \x01(\x0b\x32&.cockroach.proto.TransactionRetryErrorH\x00\x12\x45\n\x12transaction_status\x18\x08 \x01(\x0b\x32\'.cockroach.proto.TransactionStatusErrorH\x00\x12\x39\n\x0cwrite_intent\x18\t \x01(\x0b\x32!.cockroach.proto.WriteIntentErrorH\x00\x12:\n\rwrite_too_old\x18\n \x01(\x0b\x32!.cockroach.proto.WriteTooOldErrorH\x00\x12>\n\x0fop_requires_txn\x18\x0b \x01(\x0b\x32#.cockroach.proto.OpRequiresTxnErrorH\x00\x12\x41\n\x10\x63ondition_failed\x18\x0c \x01(\x0b\x32%.cockroach.proto.ConditionFailedErrorH\x00\x12=\n\x0elease_rejected\x18\r \x01(\x0b\x32#.cockroach.proto.LeaseRejectedErrorH\x00\x42\x07\n\x05value\"\x9b\x01\n\x05\x45rror\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x11\n\tretryable\x18\x02 \x01(\x08\x12@\n\x13transaction_restart\x18\x04 \x01(\x0e\x32#.cockroach.proto.TransactionRestart\x12,\n\x06\x64\x65tail\x18\x03 \x01(\x0b\x32\x1c.cockroach.proto.ErrorDetail*;\n\x12TransactionRestart\x12\t\n\x05\x41\x42ORT\x10\x00\x12\x0b\n\x07\x42\x41\x43KOFF\x10\x01\x12\r\n\tIMMEDIATE\x10\x02\x42\x07Z\x05proto')
   ,
   dependencies=[cockroach.proto.config_pb2.DESCRIPTOR,cockroach.proto.data_pb2.DESCRIPTOR,])
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -47,8 +47,8 @@ _TRANSACTIONRESTART = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2232,
-  serialized_end=2291,
+  serialized_start=2402,
+  serialized_end=2461,
 )
 _sym_db.RegisterEnumDescriptor(_TRANSACTIONRESTART)
 
@@ -504,6 +504,43 @@ _CONDITIONFAILEDERROR = _descriptor.Descriptor(
 )
 
 
+_LEASEREJECTEDERROR = _descriptor.Descriptor(
+  name='LeaseRejectedError',
+  full_name='cockroach.proto.LeaseRejectedError',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='Requested', full_name='cockroach.proto.LeaseRejectedError.Requested', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Existing', full_name='cockroach.proto.LeaseRejectedError.Existing', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1233,
+  serialized_end=1338,
+)
+
+
 _ERRORDETAIL = _descriptor.Descriptor(
   name='ErrorDetail',
   full_name='cockroach.proto.ErrorDetail',
@@ -595,6 +632,13 @@ _ERRORDETAIL = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='lease_rejected', full_name='cockroach.proto.ErrorDetail.lease_rejected', index=12,
+      number=13, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -609,8 +653,8 @@ _ERRORDETAIL = _descriptor.Descriptor(
       name='value', full_name='cockroach.proto.ErrorDetail.value',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=1234,
-  serialized_end=2072,
+  serialized_start=1341,
+  serialized_end=2242,
 )
 
 
@@ -660,8 +704,8 @@ _ERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2075,
-  serialized_end=2230,
+  serialized_start=2245,
+  serialized_end=2400,
 )
 
 _NOTLEADERERROR.fields_by_name['replica'].message_type = cockroach.proto.config_pb2._REPLICA
@@ -680,6 +724,8 @@ _WRITEINTENTERROR.fields_by_name['intents'].message_type = _WRITEINTENTERROR_INT
 _WRITETOOOLDERROR.fields_by_name['timestamp'].message_type = cockroach.proto.data_pb2._TIMESTAMP
 _WRITETOOOLDERROR.fields_by_name['existing_timestamp'].message_type = cockroach.proto.data_pb2._TIMESTAMP
 _CONDITIONFAILEDERROR.fields_by_name['actual_value'].message_type = cockroach.proto.data_pb2._VALUE
+_LEASEREJECTEDERROR.fields_by_name['Requested'].message_type = cockroach.proto.data_pb2._LEASE
+_LEASEREJECTEDERROR.fields_by_name['Existing'].message_type = cockroach.proto.data_pb2._LEASE
 _ERRORDETAIL.fields_by_name['not_leader'].message_type = _NOTLEADERERROR
 _ERRORDETAIL.fields_by_name['range_not_found'].message_type = _RANGENOTFOUNDERROR
 _ERRORDETAIL.fields_by_name['range_key_mismatch'].message_type = _RANGEKEYMISMATCHERROR
@@ -692,6 +738,7 @@ _ERRORDETAIL.fields_by_name['write_intent'].message_type = _WRITEINTENTERROR
 _ERRORDETAIL.fields_by_name['write_too_old'].message_type = _WRITETOOOLDERROR
 _ERRORDETAIL.fields_by_name['op_requires_txn'].message_type = _OPREQUIRESTXNERROR
 _ERRORDETAIL.fields_by_name['condition_failed'].message_type = _CONDITIONFAILEDERROR
+_ERRORDETAIL.fields_by_name['lease_rejected'].message_type = _LEASEREJECTEDERROR
 _ERRORDETAIL.oneofs_by_name['value'].fields.append(
   _ERRORDETAIL.fields_by_name['not_leader'])
 _ERRORDETAIL.fields_by_name['not_leader'].containing_oneof = _ERRORDETAIL.oneofs_by_name['value']
@@ -728,6 +775,9 @@ _ERRORDETAIL.fields_by_name['op_requires_txn'].containing_oneof = _ERRORDETAIL.o
 _ERRORDETAIL.oneofs_by_name['value'].fields.append(
   _ERRORDETAIL.fields_by_name['condition_failed'])
 _ERRORDETAIL.fields_by_name['condition_failed'].containing_oneof = _ERRORDETAIL.oneofs_by_name['value']
+_ERRORDETAIL.oneofs_by_name['value'].fields.append(
+  _ERRORDETAIL.fields_by_name['lease_rejected'])
+_ERRORDETAIL.fields_by_name['lease_rejected'].containing_oneof = _ERRORDETAIL.oneofs_by_name['value']
 _ERROR.fields_by_name['transaction_restart'].enum_type = _TRANSACTIONRESTART
 _ERROR.fields_by_name['detail'].message_type = _ERRORDETAIL
 DESCRIPTOR.message_types_by_name['NotLeaderError'] = _NOTLEADERERROR
@@ -742,6 +792,7 @@ DESCRIPTOR.message_types_by_name['WriteIntentError'] = _WRITEINTENTERROR
 DESCRIPTOR.message_types_by_name['WriteTooOldError'] = _WRITETOOOLDERROR
 DESCRIPTOR.message_types_by_name['OpRequiresTxnError'] = _OPREQUIRESTXNERROR
 DESCRIPTOR.message_types_by_name['ConditionFailedError'] = _CONDITIONFAILEDERROR
+DESCRIPTOR.message_types_by_name['LeaseRejectedError'] = _LEASEREJECTEDERROR
 DESCRIPTOR.message_types_by_name['ErrorDetail'] = _ERRORDETAIL
 DESCRIPTOR.message_types_by_name['Error'] = _ERROR
 DESCRIPTOR.enum_types_by_name['TransactionRestart'] = _TRANSACTIONRESTART
@@ -837,6 +888,13 @@ ConditionFailedError = _reflection.GeneratedProtocolMessageType('ConditionFailed
   # @@protoc_insertion_point(class_scope:cockroach.proto.ConditionFailedError)
   ))
 _sym_db.RegisterMessage(ConditionFailedError)
+
+LeaseRejectedError = _reflection.GeneratedProtocolMessageType('LeaseRejectedError', (_message.Message,), dict(
+  DESCRIPTOR = _LEASEREJECTEDERROR,
+  __module__ = 'cockroach.proto.errors_pb2'
+  # @@protoc_insertion_point(class_scope:cockroach.proto.LeaseRejectedError)
+  ))
+_sym_db.RegisterMessage(LeaseRejectedError)
 
 ErrorDetail = _reflection.GeneratedProtocolMessageType('ErrorDetail', (_message.Message,), dict(
   DESCRIPTOR = _ERRORDETAIL,
