@@ -14,5 +14,5 @@ setup(
     name='cockroach',
     packages=['cockroach', 'cockroach.sql.driver'],
     install_requires=install_requires,
-    extras_require={'tests': ['werkzeug']},
+    extras_require={'tests': ['werkzeug', 'dbapi-compliance']},
 )
