@@ -6,6 +6,10 @@ try:
 except ImportError:
     import enum34 as enum
 
+
+from .wire_pb2 import Datum
+
+
 class Binary(object):
     def __init__(self, v):
         self.v = v
@@ -45,3 +49,23 @@ class TypeCode(enum.Enum):
 
 for k, v in TypeCode.__members__.items():
     globals()[k] = v
+
+
+def _python_to_datum(val):
+    if isinstance(val, str):
+        return Datum(string_val=val)
+    else:
+        raise TypeError("unsupported type %s" % type(val))
+
+
+def _datum_to_python(datum):
+    which = datum.WhichOneof("payload")
+    if which is None:
+        return None
+    elif which == "string_val":
+        return datum.string_val
+    else:
+        raise TypeError("unsupported type %s" % which)
+
+__all__ = ['Binary', 'Date', 'Time', 'Timestamp', 'DateFromTicks', 'TimeFromTicks',
+           'TimestampFromTicks', 'STRING', 'BINARY', 'NUMBER', 'DATETIME', 'ROWID']

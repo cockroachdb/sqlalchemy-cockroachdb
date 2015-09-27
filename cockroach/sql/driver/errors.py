@@ -43,3 +43,7 @@ class DataError(DatabaseError):
 
 class NotSupportedError(DatabaseError):
     pass
+
+__all__ = ['Error', 'Warning', 'InterfaceError', 'DatabaseError',
+           'InternalError', 'OperationalError', 'ProgrammingError',
+           'IntegrityError', 'DataError', 'NotSupportedError']
