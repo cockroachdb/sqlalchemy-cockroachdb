@@ -9,4 +9,5 @@ dependencies:
 test:
   override:
     - make test
-    - make dockertest
+    # TODO(bdarnell): revive dockertest
+    #- make dockertest

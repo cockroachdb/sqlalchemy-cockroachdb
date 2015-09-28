@@ -12,7 +12,7 @@ if sys.version_info < (3, 4):
 
 setup(
     name='cockroach',
-    packages=['cockroach', 'cockroach.proto'],
+    packages=['cockroach', 'cockroach.sql.driver'],
     install_requires=install_requires,
     extras_require={'tests': ['werkzeug']},
 )
