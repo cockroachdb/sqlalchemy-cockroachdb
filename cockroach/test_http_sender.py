@@ -3,17 +3,17 @@ import unittest
 from werkzeug.wrappers import Request, Response
 import wsgiref.simple_server
 
-from cockroach.call import Call
 from cockroach.http_sender import HTTPSender
-from cockroach.methods import Methods
-from cockroach.proto import api_pb2, data_pb2
+from cockroach.sql.driver import wire_pb2
 
-test_key = b"a"
-test_ts = data_pb2.Timestamp(wall_time=1, logical=1)
-test_put_request = api_pb2.PutRequest(
-    header=api_pb2.RequestHeader(timestamp=test_ts, key=test_key))
-test_put_response = api_pb2.PutResponse(header=api_pb2.ResponseHeader(timestamp=test_ts))
-
+test_sql = "SELECT 1"
+test_request = wire_pb2.Request(
+    sql=test_sql,
+)
+test_session = b"new_session"
+test_response = wire_pb2.Response(
+    session=test_session,
+)
 
 class HTTPSenderTest(unittest.TestCase):
     def start_server(self, handler):
@@ -44,17 +44,16 @@ class HTTPSenderTest(unittest.TestCase):
         def handler(environ, start_response):
             req = Request(environ)
             self.assertEqual(req.method, "POST")
-            self.assertEqual(req.path, "/kv/db/Put")
-            args = api_pb2.PutRequest()
+            self.assertEqual(req.path, "/sql/Execute")
+            args = wire_pb2.Request()
             args.ParseFromString(req.data)
-            self.assertEqual(args.header.key, test_key)
-            resp = Response(test_put_response.SerializeToString(),
+            self.assertEqual(args.sql, test_sql)
+            resp = Response(test_response.SerializeToString(),
                             content_type="application/x-protobuf")
             return resp(environ, start_response)
         self.start_server(handler)
-        reply = self.sender.send(Call(Methods.Put, test_put_request))
-        self.assertFalse(reply.header.HasField('error'))
-        self.assertEqual(reply.header.timestamp, test_ts)
+        reply = self.sender.send(test_request)
+        self.assertEqual(reply.session, test_session)
 
     # Verify that send is retried on some HTTP response codes but not others.
     def test_retry_response_codes(self):
@@ -74,23 +73,27 @@ class HTTPSenderTest(unittest.TestCase):
                     resp = Response("error message", status=code)
                 else:
                     self.assertTrue(retry, "didn't expect retry on code %d" % code)
-                    resp = Response(test_put_response.SerializeToString(),
+                    resp = Response(test_response.SerializeToString(),
                                     content_type="application/x-protobuf")
                 return resp(environ, start_response)
             self.start_server(handler)
+            err = None
             try:
-                reply = self.sender.send(Call(Methods.Put, test_put_request))
+                reply = self.sender.send(test_request)
+            except Exception as e:
+                err = e
             finally:
                 self.stop_server()
             if retry:
                 self.assertEqual(count[0], 2, "expected retry for code %d; count=%d" % (
                     code, count[0]))
-                self.assertFalse(reply.header.HasField('error'),
-                                 "expected success after retry for code %d; got %s" % (
-                                     code, reply.header.error))
+                self.assertIsNone(err,
+                                  "expected success after retry for code %d; got %s" % (
+                                      code, err))
+                self.assertEqual(reply.session, test_session)
             else:
                 self.assertEqual(count[0], 1, "expected no retry for code %d" % code)
-                self.assertTrue(reply.header.HasField('error'), "expected error")
+                self.assertIsNotNone(err, "expected error")
 
     # Verify that send is retried on an unparseable response.
     # The go implementation also tests abruptly closed connections but we cannot
@@ -105,10 +108,10 @@ class HTTPSenderTest(unittest.TestCase):
                 resp = Response(b'\xff\xfe\x23\x44',
                                 content_type="application/x-protobuf")
             else:
-                resp = Response(test_put_response.SerializeToString(),
+                resp = Response(test_response.SerializeToString(),
                                 content_type="application/x-protobuf")
             return resp(environ, start_response)
         self.start_server(handler)
-        reply = self.sender.send(Call(Methods.Put, test_put_request))
-        self.assertFalse(reply.header.HasField('error'))
+        reply = self.sender.send(test_request)
         self.assertEqual(count[0], 2)
+        self.assertEqual(reply.session, test_session)
