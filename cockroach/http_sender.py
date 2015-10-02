@@ -4,6 +4,7 @@ import requests
 
 from cockroach.util import RetryOptions, retry_with_backoff, RetryStatus
 from cockroach.sql.driver import wire_pb2
+from cockroach.sql.driver import errors
 
 # URL path prefix which accepts incoming HTTP requests for the SQL API.
 sql_endpoint = "/sql/Execute"
@@ -65,6 +66,9 @@ class HTTPSender(object):
                     # On a successful post, we're done with retry loop.
                     return RetryStatus.BREAK
         retry_with_backoff(http_retry_options, retryable)
+        for result in reply.results:
+            if result.error:
+                raise errors.DatabaseError(result.error)
         return reply
 
     def close(self):
