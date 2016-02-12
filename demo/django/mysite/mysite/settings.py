@@ -76,8 +76,11 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'cockroach.django',
+        'NAME': 'django_demo',
+        'USER': 'root',
+        'HOST': 'localhost',
+        'PORT': '15432',
     }
 }
 
