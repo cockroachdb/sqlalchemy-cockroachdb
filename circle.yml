@@ -2,6 +2,10 @@ machine:
   python:
     version: 3.5.1
 
+dependencies:
+  override:
+    - /bin/true
+
 test:
   override:
     # TODO(bdarnell): revive the tests

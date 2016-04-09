@@ -3,3 +3,6 @@ __pycache__
 .tox
 MANIFEST
 *.egg-info
+
+# pytest cache
+.cache
