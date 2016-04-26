@@ -1,13 +1,12 @@
 machine:
-  services:
-    - docker
+  python:
+    version: 3.5.1
 
 dependencies:
-  post:
-    - pip install docker-compose
+  override:
+    - /bin/true
 
 test:
   override:
-    - make test
-    # TODO(bdarnell): revive dockertest
-    #- make dockertest
+    # TODO(bdarnell): revive the tests
+    - /bin/true
