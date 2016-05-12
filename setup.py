@@ -5,12 +5,12 @@ install_requires = [
 ]
 
 setup(
-    name='cockroach',
-    packages=['cockroach', 'cockroach.sqlalchemy'],
+    name='cockroachdb',
+    packages=['cockroachdb', 'cockroachdb.sqlalchemy'],
     install_requires=install_requires,
     entry_points={
         'sqlalchemy.dialects': [
-            'cockroach = cockroach.sqlalchemy.dialect:CockroachDialect',
+            'cockroachdb = cockroachdb.sqlalchemy.dialect:CockroachDBDialect',
         ],
     },
 )
