@@ -36,14 +36,14 @@ _type_map = dict(
 )
 
 
-class CockroachDialect(PGDialect_psycopg2):
-    name = 'cockroach'
+class CockroachDBDialect(PGDialect_psycopg2):
+    name = 'cockroachdb'
     supports_sequences = False
     ddl_compiler = DDLCompiler
     type_compiler = TypeCompiler
 
     def __init__(self, *args, **kwargs):
-        super(CockroachDialect, self).__init__(*args,
+        super(CockroachDBDialect, self).__init__(*args,
                                                use_native_hstore=False,
                                                server_side_cursors=False,
                                                **kwargs)
