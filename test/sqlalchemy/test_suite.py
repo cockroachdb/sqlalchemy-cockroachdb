@@ -1,6 +1,7 @@
-from sqlalchemy.testing.suite import *
+from sqlalchemy.testing.suite import *  # noqa
 
 from sqlalchemy.testing.suite import RowFetchTest as _RowFetchTest
+
 
 # This test isn't controllable with any requirements setting,
 # so patch it out by hand. The failure relates to the fact that

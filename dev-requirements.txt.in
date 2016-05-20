@@ -1,0 +1,4 @@
+# To add/update dependencies, update this file and run
+# make update-dependencies
+flake8
+tox

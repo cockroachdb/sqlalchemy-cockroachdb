@@ -1,1 +1,9 @@
-tox
+flake8==2.5.4
+mccabe==0.4.0
+pep8==1.7.0
+pluggy==0.3.1
+py==1.4.31
+pyflakes==1.0.0
+tox==2.3.1
+virtualenv==15.0.1
+wheel==0.24.0
