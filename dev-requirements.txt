@@ -1,8 +1,21 @@
+# Packages used by the Makefile and other scripts.
+#
+# To add/update dependencies, update dev-requirements.txt.in (not the
+# generated dev-requirements.txt), run make update-requirements,
+# then re-run bootstrap.sh.
+
 flake8==2.5.4
+tox==2.3.1
+
+# Twine is used in the release process to upload the package.
+twine==1.6.5
+## The following requirements were added by pip freeze:
 mccabe==0.4.0
 pep8==1.7.0
+pkginfo==1.2.1
 pluggy==0.3.1
 py==1.4.31
 pyflakes==1.0.0
-tox==2.3.1
+requests==2.10.0
+requests-toolbelt==0.6.2
 virtualenv==15.0.1

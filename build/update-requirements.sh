@@ -11,5 +11,5 @@ fi
 
 virtualenv -p python3.5 "${ENV}"
 "${ENV}/bin/pip" install -r "${1}.in"
-"${ENV}/bin/pip" freeze > "$1"
+"${ENV}/bin/pip" freeze -r "${1}.in" > "$1"
 rm -rf "${ENV}"
