@@ -6,4 +6,3 @@ py==1.4.31
 pyflakes==1.0.0
 tox==2.3.1
 virtualenv==15.0.1
-wheel==0.24.0
