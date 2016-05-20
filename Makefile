@@ -3,4 +3,4 @@ all: test
 
 .PHONY: test
 test:
-	tox --skip-missing-interpreters
+	tox

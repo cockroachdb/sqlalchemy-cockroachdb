@@ -1,12 +1,20 @@
 machine:
   python:
-    version: 3.5.1
+    # Set the default python version. CircleCI uses pyenv, which also
+    # appears to require a .python-version file mentioning this
+    # version and a specific sub-version of any python versions we
+    # test against.
+    #
+    # Note that circleci has many python versions preinstalled, but any
+    # versions that are not preinstalled are built from source with no
+    # caching on every build, so don't increase this version until
+    # circleci has the new version preinstalled.
+    version: 3.5.0
 
 dependencies:
   override:
-    - /bin/true
+    - build/circle-deps.sh
 
 test:
   override:
-    # TODO(bdarnell): revive the tests
-    - /bin/true
+    - build/circle-test.sh
