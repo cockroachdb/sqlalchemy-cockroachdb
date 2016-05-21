@@ -1,4 +1,5 @@
 import collections
+import threading
 from sqlalchemy.dialects.postgresql.base import PGDialect
 from sqlalchemy.dialects.postgresql.psycopg2 import PGDialect_psycopg2
 from sqlalchemy.util import warn
@@ -34,6 +35,21 @@ _type_map = dict(
     bytes=sqltypes.BLOB,
     blob=sqltypes.BLOB,
 )
+
+
+class _SavepointState(threading.local):
+    """Hack to override names used in savepoint statements.
+
+    To get the Session to do the right thing with transaction retries,
+    we use the begin_nested() method, which executes a savepoint. We
+    need to transform the savepoint statements that are a part of this
+    retry loop, while leaving other savepoints alone. Unfortunately
+    the interface leaves us with no way to pass this information along
+    except via a thread-local variable.
+    """
+    def __init__(self):
+        self.cockroach_restart = False
+savepoint_state = _SavepointState()
 
 
 class CockroachDBDialect(PGDialect_psycopg2):
@@ -130,3 +146,21 @@ class CockroachDBDialect(PGDialect_psycopg2):
                 del index["unique"]
                 res.append(index)
         return res
+
+    def do_savepoint(self, connection, name):
+        if savepoint_state.cockroach_restart:
+            connection.execute('SAVEPOINT cockroach_restart')
+        else:
+            super(CockroachDBDialect, self).do_savepoint(connection, name)
+
+    def do_rollback_to_savepoint(self, connection, name):
+        if savepoint_state.cockroach_restart:
+            connection.execute('ROLLBACK TO SAVEPOINT cockroach_restart')
+        else:
+            super(CockroachDBDialect, self).do_rollback_to_savepoint(connection, name)
+
+    def do_release_savepoint(self, connection, name):
+        if savepoint_state.cockroach_restart:
+            connection.execute('RELEASE SAVEPOINT cockroach_restart')
+        else:
+            super(CockroachDBDialect, self).do_release_savepoint(connection, name)
