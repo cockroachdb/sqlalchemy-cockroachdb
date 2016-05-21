@@ -1,4 +1,3 @@
-import sqlalchemy.sql.compiler
 from sqlalchemy.dialects.postgresql.base import PGDDLCompiler
 
 

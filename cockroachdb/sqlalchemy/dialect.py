@@ -44,9 +44,9 @@ class CockroachDBDialect(PGDialect_psycopg2):
 
     def __init__(self, *args, **kwargs):
         super(CockroachDBDialect, self).__init__(*args,
-                                               use_native_hstore=False,
-                                               server_side_cursors=False,
-                                               **kwargs)
+                                                 use_native_hstore=False,
+                                                 server_side_cursors=False,
+                                                 **kwargs)
 
     def initialize(self, connection):
         # Bypass PGDialect's initialize implementation, which looks at

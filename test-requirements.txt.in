@@ -1,0 +1,9 @@
+# Packages used when running tests. Installed by tox into multiple
+# virtualenvs.
+#
+# To add/update dependencies, update test-requirements.txt.in (not the
+# generated test-requirements.txt) and run make update-requirements
+
+SQLAlchemy
+mock
+pytest
