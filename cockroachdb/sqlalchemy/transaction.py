@@ -1,4 +1,5 @@
 import psycopg2
+import psycopg2.errorcodes
 import sqlalchemy.engine
 import sqlalchemy.exc
 import sqlalchemy.orm
@@ -74,7 +75,7 @@ def _txn_retry_loop(conn, callback):
                     ret = callback(conn)
                     return ret
             except sqlalchemy.exc.DatabaseError as e:
-                if isinstance(e.orig, psycopg2.DatabaseError):
-                    if e.orig.pgcode == 'CR000':
+                if isinstance(e.orig, psycopg2.OperationalError):
+                    if e.orig.pgcode == psycopg2.errorcodes.SERIALIZATION_FAILURE:
                         continue
                 raise
