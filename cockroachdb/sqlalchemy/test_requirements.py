@@ -14,7 +14,8 @@ class Requirements(SuiteRequirements):
     # in the tests.
     independent_connections = exclusions.open()
 
-    # We don't support these features yet.
+    # We don't support these features yet, but the tests have them on
+    # by default.
     foreign_key_constraint_reflection = exclusions.closed()
     temporary_tables = exclusions.closed()
     temp_table_reflection = exclusions.closed()
@@ -31,19 +32,39 @@ class Requirements(SuiteRequirements):
     # The autoincrement tests assume a predictable 1-based sequence.
     autoincrement_insert = exclusions.closed()
 
-    # Turn on all the settings that are off by default but we support.
+    # The following features are off by default. We turn on as many as
+    # we can without causing test failures.
+    non_updating_cascade = exclusions.closed()
+    deferrable_fks = exclusions.closed()
     boolean_col_expressions = exclusions.open()
     nullsordering = exclusions.open()
     standalone_binds = exclusions.open()
     intersect = exclusions.open()
+    except_ = exclusions.open()
+    window_functions = exclusions.closed()
     empty_inserts = exclusions.open()
+    returning = exclusions.open()
     multivalues_inserts = exclusions.open()
     emulated_lastrowid = exclusions.open()
     dbapi_lastrowid = exclusions.open()
+    views = exclusions.closed()
+    schemas = exclusions.closed()
+    sequences = exclusions.closed()
+    sequences_optional = exclusions.closed()
+    temporary_views = exclusions.closed()
     reflects_pk_names = exclusions.open()
     unicode_ddl = exclusions.open()
+    datetime_literals = exclusions.closed()
     datetime_historic = exclusions.open()
     date_historic = exclusions.open()
+    precision_numerics_enotation_small = exclusions.open()
+    precision_numerics_enotation_large = exclusions.open()
+    precision_numerics_many_significant_digits = exclusions.closed()
+    precision_numerics_retains_significant_digits = exclusions.open()
+    savepoints = exclusions.closed()
+    two_phase_transactions = exclusions.closed()
     update_from = exclusions.open()
     mod_operator_as_percent_sign = exclusions.open()
+    # The psycopg driver doesn't support these.
+    percent_schema_names = exclusions.closed()
     order_by_label_with_expression = exclusions.open()
