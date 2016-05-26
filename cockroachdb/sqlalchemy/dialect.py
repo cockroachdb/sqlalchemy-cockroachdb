@@ -7,7 +7,6 @@ from sqlalchemy.util import warn
 import sqlalchemy.types as sqltypes
 
 from .ddl_compiler import DDLCompiler
-from .type_compiler import TypeCompiler
 
 # Map type names (as returned by SHOW COLUMNS) to sqlalchemy type
 # objects.
@@ -56,7 +55,6 @@ class CockroachDBDialect(PGDialect_psycopg2):
     name = 'cockroachdb'
     supports_sequences = False
     ddl_compiler = DDLCompiler
-    type_compiler = TypeCompiler
 
     def __init__(self, *args, **kwargs):
         super(CockroachDBDialect, self).__init__(*args,
