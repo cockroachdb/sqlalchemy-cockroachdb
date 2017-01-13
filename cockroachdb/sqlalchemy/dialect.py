@@ -82,14 +82,16 @@ class CockroachDBDialect(PGDialect_psycopg2):
         # used.
         return (9, 5, 0)
 
-    def _get_default_schema_name(self, conn):
-        raise NotImplementedError()
-
     def get_table_names(self, conn, schema=None, **kw):
+        # Upstream implementation needs correlated subqueries.
         return [row.Table for row in conn.execute("SHOW TABLES")]
 
     def has_table(self, conn, table, schema=None):
+        # Upstream implementation needs pg_table_is_visible().
         return any(t == table for t in self.get_table_names(conn, schema=schema))
+
+    # The upstream implementations of the reflection functions below depend on
+    # get_table_oid() which needs pg_table_is_visible().
 
     def get_columns(self, conn, table_name, schema=None, **kw):
         res = []
@@ -151,18 +153,21 @@ class CockroachDBDialect(PGDialect_psycopg2):
         return res
 
     def do_savepoint(self, connection, name):
+        # Savepoint logic customized to work with run_transaction().
         if savepoint_state.cockroach_restart:
             connection.execute('SAVEPOINT cockroach_restart')
         else:
             super(CockroachDBDialect, self).do_savepoint(connection, name)
 
     def do_rollback_to_savepoint(self, connection, name):
+        # Savepoint logic customized to work with run_transaction().
         if savepoint_state.cockroach_restart:
             connection.execute('ROLLBACK TO SAVEPOINT cockroach_restart')
         else:
             super(CockroachDBDialect, self).do_rollback_to_savepoint(connection, name)
 
     def do_release_savepoint(self, connection, name):
+        # Savepoint logic customized to work with run_transaction().
         if savepoint_state.cockroach_restart:
             connection.execute('RELEASE SAVEPOINT cockroach_restart')
         else:

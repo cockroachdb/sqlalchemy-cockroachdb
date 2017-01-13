@@ -16,7 +16,6 @@ class Requirements(SuiteRequirements):
 
     # We don't support these features yet, but the tests have them on
     # by default.
-    foreign_key_constraint_reflection = exclusions.closed()
     temporary_tables = exclusions.closed()
     temp_table_reflection = exclusions.closed()
     time = exclusions.closed()
@@ -27,28 +26,33 @@ class Requirements(SuiteRequirements):
     date_coerces_from_datetime = exclusions.closed()
 
     # Our reflection support is incomplete (we need to return type
-    # parameters and hide the implicit rowid index).
+    # parameters).
     table_reflection = exclusions.closed()
+    # The following tests are also disabled by disabling_table_reflection,
+    # but are failing for their own reasons.
+    view_reflection = exclusions.closed()
+    view_column_reflection = exclusions.closed()
+    foreign_key_constraint_reflection = exclusions.closed()
 
     # The autoincrement tests assume a predictable 1-based sequence.
     autoincrement_insert = exclusions.closed()
 
     # The following features are off by default. We turn on as many as
     # we can without causing test failures.
-    non_updating_cascade = exclusions.closed()
+    non_updating_cascade = exclusions.open()
     deferrable_fks = exclusions.closed()
     boolean_col_expressions = exclusions.open()
     nullsordering = exclusions.open()
     standalone_binds = exclusions.open()
     intersect = exclusions.open()
     except_ = exclusions.open()
-    window_functions = exclusions.closed()
+    window_functions = exclusions.open()
     empty_inserts = exclusions.open()
     returning = exclusions.open()
     multivalues_inserts = exclusions.open()
     emulated_lastrowid = exclusions.open()
     dbapi_lastrowid = exclusions.open()
-    views = exclusions.closed()
+    views = exclusions.open()
     schemas = exclusions.closed()
     sequences = exclusions.closed()
     sequences_optional = exclusions.closed()
