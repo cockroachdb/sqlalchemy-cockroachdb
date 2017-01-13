@@ -48,6 +48,8 @@ class _SavepointState(threading.local):
     """
     def __init__(self):
         self.cockroach_restart = False
+
+
 savepoint_state = _SavepointState()
 
 

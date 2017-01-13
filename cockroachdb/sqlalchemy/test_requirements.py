@@ -21,6 +21,7 @@ class Requirements(SuiteRequirements):
     temp_table_reflection = exclusions.closed()
     time = exclusions.closed()
     time_microseconds = exclusions.closed()
+    server_side_cursors = exclusions.closed()
 
     # We don't do implicit casts.
     date_coerces_from_datetime = exclusions.closed()
