@@ -115,6 +115,9 @@ class CockroachDBDialect(PGDialect_psycopg2):
         columns = collections.defaultdict(list)
         # TODO(bdarnell): escape table name
         for row in conn.execute('SHOW INDEXES FROM "%s"' % table_name):
+            # beta-20170112 and older versions do not have the Implicit column.
+            if getattr(row, "Implicit", False):
+                continue
             columns[row.Name].append(row.Column)
             uniques[row.Name] = row.Unique
         res = []
