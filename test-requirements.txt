@@ -4,11 +4,11 @@
 # To add/update dependencies, update test-requirements.txt.in (not the
 # generated test-requirements.txt) and run make update-requirements
 
-SQLAlchemy==1.0.13
+SQLAlchemy==1.1.4
 mock==2.0.0
-pytest==2.9.1
+pytest==3.0.5
 futures==3.0.5
 ## The following requirements were added by pip freeze:
-pbr==1.9.1
-py==1.4.31
+pbr==1.10.0
+py==1.4.32
 six==1.10.0
