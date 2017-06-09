@@ -4,7 +4,7 @@ set -eux -o pipefail
 
 pip install -r dev-requirements.txt
 
-COCKROACH_VERSION=beta-20170112
+COCKROACH_VERSION=v1.0.1
 COCKROACH_PLATFORM=linux-amd64
 COCKROACH_NAME=cockroach-${COCKROACH_VERSION}.${COCKROACH_PLATFORM}
 DOWNLOAD_DIR=~/cockroach-download
