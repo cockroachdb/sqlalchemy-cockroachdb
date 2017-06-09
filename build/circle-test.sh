@@ -6,4 +6,4 @@ bin/cockroach start --background
 bin/cockroach sql -e 'CREATE DATABASE IF NOT EXISTS test_sqlalchemy'
 
 make test
-make check
+make lint

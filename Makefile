@@ -5,8 +5,8 @@ all: test
 test:
 	tox
 
-.PHONY: check
-check:
+.PHONY: lint
+lint:
 	flake8 --max-line-length=100 cockroachdb test
 	python setup.py check
 
