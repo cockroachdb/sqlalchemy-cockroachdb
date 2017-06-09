@@ -27,7 +27,7 @@ class Requirements(SuiteRequirements):
 
     # Our reflection support is incomplete (we need to return type
     # parameters).
-    table_reflection = exclusions.closed()
+    table_reflection = exclusions.open()
     # The following tests are also disabled by disabling_table_reflection,
     # but are failing for their own reasons.
     view_reflection = exclusions.closed()
