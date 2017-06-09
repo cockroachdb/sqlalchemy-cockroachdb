@@ -97,7 +97,7 @@ class CockroachDBDialect(PGDialect_psycopg2):
         res = []
         # TODO(bdarnell): escape table name
         for row in conn.execute('SHOW COLUMNS FROM "%s"' % table_name):
-            name, type_name, nullable, default = row
+            name, type_name, nullable, default = row[:4]
             # TODO(bdarnell): when there are type parameters, attach
             # them to the returned type object.
             try:
