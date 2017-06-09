@@ -6,3 +6,6 @@ MANIFEST
 
 # pytest cache
 .cache
+
+# created by release process
+dist/
