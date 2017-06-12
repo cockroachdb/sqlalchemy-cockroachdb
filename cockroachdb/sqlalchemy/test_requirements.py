@@ -25,13 +25,12 @@ class Requirements(SuiteRequirements):
     # We don't do implicit casts.
     date_coerces_from_datetime = exclusions.closed()
 
-    # Our reflection support is incomplete (we need to return type
-    # parameters).
-    table_reflection = exclusions.open()
-    # The following tests are also disabled by disabling_table_reflection,
-    # but are failing for their own reasons.
+    # We do not support creation of views with `SELECT *` expressions,
+    # which these tests use.
     view_reflection = exclusions.closed()
     view_column_reflection = exclusions.closed()
+    # Requires either implementing pg_get_constraintdef() or overriding
+    # Dialect.get_foreign_keys()
     foreign_key_constraint_reflection = exclusions.closed()
 
     # The autoincrement tests assume a predictable 1-based sequence.
