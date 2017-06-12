@@ -1,4 +1,5 @@
 import collections
+import re
 import threading
 from sqlalchemy.dialects.postgresql.base import PGDialect
 from sqlalchemy.dialects.postgresql.psycopg2 import PGDialect_psycopg2
@@ -97,14 +98,25 @@ class CockroachDBDialect(PGDialect_psycopg2):
         res = []
         # TODO(bdarnell): escape table name
         for row in conn.execute('SHOW COLUMNS FROM "%s"' % table_name):
-            name, type_name, nullable, default = row
-            # TODO(bdarnell): when there are type parameters, attach
-            # them to the returned type object.
-            try:
-                typ = _type_map[type_name.split('(')[0].lower()]
-            except KeyError:
-                warn("Did not recognize type '%s' of column '%s'" % (type_name, name))
-                typ = sqltypes.NULLTYPE
+            name, type_str, nullable, default = row[:4]
+            # When there are type parameters, attach them to the
+            # returned type object.
+            m = re.match(r'^(\w+)(?:\(([0-9, ]*)\))?$', type_str)
+            if m is None:
+                warn("Could not parse type name '%s'" % type_str)
+                typ = sqltypes.NULLTYPE()
+            else:
+                type_name, type_args = m.groups()
+                try:
+                    type_class = _type_map[type_name.lower()]
+                except KeyError:
+                    warn("Did not recognize type '%s' of column '%s'" %
+                         (type_name, name))
+                    type_class = sqltypes.NULLTYPE
+                if type_args:
+                    typ = type_class(*[int(s.strip()) for s in type_args.split(',')])
+                else:
+                    typ = type_class()
             res.append(dict(
                 name=name,
                 type=typ,
