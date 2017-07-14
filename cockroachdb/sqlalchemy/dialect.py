@@ -164,6 +164,20 @@ class CockroachDBDialect(PGDialect_psycopg2):
                 res.append(index)
         return res
 
+    def get_foreign_keys(self, conn, table_name, schema=None, **kw):
+        # TODO(bdarnell): The postgres dialect implementation depends
+        # on pg_get_constraintdef, which we don't support. We need to
+        # implement that function or provide our own implementation of
+        # get_foreign_keys() in terms of our SHOW CONSTRAINTS command.
+        # For now, just return nothing.
+        return []
+
+    def get_check_constraints(self, conn, table_name, schema=None, **kw):
+        # TODO(bdarnell): The postgres dialect implementation depends on
+        # pg_table_is_visible, which is supported in cockroachdb 1.1
+        # but not in 1.0. Figure out a versioning strategy.
+        return []
+
     def do_savepoint(self, connection, name):
         # Savepoint logic customized to work with run_transaction().
         if savepoint_state.cockroach_restart:
