@@ -11,7 +11,10 @@ class AcrossSchemaTest(fixtures.TestBase):
 
     def setup_method(self):
         testing.db.execute("CREATE DATABASE IF NOT EXISTS {}".format(self.TEST_DATABASE))
-        testing.db.execute("CREATE TABLE IF NOT EXISTS {}.users (name STRING PRIMARY KEY)".format(self.TEST_DATABASE))
+        testing.db.execute("""CREATE TABLE IF NOT EXISTS {}.users (
+                                  name STRING PRIMARY KEY
+                              )
+                           """.format(self.TEST_DATABASE))
         self.meta = MetaData(testing.db, schema=self.TEST_DATABASE)
 
     def test_get_columns_indexes_across_schema(self):
