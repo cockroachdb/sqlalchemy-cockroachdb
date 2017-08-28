@@ -7,7 +7,6 @@ from sqlalchemy.util import warn
 
 import sqlalchemy.types as sqltypes
 
-from .ddl_compiler import DDLCompiler
 from .stmt_compiler import CockroachCompiler
 
 # Map type names (as returned by SHOW COLUMNS) to sqlalchemy type
@@ -58,7 +57,6 @@ savepoint_state = _SavepointState()
 class CockroachDBDialect(PGDialect_psycopg2):
     name = 'cockroachdb'
     supports_sequences = False
-    ddl_compiler = DDLCompiler
     statement_compiler = CockroachCompiler
 
     def __init__(self, *args, **kwargs):
@@ -99,7 +97,8 @@ class CockroachDBDialect(PGDialect_psycopg2):
     def get_columns(self, conn, table_name, schema=None, **kw):
         res = []
         # TODO(bdarnell): escape table name
-        for row in conn.execute('SHOW COLUMNS FROM "%s"."%s"' % (schema or self.default_schema_name, table_name)):
+        for row in conn.execute('SHOW COLUMNS FROM "%s"."%s"' %
+                                (schema or self.default_schema_name, table_name)):
             name, type_str, nullable, default = row[:4]
             # When there are type parameters, attach them to the
             # returned type object.
@@ -132,7 +131,8 @@ class CockroachDBDialect(PGDialect_psycopg2):
         uniques = collections.OrderedDict()
         columns = collections.defaultdict(list)
         # TODO(bdarnell): escape table name
-        for row in conn.execute('SHOW INDEXES FROM "%s"."%s"' % (schema or self.default_schema_name, table_name)):
+        for row in conn.execute('SHOW INDEXES FROM "%s"."%s"' %
+                                (schema or self.default_schema_name, table_name)):
             # beta-20170112 and older versions do not have the Implicit column.
             if getattr(row, "Implicit", False):
                 continue
