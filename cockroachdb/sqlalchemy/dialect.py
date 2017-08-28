@@ -7,7 +7,6 @@ from sqlalchemy.util import warn
 
 import sqlalchemy.types as sqltypes
 
-from .ddl_compiler import DDLCompiler
 from .stmt_compiler import CockroachCompiler
 
 # Map type names (as returned by SHOW COLUMNS) to sqlalchemy type
@@ -58,7 +57,6 @@ savepoint_state = _SavepointState()
 class CockroachDBDialect(PGDialect_psycopg2):
     name = 'cockroachdb'
     supports_sequences = False
-    ddl_compiler = DDLCompiler
     statement_compiler = CockroachCompiler
 
     def __init__(self, *args, **kwargs):
