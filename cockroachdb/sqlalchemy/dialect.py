@@ -200,3 +200,13 @@ class CockroachDBDialect(PGDialect_psycopg2):
             connection.execute('RELEASE SAVEPOINT cockroach_restart')
         else:
             super(CockroachDBDialect, self).do_release_savepoint(connection, name)
+
+
+# If alembic is installed, register an alias in its dialect mapping too.
+try:
+    import alembic.ddl.postgresql
+except ImportError:
+    pass
+else:
+    class CockroachDBImpl(alembic.ddl.postgresql.PostgresqlImpl):
+        __dialect__ = 'cockroachdb'
