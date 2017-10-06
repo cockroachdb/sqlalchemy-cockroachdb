@@ -202,7 +202,7 @@ class CockroachDBDialect(PGDialect_psycopg2):
             super(CockroachDBDialect, self).do_release_savepoint(connection, name)
 
 
-# If alembic is installed, register an alias in its dialect mapping too.
+# If alembic is installed, register an alias in its dialect mapping.
 try:
     import alembic.ddl.postgresql
 except ImportError:
@@ -210,3 +210,12 @@ except ImportError:
 else:
     class CockroachDBImpl(alembic.ddl.postgresql.PostgresqlImpl):
         __dialect__ = 'cockroachdb'
+
+
+# If sqlalchemy-migrate is installed, register there too.
+try:
+    from migrate.changeset.databases.visitor import DIALECTS as migrate_dialects
+except ImportError:
+    pass
+else:
+    migrate_dialects['cockroachdb'] = migrate_dialects['postgresql']
