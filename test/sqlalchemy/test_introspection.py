@@ -1,6 +1,6 @@
 from sqlalchemy import Table, Column, MetaData, testing, ForeignKey, UniqueConstraint, \
     CheckConstraint
-from sqlalchemy.types import Integer, String
+from sqlalchemy.types import Integer, String, Boolean
 from sqlalchemy.testing import fixtures
 
 meta = MetaData()
@@ -9,6 +9,7 @@ customer_table = Table('customer', meta,
                        Column('id', Integer, primary_key=True),
                        Column('name', String),
                        Column('email', String),
+                       Column('verified', Boolean),
                        UniqueConstraint('email'))
 
 order_table = Table('order', meta,
