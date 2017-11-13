@@ -29,9 +29,6 @@ class Requirements(SuiteRequirements):
     # which these tests use.
     view_reflection = exclusions.closed()
     view_column_reflection = exclusions.closed()
-    # Requires either implementing pg_get_constraintdef() or overriding
-    # Dialect.get_foreign_keys()
-    foreign_key_constraint_reflection = exclusions.closed()
 
     # The autoincrement tests assume a predictable 1-based sequence.
     autoincrement_insert = exclusions.closed()
@@ -69,6 +66,7 @@ class Requirements(SuiteRequirements):
     two_phase_transactions = exclusions.closed()
     update_from = exclusions.open()
     mod_operator_as_percent_sign = exclusions.open()
+    foreign_key_constraint_reflection = exclusions.open()
     # The psycopg driver doesn't support these.
     percent_schema_names = exclusions.closed()
     order_by_label_with_expression = exclusions.open()

@@ -167,12 +167,32 @@ class CockroachDBDialect(PGDialect_psycopg2):
         return res
 
     def get_foreign_keys(self, conn, table_name, schema=None, **kw):
-        # TODO(bdarnell): The postgres dialect implementation depends
-        # on pg_get_constraintdef, which we don't support. We need to
-        # implement that function or provide our own implementation of
-        # get_foreign_keys() in terms of our SHOW CONSTRAINTS command.
-        # For now, just return nothing.
-        return []
+        fkeys = []
+        FK_REGEX = re.compile(
+            r'(?P<referred_table>.+)?\.\[(?P<referred_columns>.+)?]')
+
+        for row in conn.execute(
+                'SHOW CONSTRAINTS FROM "%s"."%s"' %
+                (schema or self.default_schema_name, table_name)):
+            if row.Type.startswith("FOREIGN KEY"):
+                m = re.search(FK_REGEX, row.Details)
+
+                name = row.Name
+                constrained_columns = row['Column(s)'].split(', ')
+                referred_table = m.group('referred_table')
+                referred_columns = m.group('referred_columns').split()
+                referred_schema = schema
+
+                fkey_d = {
+                    'name': name,
+                    'constrained_columns': constrained_columns,
+                    'referred_table': referred_table,
+                    'referred_columns': referred_columns,
+                    'referred_schema': referred_schema,
+                }
+                fkeys.append(fkey_d)
+
+        return fkeys
 
     def get_check_constraints(self, conn, table_name, schema=None, **kw):
         # TODO(bdarnell): The postgres dialect implementation depends on
