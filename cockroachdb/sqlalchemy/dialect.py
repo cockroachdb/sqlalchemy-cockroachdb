@@ -142,6 +142,12 @@ class CockroachDBDialect(PGDialect_psycopg2):
         res = []
         # Map over uniques because it preserves order.
         for name in uniques:
+            # In order to mimic postgresql behaviour, we hide the primary
+            # index from SQLAlchemy. One of the side effects of exposing it
+            # is when comparing the database state against models, for
+            # example when Alembic autogenerates migrations.
+            if name == "primary":
+                continue
             res.append(dict(name=name, column_names=columns[name], unique=uniques[name]))
         return res
 
