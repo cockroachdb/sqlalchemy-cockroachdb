@@ -15,6 +15,7 @@ from .stmt_compiler import CockroachCompiler
 # TODO(bdarnell): test more of these. The stock test suite only covers
 # a few basic ones.
 _type_map = dict(
+    bool=sqltypes.BOOLEAN,  # introspection returns "BOOL" not boolean
     boolean=sqltypes.BOOLEAN,
     int=sqltypes.INT,
     integer=sqltypes.INT,
