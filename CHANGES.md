@@ -1,3 +1,12 @@
+# Version 0.1.2
+
+Released Feb 7, 2018
+
+- If Alembic or `sqlalchemy-migrate` is installed, an experimental
+  `cockroachdb` dialect will be registered with those packages too.
+- The `get_foreign_keys()` introspection interface is now supported.
+- Fixed introspection of boolean columns.
+
 # Version 0.1.1
 
 Released Sep 28, 2017
