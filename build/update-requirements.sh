@@ -14,6 +14,6 @@ if [ ! -f "${1}.in" ]; then
   exit 1
 fi
 
-virtualenv -p python3.5 "${ENV}"
+virtualenv -p python3.6 "${ENV}"
 "${ENV}/bin/pip" install -r "${1}.in"
 "${ENV}/bin/pip" freeze -r "${1}.in" > "$1"
