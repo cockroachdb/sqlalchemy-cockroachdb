@@ -9,7 +9,7 @@ machine:
     # versions that are not preinstalled are built from source with no
     # caching on every build, so don't increase this version until
     # circleci has the new version preinstalled.
-    version: 3.5.0
+    version: 3.6.0
 
 dependencies:
   override:
