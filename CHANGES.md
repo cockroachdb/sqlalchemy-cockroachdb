@@ -1,3 +1,9 @@
+# Version 0.1.3
+
+Released Mar 27, 2018
+
+- Support for JSONB columns is now reported in accordance with CockroachDB 2.0.
+
 # Version 0.1.2
 
 Released Feb 7, 2018
