@@ -70,3 +70,7 @@ class Requirements(SuiteRequirements):
     # The psycopg driver doesn't support these.
     percent_schema_names = exclusions.closed()
     order_by_label_with_expression = exclusions.open()
+
+    order_by_col_from_union = exclusions.closed()
+    cross_schema_fk_reflection = exclusions.closed()
+    implicitly_named_constraints = exclusions.open()

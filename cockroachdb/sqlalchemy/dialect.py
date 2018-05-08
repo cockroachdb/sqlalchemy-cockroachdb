@@ -58,6 +58,7 @@ savepoint_state = _SavepointState()
 class CockroachDBDialect(PGDialect_psycopg2):
     name = 'cockroachdb'
     supports_sequences = False
+    supports_comments = False
     statement_compiler = CockroachCompiler
 
     def __init__(self, *args, **kwargs):
@@ -138,6 +139,8 @@ class CockroachDBDialect(PGDialect_psycopg2):
                                 (schema or self.default_schema_name, table_name)):
             # beta-20170112 and older versions do not have the Implicit column.
             if getattr(row, "Implicit", False):
+                continue
+            if row.Name == 'primary' and row.Column == 'rowid':
                 continue
             columns[row.Name].append(row.Column)
             uniques[row.Name] = row.Unique
