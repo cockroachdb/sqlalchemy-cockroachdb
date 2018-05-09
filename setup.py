@@ -6,7 +6,7 @@ install_requires = [
 
 setup(
     name='cockroachdb',
-    version='0.1.3',
+    version='0.1.4',
     author='Cockroach Labs',
     author_email='cockroach-db@googlegroups.com',
     url='https://github.com/cockroachdb/cockroachdb-python',
