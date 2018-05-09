@@ -77,6 +77,7 @@ class CockroachDBDialect(PGDialect_psycopg2):
         self.supports_native_enum = False
         self.supports_smallserial = False
         self._backslash_escapes = False
+        self._has_native_json = True
         self._has_native_jsonb = True
 
     def _get_server_version_info(self, conn):
