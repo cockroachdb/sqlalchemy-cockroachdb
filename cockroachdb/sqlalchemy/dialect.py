@@ -35,6 +35,8 @@ _type_map = dict(
     varchar=sqltypes.VARCHAR,
     bytes=sqltypes.BLOB,
     blob=sqltypes.BLOB,
+    json=sqltypes.JSON,
+    jsonb=sqltypes.JSON,
 )
 
 
