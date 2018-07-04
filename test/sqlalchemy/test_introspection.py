@@ -18,6 +18,11 @@ order_table = Table('order', meta,
                     Column('info', String),
                     Column('status', String, CheckConstraint("status in ('open', 'closed')")))
 
+# Regression test for https://github.com/cockroachdb/cockroach/issues/26993
+index_table = Table('index', meta,
+                    Column('index', Integer, primary_key=True))
+view_table = Table('view', meta,
+                    Column('view', Integer, primary_key=True))
 
 class IntrospectionTest(fixtures.TestBase):
     def teardown_method(self, method):
@@ -36,3 +41,5 @@ class IntrospectionTest(fixtures.TestBase):
         # in SQLAlchemy's dialect test suite.
         Table('customer', meta2, autoload=True)
         Table('order', meta2, autoload=True)
+        Table('index', meta2, autoload=True)
+        Table('view', meta2, autoload=True)

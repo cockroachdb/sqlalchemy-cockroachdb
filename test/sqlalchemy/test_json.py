@@ -25,6 +25,8 @@ class JSONModel(declarative_base()):
 
 class JSONTest(fixtures.TestBase):
     def setup_method(self, method):
+        if not testing.db.dialect._has_native_json:
+            return
         meta.create_all(testing.db)
         testing.db.execute(
             json_table.insert(),
@@ -38,9 +40,13 @@ class JSONTest(fixtures.TestBase):
                   base_json_data={'f': 6})])
 
     def teardown_method(self, method):
+        if not testing.db.dialect._has_native_json:
+            return
         meta.drop_all(testing.db)
 
     def test_json(self):
+        if not testing.db.dialect._has_native_json:
+            return
         result = []
         query = select([json_table.c.jsonb_data,
                         json_table.c.json_data,
@@ -54,6 +60,8 @@ class JSONTest(fixtures.TestBase):
 
 class JSONSessionTest(fixtures.TestBase):
     def setup_method(self, method):
+        if not testing.db.dialect._has_native_json:
+            return
         meta.create_all(testing.db)
         self.sessionmaker = sessionmaker(testing.db)
         session = self.sessionmaker()
@@ -68,9 +76,13 @@ class JSONSessionTest(fixtures.TestBase):
         session.commit()
 
     def teardown_method(self, method):
+        if not testing.db.dialect._has_native_json:
+            return
         meta.drop_all(testing.db)
 
     def test_json(self):
+        if not testing.db.dialect._has_native_json:
+            return
         session = self.sessionmaker()
         result = []
         for row in session.query(JSONModel).all():
