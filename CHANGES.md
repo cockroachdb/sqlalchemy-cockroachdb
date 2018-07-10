@@ -1,3 +1,9 @@
+# Version 0.1.5
+
+Released July 10, 2018
+
+- More compatibility improvements for JSON/JSONB support.
+
 # Version 0.1.4
 
 Released May 9, 2018
