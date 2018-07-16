@@ -1,3 +1,10 @@
+# Version 0.2.0
+
+Released July 16, 2018
+
+- Adapter again simultaneously compatible with CockroachDB 1.1, 2.0
+  and 2.1.
+
 # Version 0.1.5
 
 Released July 10, 2018

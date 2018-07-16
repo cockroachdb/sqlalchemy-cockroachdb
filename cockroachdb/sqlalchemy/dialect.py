@@ -4,12 +4,13 @@ import threading
 from sqlalchemy.dialects.postgresql.base import PGDialect
 from sqlalchemy.dialects.postgresql.psycopg2 import PGDialect_psycopg2
 from sqlalchemy.util import warn
+import sqlalchemy.sql as sql
 
 import sqlalchemy.types as sqltypes
 
-from .stmt_compiler import CockroachCompiler
+from .stmt_compiler import CockroachCompiler, CockroachIdentifierPreparer
 
-# Map type names (as returned by SHOW COLUMNS) to sqlalchemy type
+# Map type names (as returned by information_schema) to sqlalchemy type
 # objects.
 #
 # TODO(bdarnell): test more of these. The stock test suite only covers
@@ -61,6 +62,7 @@ class CockroachDBDialect(PGDialect_psycopg2):
     name = 'cockroachdb'
     supports_sequences = False
     statement_compiler = CockroachCompiler
+    preparer = CockroachIdentifierPreparer
 
     def __init__(self, *args, **kwargs):
         super(CockroachDBDialect, self).__init__(*args,
@@ -79,8 +81,12 @@ class CockroachDBDialect(PGDialect_psycopg2):
         self.supports_native_enum = False
         self.supports_smallserial = False
         self._backslash_escapes = False
-        self._has_native_json = True
         self._has_native_jsonb = True
+        sversion = connection.scalar("select version()")
+        self._is_v2plus = " v2." in sversion
+        self._is_v21plus = self._is_v2plus and (" v2.0." not in sversion)
+        self._has_native_json = self._is_v2plus
+        self._has_native_jsonb = self._is_v2plus
 
     def _get_server_version_info(self, conn):
         # PGDialect expects a postgres server version number here,
@@ -90,20 +96,35 @@ class CockroachDBDialect(PGDialect_psycopg2):
 
     def get_table_names(self, conn, schema=None, **kw):
         # Upstream implementation needs correlated subqueries.
-        return [row.Table for row in conn.execute("SHOW TABLES")]
+
+        if not self._is_v2plus:
+            # v1.1 or earlier.
+            return [row.Table for row in conn.execute("SHOW TABLES")]
+
+        # v2.0+ have a good information schema. Use it.
+        return [row.table_name for row in conn.execute("SELECT table_name FROM information_schema.tables WHERE table_schema=%s", (schema or self.default_schema_name,))]
 
     def has_table(self, conn, table, schema=None):
         # Upstream implementation needs pg_table_is_visible().
         return any(t == table for t in self.get_table_names(conn, schema=schema))
 
     # The upstream implementations of the reflection functions below depend on
-    # get_table_oid() which needs pg_table_is_visible().
-
+    # correlated subqueries which are not yet supported.
     def get_columns(self, conn, table_name, schema=None, **kw):
+        if not self._is_v2plus:
+            # v1.1.
+            # Bad: the table name is not properly escaped.
+            # Oh well. Hoping 1.1 won't be around for long.
+            rows = conn.execute('SHOW COLUMNS FROM "%s"."%s"' % (schema or self.default_schema_name, table_name))
+        else:
+            # v2.0 or later. Information schema is usable.
+            rows = conn.execute('''
+        SELECT column_name, data_type, is_nullable::bool, column_default
+        FROM information_schema.columns
+        WHERE table_schema = %s AND table_name = %s''', (schema or self.default_schema_name, table_name))
+
         res = []
-        # TODO(bdarnell): escape table name
-        for row in conn.execute('SHOW COLUMNS FROM "%s"."%s"' %
-                                (schema or self.default_schema_name, table_name)):
+        for row in rows:
             name, type_str, nullable, default = row[:4]
             # When there are type parameters, attach them to the
             # returned type object.
@@ -133,45 +154,40 @@ class CockroachDBDialect(PGDialect_psycopg2):
 
     def get_indexes(self, conn, table_name, schema=None, **kw):
         # Maps names to a bool indicating whether the index is unique.
+
+        if not self._is_v2plus:
+            # v1.1 or earlier.
+            # Bad: the table name is not properly escaped.
+            # Oh well. Hoping 1.1 won't be around for long.
+            rows = conn.execute('''
+SELECT "Name" as index_name,
+       "Column" as column_name,
+       "Unique" as unique,
+       "Implicit" as implicit
+FROM [SHOW INDEXES FROM "%s"."%s"]''' %
+                                (schema or self.default_schema_name, table_name))
+        else:
+            # v2.0: usable information schema.
+            rows = conn.execute('''
+SELECT index_name, column_name, (not non_unique::bool) as unique, implicit::bool as implicit
+FROM information_schema.statistics
+WHERE table_schema = %s AND table_name = %s
+        ''', (schema or self.default_schema_name, table_name))
+
         uniques = collections.OrderedDict()
         columns = collections.defaultdict(list)
-        # TODO(bdarnell): escape table name
-        for row in conn.execute('SHOW INDEXES FROM "%s"."%s"' %
-                                (schema or self.default_schema_name, table_name)):
-            # beta-20170112 and older versions do not have the Implicit column.
-            if getattr(row, "Implicit", False):
+        for row in rows:
+            if row.implicit:
                 continue
-            columns[row.Name].append(row.Column)
-            uniques[row.Name] = row.Unique
+            columns[row.index_name].append(row.column_name)
+            uniques[row.index_name] = row.unique
         res = []
         # Map over uniques because it preserves order.
         for name in uniques:
             res.append(dict(name=name, column_names=columns[name], unique=uniques[name]))
         return res
 
-    def get_pk_constraint(self, conn, table_name, schema=None, **kw):
-        # The PK is always first in the index list; it may not always
-        # be named "primary".
-        pk = self.get_indexes(conn, table_name, schema=schema, **kw)[0]
-        res = dict(constrained_columns=pk["column_names"])
-        # The SQLAlchemy tests expect that the name field is only
-        # present if the PK was explicitly renamed by the user.
-        # Checking for a name of "primary" is an imperfect proxy for
-        # this but is good enough to pass the tests.
-        if pk["name"] != "primary":
-            res["name"] = pk["name"]
-        return res
-
-    def get_unique_constraints(self, conn, table_name, schema=None, **kw):
-        res = []
-        # Skip the primary key which is always first in the list.
-        for index in self.get_indexes(conn, table_name, schema=schema, **kw)[1:]:
-            if index["unique"]:
-                del index["unique"]
-                res.append(index)
-        return res
-
-    def get_foreign_keys(self, conn, table_name, schema=None, **kw):
+    def get_foreign_keys_v1(self, conn, table_name, schema=None, **kw):
         fkeys = []
         FK_REGEX = re.compile(
             r'(?P<referred_table>.+)?\.\[(?P<referred_columns>.+)?]')
@@ -187,19 +203,159 @@ class CockroachDBDialect(PGDialect_psycopg2):
                 referred_table = m.group('referred_table')
                 referred_columns = m.group('referred_columns').split()
                 referred_schema = schema
-
                 fkey_d = {
                     'name': name,
                     'constrained_columns': constrained_columns,
                     'referred_table': referred_table,
                     'referred_columns': referred_columns,
-                    'referred_schema': referred_schema,
+                    'referred_schema': referred_schema
                 }
                 fkeys.append(fkey_d)
-
         return fkeys
 
+    def get_foreign_keys(self, connection, table_name, schema=None,
+                         postgresql_ignore_search_path=False, **kw):
+        if not self._is_v2plus:
+            # v1.1 or earlier.
+            return self.get_foreign_keys_v1(connection, table_name, schema, **kw)
+
+        # v2.0 or later.
+        # This method is the same as the one in SQLAlchemy's pg dialect, with
+        # a tweak to the FK regular expressions to tolerate whitespace between
+        # the table name and the column list.
+        # See also: https://github.com/cockroachdb/cockroach/issues/27123
+
+        preparer = self.identifier_preparer
+        table_oid = self.get_table_oid(connection, table_name, schema,
+                                       info_cache=kw.get('info_cache'))
+
+        FK_SQL = """
+          SELECT r.conname,
+                pg_catalog.pg_get_constraintdef(r.oid, true) as condef,
+                n.nspname as conschema
+          FROM  pg_catalog.pg_constraint r,
+                pg_namespace n,
+                pg_class c
+
+          WHERE r.conrelid = :table AND
+                r.contype = 'f' AND
+                c.oid = confrelid AND
+                n.oid = c.relnamespace
+          ORDER BY 1
+        """
+        # http://www.postgresql.org/docs/9.0/static/sql-createtable.html
+        FK_REGEX = re.compile(
+            r'FOREIGN KEY \((.*?)\) REFERENCES (?:(.*?)\.)?(.*?)[\s]?\((.*?)\)'
+            r'[\s]?(MATCH (FULL|PARTIAL|SIMPLE)+)?'
+            r'[\s]?(ON UPDATE '
+            r'(CASCADE|RESTRICT|NO ACTION|SET NULL|SET DEFAULT)+)?'
+            r'[\s]?(ON DELETE '
+            r'(CASCADE|RESTRICT|NO ACTION|SET NULL|SET DEFAULT)+)?'
+            r'[\s]?(DEFERRABLE|NOT DEFERRABLE)?'
+            r'[\s]?(INITIALLY (DEFERRED|IMMEDIATE)+)?'
+        )
+
+        t = sql.text(FK_SQL, typemap={
+            'conname': sqltypes.Unicode,
+            'condef': sqltypes.Unicode})
+        c = connection.execute(t, table=table_oid)
+        fkeys = []
+        for conname, condef, conschema in c.fetchall():
+            m = re.search(FK_REGEX, condef).groups()
+
+            constrained_columns, referred_schema, \
+                referred_table, referred_columns, \
+                _, match, _, onupdate, _, ondelete, \
+                deferrable, _, initially = m
+
+            if deferrable is not None:
+                deferrable = True if deferrable == 'DEFERRABLE' else False
+            constrained_columns = [preparer._unquote_identifier(x)
+                                   for x in re.split(
+                                       r'\s*,\s*', constrained_columns)]
+
+            if postgresql_ignore_search_path:
+                # when ignoring search path, we use the actual schema
+                # provided it isn't the "default" schema
+                if conschema != self.default_schema_name:
+                    referred_schema = conschema
+                else:
+                    referred_schema = schema
+            elif referred_schema:
+                # referred_schema is the schema that we regexp'ed from
+                # pg_get_constraintdef().  If the schema is in the search
+                # path, pg_get_constraintdef() will give us None.
+                referred_schema = \
+                    preparer._unquote_identifier(referred_schema)
+            elif schema is not None and schema == conschema:
+                # If the actual schema matches the schema of the table
+                # we're reflecting, then we will use that.
+                referred_schema = schema
+
+            referred_table = preparer._unquote_identifier(referred_table)
+            referred_columns = [preparer._unquote_identifier(x)
+                                for x in
+                                re.split(r'\s*,\s', referred_columns)]
+            fkey_d = {
+                'name': conname,
+                'constrained_columns': constrained_columns,
+                'referred_schema': referred_schema,
+                'referred_table': referred_table,
+                'referred_columns': referred_columns,
+                'options': {
+                    'onupdate': onupdate,
+                    'ondelete': ondelete,
+                    'deferrable': deferrable,
+                    'initially': initially,
+                    'match': match
+                }
+            }
+            fkeys.append(fkey_d)
+        return fkeys
+
+    def get_pk_constraint(self, conn, table_name, schema=None, **kw):
+        if self._is_v21plus:
+            return super(CockroachDBDialect, self).get_pk_constraint(conn, table_name, schema, **kw)
+
+        # v2.0 does not know about enough SQL to understand the query done by
+        # the upstream dialect. So run a dumbed down version instead.
+        idxs = self.get_indexes(conn, table_name, schema=schema, **kw)
+        if len(idxs) == 0:
+            # virtual table. No constraints.
+            return {}
+        # The PK is always first in the index list; it may not always
+        # be named "primary".
+        pk = idxs[0]
+        res = dict(constrained_columns=pk["column_names"])
+        # The SQLAlchemy tests expect that the name field is only
+        # present if the PK was explicitly renamed by the user.
+        # Checking for a name of "primary" is an imperfect proxy for
+        # this but is good enough to pass the tests.
+        if pk["name"] != "primary":
+            res["name"] = pk["name"]
+        return res
+
+    def get_unique_constraints(self, conn, table_name, schema=None, **kw):
+        if self._is_v21plus:
+            return super(CockroachDBDialect, self).get_unique_constraints(conn, table_name, schema, **kw)
+
+        # v2.0 does not know about enough SQL to understand the query done by
+        # the upstream dialect. So run a dumbed down version instead.
+        res = []
+        # Skip the primary key which is always first in the list.
+        idxs = self.get_indexes(conn, table_name, schema=schema, **kw)
+        if len(idxs) == 0:
+            # virtual table. No constraints.
+            return res
+        for index in idxs[1:]:
+            if index["unique"]:
+                del index["unique"]
+                res.append(index)
+        return res
+
     def get_check_constraints(self, conn, table_name, schema=None, **kw):
+        if self._is_v21plus:
+            return super(CockroachDBDialect, self).get_check_constraints(conn, table_name, schema, **kw)
         # TODO(bdarnell): The postgres dialect implementation depends on
         # pg_table_is_visible, which is supported in cockroachdb 1.1
         # but not in 1.0. Figure out a versioning strategy.
