@@ -21,6 +21,7 @@ class Requirements(SuiteRequirements):
     time = exclusions.skip_if(lambda config: not config.db.dialect._is_v2plus, "v1.x does not support TIME.")
     time_microseconds = exclusions.skip_if(lambda config: not config.db.dialect._is_v2plus, "v1.x does not support TIME.")
     server_side_cursors = exclusions.closed()
+    cross_schema_fk_reflection = exclusions.closed()
 
     # We don't do implicit casts.
     date_coerces_from_datetime = exclusions.closed()
@@ -70,3 +71,9 @@ class Requirements(SuiteRequirements):
     # The psycopg driver doesn't support these.
     percent_schema_names = exclusions.closed()
     order_by_label_with_expression = exclusions.open()
+    order_by_col_from_union = exclusions.open()
+    implicitly_named_constraints = exclusions.open()
+
+    # Mostly work, except for https://github.com/cockroachdb/cockroach/issues/28548
+    index_reflection = exclusions.closed()
+    unique_constraint_reflection = exclusions.closed()

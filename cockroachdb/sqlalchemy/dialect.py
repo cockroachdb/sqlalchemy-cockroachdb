@@ -60,6 +60,7 @@ savepoint_state = _SavepointState()
 
 class CockroachDBDialect(PGDialect_psycopg2):
     name = 'cockroachdb'
+    supports_comments = False
     supports_sequences = False
     statement_compiler = CockroachCompiler
     preparer = CockroachIdentifierPreparer
