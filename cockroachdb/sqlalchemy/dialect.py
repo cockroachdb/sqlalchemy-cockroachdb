@@ -103,7 +103,9 @@ class CockroachDBDialect(PGDialect_psycopg2):
             return [row.Table for row in conn.execute("SHOW TABLES")]
 
         # v2.0+ have a good information schema. Use it.
-        return [row.table_name for row in conn.execute("SELECT table_name FROM information_schema.tables WHERE table_schema=%s", (schema or self.default_schema_name,))]
+        return [row.table_name for row in conn.execute(
+            "SELECT table_name FROM information_schema.tables WHERE table_schema=%s",
+            (schema or self.default_schema_name,))]
 
     def has_table(self, conn, table, schema=None):
         # Upstream implementation needs pg_table_is_visible().
@@ -116,13 +118,15 @@ class CockroachDBDialect(PGDialect_psycopg2):
             # v1.1.
             # Bad: the table name is not properly escaped.
             # Oh well. Hoping 1.1 won't be around for long.
-            rows = conn.execute('SHOW COLUMNS FROM "%s"."%s"' % (schema or self.default_schema_name, table_name))
+            rows = conn.execute('SHOW COLUMNS FROM "%s"."%s"' %
+                                (schema or self.default_schema_name, table_name))
         else:
             # v2.0 or later. Information schema is usable.
             rows = conn.execute('''
         SELECT column_name, data_type, is_nullable::bool, column_default
         FROM information_schema.columns
-        WHERE table_schema = %s AND table_name = %s''', (schema or self.default_schema_name, table_name))
+        WHERE table_schema = %s AND table_name = %s''',
+                                (schema or self.default_schema_name, table_name))
 
         res = []
         for row in rows:
@@ -338,7 +342,8 @@ WHERE table_schema = %s AND table_name = %s
 
     def get_unique_constraints(self, conn, table_name, schema=None, **kw):
         if self._is_v21plus:
-            return super(CockroachDBDialect, self).get_unique_constraints(conn, table_name, schema, **kw)
+            return super(CockroachDBDialect, self).get_unique_constraints(
+                conn, table_name, schema, **kw)
 
         # v2.0 does not know about enough SQL to understand the query done by
         # the upstream dialect. So run a dumbed down version instead.
@@ -356,7 +361,8 @@ WHERE table_schema = %s AND table_name = %s
 
     def get_check_constraints(self, conn, table_name, schema=None, **kw):
         if self._is_v21plus:
-            return super(CockroachDBDialect, self).get_check_constraints(conn, table_name, schema, **kw)
+            return super(CockroachDBDialect, self).get_check_constraints(
+                conn, table_name, schema, **kw)
         # TODO(bdarnell): The postgres dialect implementation depends on
         # pg_table_is_visible, which is supported in cockroachdb 1.1
         # but not in 1.0. Figure out a versioning strategy.

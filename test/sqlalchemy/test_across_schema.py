@@ -1,8 +1,9 @@
 from sqlalchemy import Table, MetaData, testing
 from sqlalchemy.testing import fixtures
-from sqlalchemy.orm import sessionmaker, load_only
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy import func
 from sqlalchemy import distinct
+
 
 class AcrossSchemaTest(fixtures.TestBase):
     def teardown_method(self, method):

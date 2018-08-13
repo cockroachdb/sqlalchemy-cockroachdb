@@ -18,8 +18,10 @@ class Requirements(SuiteRequirements):
     # by default.
     temporary_tables = exclusions.closed()
     temp_table_reflection = exclusions.closed()
-    time = exclusions.skip_if(lambda config: not config.db.dialect._is_v2plus, "v1.x does not support TIME.")
-    time_microseconds = exclusions.skip_if(lambda config: not config.db.dialect._is_v2plus, "v1.x does not support TIME.")
+    time = exclusions.skip_if(lambda config: not config.db.dialect._is_v2plus,
+                              "v1.x does not support TIME.")
+    time_microseconds = exclusions.skip_if(lambda config: not config.db.dialect._is_v2plus,
+                                           "v1.x does not support TIME.")
     server_side_cursors = exclusions.closed()
     cross_schema_fk_reflection = exclusions.closed()
 
