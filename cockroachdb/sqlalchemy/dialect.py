@@ -398,6 +398,7 @@ except ImportError:
 else:
     class CockroachDBImpl(alembic.ddl.postgresql.PostgresqlImpl):
         __dialect__ = 'cockroachdb'
+        transactional_ddl = False
 
 
 # If sqlalchemy-migrate is installed, register there too.
