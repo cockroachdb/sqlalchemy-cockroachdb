@@ -6,6 +6,12 @@ MANIFEST
 
 # pytest cache
 .cache
+.pytest_cache
 
 # created by release process
 dist/
+
+# created by running tests
+env/
+cockroach-data/
+cockroach.pid

@@ -50,8 +50,7 @@ class JSONTest(fixtures.TestBase):
         result = []
         query = select([json_table.c.jsonb_data,
                         json_table.c.json_data,
-                        json_table.c.base_json_data,
-        ])
+                        json_table.c.base_json_data])
         for row in testing.db.execute(query):
             result.append((row.jsonb_data, row.json_data, row.base_json_data))
         assert result == [({'a': 1}, {'b': 2}, {'c': 3}),

@@ -22,7 +22,8 @@ order_table = Table('order', meta,
 index_table = Table('index', meta,
                     Column('index', Integer, primary_key=True))
 view_table = Table('view', meta,
-                    Column('view', Integer, primary_key=True))
+                   Column('view', Integer, primary_key=True))
+
 
 class IntrospectionTest(fixtures.TestBase):
     def teardown_method(self, method):

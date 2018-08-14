@@ -2,10 +2,20 @@
 
 set -eux -o pipefail
 
+if [ ! -x env/bin/python ]; then
+    python3 -m venv env
+fi
+source env/bin/activate
+
 pip install -r dev-requirements.txt
 
-for COCKROACH_VERSION in v1.0.6 v1.1-beta.20170921; do
-  COCKROACH_PLATFORM=linux-amd64
+case $OSTYPE in
+    darwin*) COCKROACH_PLATFORM=darwin-10.9-amd64;;
+    linux*) COCKROACH_PLATFORM=linux-amd64;;
+    *) echo "Unsupported platform"; exit 1;;
+esac
+
+for COCKROACH_VERSION in v2.1.0-alpha.20180730; do
   COCKROACH_NAME=cockroach-${COCKROACH_VERSION}.${COCKROACH_PLATFORM}
   DOWNLOAD_DIR=~/cockroach-download
 
@@ -13,6 +23,5 @@ for COCKROACH_VERSION in v1.0.6 v1.1-beta.20170921; do
     mkdir -p "${DOWNLOAD_DIR}"
     curl "https://binaries.cockroachdb.com/${COCKROACH_NAME}.tgz" | tar xzf - -C "${DOWNLOAD_DIR}"
   fi
-  mkdir -p bin
-  ln -sf "${DOWNLOAD_DIR}/${COCKROACH_NAME}/cockroach" "bin/cockroach-${COCKROACH_VERSION:0:4}"
+  ln -sf "${DOWNLOAD_DIR}/${COCKROACH_NAME}/cockroach" "env/bin/cockroach-${COCKROACH_VERSION:0:4}"
 done
