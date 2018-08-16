@@ -1,3 +1,10 @@
+# Version 0.2.1
+
+Released Aug 16, 2018
+
+- Alembic migrations no longer attempt to run DDL statements in transactions.
+- Comments are now dropped from table definitions as CockroachDB does not support them.
+
 # Version 0.2.0
 
 Released July 16, 2018
