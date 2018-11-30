@@ -1,9 +1,9 @@
 from concurrent.futures import ThreadPoolExecutor
-from sqlalchemy import Table, Column, MetaData, select, testing
+from sqlalchemy import Table, Column, MetaData, select, testing, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.testing import fixtures
-from sqlalchemy.types import Integer
+from sqlalchemy.types import Integer, DateTime
 import threading
 
 from cockroachdb.sqlalchemy import run_transaction
@@ -19,6 +19,16 @@ account_table = Table('account', meta,
 # ORM class for the session test.
 class Account(declarative_base()):
     __table__ = account_table
+
+
+item_table = Table('item', meta,
+                   Column('id', Integer, primary_key=True, autoincrement=True),
+                   Column('created', DateTime, server_default=func.now()))
+
+
+class Item(declarative_base()):
+    __table__ = item_table
+    __mapper_args__ = {"eager_defaults": True}
 
 
 class BaseRunTransactionTest(fixtures.TestBase):
@@ -124,3 +134,29 @@ class RunTransactionSessionTest(BaseRunTransactionTest):
                     accounts[1].balance -= 100
             run_transaction(Session, txn_body)
         self.run_parallel_transactions(callback)
+
+
+class InsertReturningTest(fixtures.TestBase):
+    def setup_method(self, method):
+        meta.create_all(testing.db)
+
+    def teardown_method(self, method):
+        meta.drop_all(testing.db)
+
+    def test_insert_returning(self):
+        # This test demonstrates the use of the INSERT RETURNING
+        # clause with the ORM to return server-generated values from a
+        # transaction. The expire_on_commit=False option is necessary
+        # to make the objects valid after the transaction has
+        # completed. The eager_defaults option (set above) is
+        # necessary to handle fields other than the primary key (which
+        # is always loaded eagerly)
+        def txn_body(session):
+            item = Item()
+            session.add(item)
+            return item
+
+        Session = sessionmaker(testing.db, expire_on_commit=False)
+        item = run_transaction(Session, txn_body)
+        assert item.id is not None
+        assert item.created is not None
