@@ -33,11 +33,14 @@ _type_map = dict(
     interval=sqltypes.Interval,
     string=sqltypes.VARCHAR,
     char=sqltypes.VARCHAR,
+    character=sqltypes.VARCHAR,
     varchar=sqltypes.VARCHAR,
+    text=sqltypes.VARCHAR,
     bytes=sqltypes.BLOB,
     blob=sqltypes.BLOB,
     json=sqltypes.JSON,
     jsonb=sqltypes.JSON,
+    **{'character varying': sqltypes.VARCHAR}
 )
 
 
@@ -123,9 +126,9 @@ class CockroachDBDialect(PGDialect_psycopg2):
         else:
             # v2.0 or later. Information schema is usable.
             rows = conn.execute('''
-        SELECT column_name, data_type, is_nullable::bool, column_default
+        SELECT column_name, data_type, is_nullable::bool, column_default, numeric_precision, numeric_scale, character_maximum_length
         FROM information_schema.columns
-        WHERE table_schema = %s AND table_name = %s''',
+        WHERE table_schema = %s AND table_name = %s AND NOT is_hidden::bool''',
                                 (schema or self.default_schema_name, table_name))
 
         res = []
@@ -133,7 +136,7 @@ class CockroachDBDialect(PGDialect_psycopg2):
             name, type_str, nullable, default = row[:4]
             # When there are type parameters, attach them to the
             # returned type object.
-            m = re.match(r'^(\w+)(?:\(([0-9, ]*)\))?$', type_str)
+            m = re.match(r'^(\w+|character varying)(?:\(([0-9, ]*)\))?$', type_str)
             if m is None:
                 warn("Could not parse type name '%s'" % type_str)
                 typ = sqltypes.NULLTYPE()
@@ -147,6 +150,10 @@ class CockroachDBDialect(PGDialect_psycopg2):
                     type_class = sqltypes.NULLTYPE
                 if type_args:
                     typ = type_class(*[int(s.strip()) for s in type_args.split(',')])
+                elif type_class is sqltypes.DECIMAL:
+                    typ = type_class(row.numeric_precision, row.numeric_scale)
+                elif row.character_maximum_length is not None:
+                    typ = type_class(row.character_maximum_length)
                 else:
                     typ = type_class()
             res.append(dict(
