@@ -3,6 +3,8 @@ import re
 import threading
 from sqlalchemy.dialects.postgresql.base import PGDialect
 from sqlalchemy.dialects.postgresql.psycopg2 import PGDialect_psycopg2
+from sqlalchemy.dialects.postgresql import INET
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.util import warn
 import sqlalchemy.sql as sql
 
@@ -18,26 +20,56 @@ from .stmt_compiler import CockroachCompiler, CockroachIdentifierPreparer
 _type_map = {
     'bool': sqltypes.BOOLEAN,  # introspection returns "BOOL" not boolean
     'boolean': sqltypes.BOOLEAN,
+
+    'bigint': sqltypes.INT,
     'int': sqltypes.INT,
+    'int2': sqltypes.INT,
+    'int4': sqltypes.INT,
+    'int64': sqltypes.INT,
+    'int8': sqltypes.INT,
     'integer': sqltypes.INT,
     'smallint': sqltypes.INT,
-    'bigint': sqltypes.INT,
+
+    'double precision': sqltypes.FLOAT,
     'float': sqltypes.FLOAT,
+    'float4': sqltypes.FLOAT,
+    'float8': sqltypes.FLOAT,
     'real': sqltypes.FLOAT,
-    'double': sqltypes.FLOAT,
+
+    'dec': sqltypes.DECIMAL,
     'decimal': sqltypes.DECIMAL,
     'numeric': sqltypes.DECIMAL,
+
     'date': sqltypes.DATE,
+
+    'time': sqltypes.Time,
+    'time without time zone': sqltypes.Time,
+
     'timestamp': sqltypes.TIMESTAMP,
     'timestamptz': sqltypes.TIMESTAMP,
+    'timestamp with time zone': sqltypes.TIMESTAMP,
+    'timestamp without time zone': sqltypes.TIMESTAMP,
+
     'interval': sqltypes.Interval,
-    'string': sqltypes.VARCHAR,
+
     'char': sqltypes.VARCHAR,
+    'char varying': sqltypes.VARCHAR,
+    'character': sqltypes.VARCHAR,
+    'character varying': sqltypes.VARCHAR,
+    'string': sqltypes.VARCHAR,
+    'text': sqltypes.Text,
     'varchar': sqltypes.VARCHAR,
-    'bytes': sqltypes.BLOB,
+
     'blob': sqltypes.BLOB,
+    'bytea': sqltypes.BLOB,
+    'bytes': sqltypes.BLOB,
+
     'json': sqltypes.JSON,
     'jsonb': sqltypes.JSON,
+
+    'uuid': UUID,
+
+    'inet': INET,
 }
 
 
