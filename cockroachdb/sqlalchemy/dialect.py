@@ -15,30 +15,30 @@ from .stmt_compiler import CockroachCompiler, CockroachIdentifierPreparer
 #
 # TODO(bdarnell): test more of these. The stock test suite only covers
 # a few basic ones.
-_type_map = dict(
-    bool=sqltypes.BOOLEAN,  # introspection returns "BOOL" not boolean
-    boolean=sqltypes.BOOLEAN,
-    int=sqltypes.INT,
-    integer=sqltypes.INT,
-    smallint=sqltypes.INT,
-    bigint=sqltypes.INT,
-    float=sqltypes.FLOAT,
-    real=sqltypes.FLOAT,
-    double=sqltypes.FLOAT,
-    decimal=sqltypes.DECIMAL,
-    numeric=sqltypes.DECIMAL,
-    date=sqltypes.DATE,
-    timestamp=sqltypes.TIMESTAMP,
-    timestamptz=sqltypes.TIMESTAMP,
-    interval=sqltypes.Interval,
-    string=sqltypes.VARCHAR,
-    char=sqltypes.VARCHAR,
-    varchar=sqltypes.VARCHAR,
-    bytes=sqltypes.BLOB,
-    blob=sqltypes.BLOB,
-    json=sqltypes.JSON,
-    jsonb=sqltypes.JSON,
-)
+_type_map = {
+    'bool': sqltypes.BOOLEAN,  # introspection returns "BOOL" not boolean
+    'boolean': sqltypes.BOOLEAN,
+    'int': sqltypes.INT,
+    'integer': sqltypes.INT,
+    'smallint': sqltypes.INT,
+    'bigint': sqltypes.INT,
+    'float': sqltypes.FLOAT,
+    'real': sqltypes.FLOAT,
+    'double': sqltypes.FLOAT,
+    'decimal': sqltypes.DECIMAL,
+    'numeric': sqltypes.DECIMAL,
+    'date': sqltypes.DATE,
+    'timestamp': sqltypes.TIMESTAMP,
+    'timestamptz': sqltypes.TIMESTAMP,
+    'interval': sqltypes.Interval,
+    'string': sqltypes.VARCHAR,
+    'char': sqltypes.VARCHAR,
+    'varchar': sqltypes.VARCHAR,
+    'bytes': sqltypes.BLOB,
+    'blob': sqltypes.BLOB,
+    'json': sqltypes.JSON,
+    'jsonb': sqltypes.JSON,
+}
 
 
 class _SavepointState(threading.local):
