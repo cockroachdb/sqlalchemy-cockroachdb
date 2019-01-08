@@ -133,7 +133,7 @@ class CockroachDBDialect(PGDialect_psycopg2):
             name, type_str, nullable, default = row[:4]
             # When there are type parameters, attach them to the
             # returned type object.
-            m = re.match(r'^(\w+)(?:\(([0-9, ]*)\))?$', type_str)
+            m = re.match(r'^(\w+(?: \w+)*)(?:\(([0-9, ]*)\))?$', type_str)
             if m is None:
                 warn("Could not parse type name '%s'" % type_str)
                 typ = sqltypes.NULLTYPE()
