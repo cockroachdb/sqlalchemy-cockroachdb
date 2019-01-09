@@ -154,11 +154,13 @@ class CockroachDBDialect(PGDialect_psycopg2):
                                 (schema or self.default_schema_name, table_name))
         else:
             # v2.0 or later. Information schema is usable.
-            rows = conn.execute('''
-        SELECT column_name, data_type, is_nullable::bool, column_default
-        FROM information_schema.columns
-        WHERE table_schema = %s AND table_name = %s AND NOT is_hidden::bool''',
-                                (schema or self.default_schema_name, table_name))
+            rows = conn.execute(
+                'SELECT column_name, data_type, is_nullable::bool, column_default, '
+                'numeric_precision, numeric_scale '
+                'FROM information_schema.columns '
+                'WHERE table_schema = %s AND table_name = %s AND NOT is_hidden::bool',
+                (schema or self.default_schema_name, table_name),
+            )
 
         res = []
         for row in rows:
@@ -179,6 +181,11 @@ class CockroachDBDialect(PGDialect_psycopg2):
                     type_class = sqltypes.NULLTYPE
                 if type_args:
                     typ = type_class(*[int(s.strip()) for s in type_args.split(',')])
+                elif type_class is sqltypes.DECIMAL:
+                    typ = type_class(
+                        precision=row.numeric_precision,
+                        scale=row.numeric_scale,
+                    )
                 else:
                     typ = type_class()
             res.append(dict(
