@@ -157,7 +157,7 @@ class CockroachDBDialect(PGDialect_psycopg2):
             rows = conn.execute('''
         SELECT column_name, data_type, is_nullable::bool, column_default
         FROM information_schema.columns
-        WHERE table_schema = %s AND table_name = %s''',
+        WHERE table_schema = %s AND table_name = %s AND NOT is_hidden::bool''',
                                 (schema or self.default_schema_name, table_name))
 
         res = []
