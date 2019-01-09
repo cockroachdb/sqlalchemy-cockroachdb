@@ -156,7 +156,7 @@ class CockroachDBDialect(PGDialect_psycopg2):
             # v2.0 or later. Information schema is usable.
             rows = conn.execute(
                 'SELECT column_name, data_type, is_nullable::bool, column_default, '
-                'numeric_precision, numeric_scale '
+                'numeric_precision, numeric_scale, character_maximum_length '
                 'FROM information_schema.columns '
                 'WHERE table_schema = %s AND table_name = %s AND NOT is_hidden::bool',
                 (schema or self.default_schema_name, table_name),
@@ -186,6 +186,8 @@ class CockroachDBDialect(PGDialect_psycopg2):
                         precision=row.numeric_precision,
                         scale=row.numeric_scale,
                     )
+                elif type_class is sqltypes.VARCHAR:
+                    typ = type_class(length=row.character_maximum_length)
                 else:
                     typ = type_class()
             res.append(dict(
