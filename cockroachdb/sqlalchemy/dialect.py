@@ -57,7 +57,7 @@ _type_map = {
     'character': sqltypes.VARCHAR,
     'character varying': sqltypes.VARCHAR,
     'string': sqltypes.VARCHAR,
-    'text': sqltypes.Text,
+    'text': sqltypes.VARCHAR,
     'varchar': sqltypes.VARCHAR,
 
     'blob': sqltypes.BLOB,
