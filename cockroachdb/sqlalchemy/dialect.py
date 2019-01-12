@@ -114,7 +114,6 @@ class CockroachDBDialect(PGDialect_psycopg2):
         self.supports_native_enum = False
         self.supports_smallserial = False
         self._backslash_escapes = False
-        self._has_native_jsonb = True
         sversion = connection.scalar("select version()")
         self._is_v2plus = " v2." in sversion
         self._is_v21plus = self._is_v2plus and (" v2.0." not in sversion)
