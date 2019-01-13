@@ -198,39 +198,50 @@ class CockroachDBDialect(PGDialect_psycopg2):
         return res
 
     def get_indexes(self, conn, table_name, schema=None, **kw):
-        # Maps names to a bool indicating whether the index is unique.
-
+        # The Cockroach database creates a UNIQUE INDEX implicitly whenever the
+        # UNIQUE CONSTRAINT construct is used. Currently we are just ignoring all unique indexes,
+        # but we might need to return them and add an additional key `duplicates_constraint` if
+        # it is detected as mirroring a constraint.
+        # https://www.cockroachlabs.com/docs/stable/unique.html
+        # https://github.com/sqlalchemy/sqlalchemy/blob/55f930ef3d4e60bed02a2dad16e331fe42cfd12b/lib/sqlalchemy/dialects/postgresql/base.py#L723
         if not self._is_v2plus:
-            # v1.1 or earlier.
-            # Bad: the table name is not properly escaped.
-            # Oh well. Hoping 1.1 won't be around for long.
-            rows = conn.execute('''
-SELECT "Name" as index_name,
-       "Column" as column_name,
-       "Unique" as unique,
-       "Implicit" as implicit
-FROM [SHOW INDEXES FROM "%s"."%s"]''' %
-                                (schema or self.default_schema_name, table_name))
+            q = '''
+                SELECT
+                    "Name" as index_name,
+                    "Column" as column_name,
+                    "Unique" as unique,
+                    "Implicit" as implicit
+                FROM
+                    [SHOW INDEXES FROM "%(schema)s"."%(name)s"]
+            '''
         else:
-            # v2.0: usable information schema.
-            rows = conn.execute('''
-SELECT index_name, column_name, (not non_unique::bool) as unique, implicit::bool as implicit
-FROM information_schema.statistics
-WHERE table_schema = %s AND table_name = %s
-        ''', (schema or self.default_schema_name, table_name))
-
-        uniques = collections.OrderedDict()
-        columns = collections.defaultdict(list)
+            q = '''
+                SELECT
+                    index_name,
+                    column_name,
+                    (not non_unique::bool) as unique,
+                    implicit::bool as implicit
+                FROM
+                    information_schema.statistics
+                WHERE
+                    table_schema = %(schema)s
+                    AND table_name = %(name)s
+            '''
+        rows = conn.execute(q, schema=(schema or self.default_schema_name), name=table_name)
+        indexes = collections.defaultdict(list)
         for row in rows:
-            if row.implicit:
+            if row.implicit or row.unique:
                 continue
-            columns[row.index_name].append(row.column_name)
-            uniques[row.index_name] = row.unique
-        res = []
-        # Map over uniques because it preserves order.
-        for name in uniques:
-            res.append(dict(name=name, column_names=columns[name], unique=uniques[name]))
-        return res
+            indexes[row.index_name].append(row)
+
+        result = []
+        for name, rows in indexes.items():
+            result.append({
+                'name': name,
+                'column_names': [r.column_name for r in rows],
+                'unique': False,
+            })
+        return result
 
     def get_foreign_keys_v1(self, conn, table_name, schema=None, **kw):
         fkeys = []
