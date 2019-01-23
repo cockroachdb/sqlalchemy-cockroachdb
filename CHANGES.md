@@ -1,3 +1,11 @@
+# Version 0.3.0
+
+Released Jan 23, 2019
+
+- Added support for more data types.
+- Improved introspection of types with modifiers (decimal, varchar).
+- Improved introspection of unique constraints.
+
 # Version 0.2.1
 
 Released Aug 16, 2018
