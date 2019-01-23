@@ -15,7 +15,7 @@ case $OSTYPE in
     *) echo "Unsupported platform"; exit 1;;
 esac
 
-for COCKROACH_VERSION in v2.1.0-alpha.20180730; do
+for COCKROACH_VERSION in v2.1.3; do
   COCKROACH_NAME=cockroach-${COCKROACH_VERSION}.${COCKROACH_PLATFORM}
   DOWNLOAD_DIR=~/cockroach-download
 

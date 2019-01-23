@@ -3,6 +3,8 @@ import re
 import threading
 from sqlalchemy.dialects.postgresql.base import PGDialect
 from sqlalchemy.dialects.postgresql.psycopg2 import PGDialect_psycopg2
+from sqlalchemy.dialects.postgresql import INET
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.util import warn
 import sqlalchemy.sql as sql
 
@@ -15,33 +17,60 @@ from .stmt_compiler import CockroachCompiler, CockroachIdentifierPreparer
 #
 # TODO(bdarnell): test more of these. The stock test suite only covers
 # a few basic ones.
-_type_map = dict(
-    bool=sqltypes.BOOLEAN,  # introspection returns "BOOL" not boolean
-    boolean=sqltypes.BOOLEAN,
-    int=sqltypes.INT,
-    integer=sqltypes.INT,
-    smallint=sqltypes.INT,
-    bigint=sqltypes.INT,
-    float=sqltypes.FLOAT,
-    real=sqltypes.FLOAT,
-    double=sqltypes.FLOAT,
-    decimal=sqltypes.DECIMAL,
-    numeric=sqltypes.DECIMAL,
-    date=sqltypes.DATE,
-    timestamp=sqltypes.TIMESTAMP,
-    timestamptz=sqltypes.TIMESTAMP,
-    interval=sqltypes.Interval,
-    string=sqltypes.VARCHAR,
-    char=sqltypes.VARCHAR,
-    character=sqltypes.VARCHAR,
-    varchar=sqltypes.VARCHAR,
-    text=sqltypes.VARCHAR,
-    bytes=sqltypes.BLOB,
-    blob=sqltypes.BLOB,
-    json=sqltypes.JSON,
-    jsonb=sqltypes.JSON,
-    **{'character varying': sqltypes.VARCHAR}
-)
+_type_map = {
+    'bool': sqltypes.BOOLEAN,  # introspection returns "BOOL" not boolean
+    'boolean': sqltypes.BOOLEAN,
+
+    'bigint': sqltypes.INT,
+    'int': sqltypes.INT,
+    'int2': sqltypes.INT,
+    'int4': sqltypes.INT,
+    'int64': sqltypes.INT,
+    'int8': sqltypes.INT,
+    'integer': sqltypes.INT,
+    'smallint': sqltypes.INT,
+
+    'double precision': sqltypes.FLOAT,
+    'float': sqltypes.FLOAT,
+    'float4': sqltypes.FLOAT,
+    'float8': sqltypes.FLOAT,
+    'real': sqltypes.FLOAT,
+
+    'dec': sqltypes.DECIMAL,
+    'decimal': sqltypes.DECIMAL,
+    'numeric': sqltypes.DECIMAL,
+
+    'date': sqltypes.DATE,
+
+    'time': sqltypes.Time,
+    'time without time zone': sqltypes.Time,
+
+    'timestamp': sqltypes.TIMESTAMP,
+    'timestamptz': sqltypes.TIMESTAMP,
+    'timestamp with time zone': sqltypes.TIMESTAMP,
+    'timestamp without time zone': sqltypes.TIMESTAMP,
+
+    'interval': sqltypes.Interval,
+
+    'char': sqltypes.VARCHAR,
+    'char varying': sqltypes.VARCHAR,
+    'character': sqltypes.VARCHAR,
+    'character varying': sqltypes.VARCHAR,
+    'string': sqltypes.VARCHAR,
+    'text': sqltypes.VARCHAR,
+    'varchar': sqltypes.VARCHAR,
+
+    'blob': sqltypes.BLOB,
+    'bytea': sqltypes.BLOB,
+    'bytes': sqltypes.BLOB,
+
+    'json': sqltypes.JSON,
+    'jsonb': sqltypes.JSON,
+
+    'uuid': UUID,
+
+    'inet': INET,
+}
 
 
 class _SavepointState(threading.local):
@@ -85,7 +114,6 @@ class CockroachDBDialect(PGDialect_psycopg2):
         self.supports_native_enum = False
         self.supports_smallserial = False
         self._backslash_escapes = False
-        self._has_native_jsonb = True
         sversion = connection.scalar("select version()")
         self._is_v2plus = " v2." in sversion
         self._is_v21plus = self._is_v2plus and (" v2.0." not in sversion)
@@ -125,18 +153,20 @@ class CockroachDBDialect(PGDialect_psycopg2):
                                 (schema or self.default_schema_name, table_name))
         else:
             # v2.0 or later. Information schema is usable.
-            rows = conn.execute('''
-        SELECT column_name, data_type, is_nullable::bool, column_default, numeric_precision, numeric_scale, character_maximum_length
-        FROM information_schema.columns
-        WHERE table_schema = %s AND table_name = %s AND NOT is_hidden::bool''',
-                                (schema or self.default_schema_name, table_name))
+            rows = conn.execute(
+                'SELECT column_name, data_type, is_nullable::bool, column_default, '
+                'numeric_precision, numeric_scale, character_maximum_length '
+                'FROM information_schema.columns '
+                'WHERE table_schema = %s AND table_name = %s AND NOT is_hidden::bool',
+                (schema or self.default_schema_name, table_name),
+            )
 
         res = []
         for row in rows:
             name, type_str, nullable, default = row[:4]
             # When there are type parameters, attach them to the
             # returned type object.
-            m = re.match(r'^(\w+|character varying)(?:\(([0-9, ]*)\))?$', type_str)
+            m = re.match(r'^(\w+(?: \w+)*)(?:\(([0-9, ]*)\))?$', type_str)
             if m is None:
                 warn("Could not parse type name '%s'" % type_str)
                 typ = sqltypes.NULLTYPE()
@@ -151,9 +181,12 @@ class CockroachDBDialect(PGDialect_psycopg2):
                 if type_args:
                     typ = type_class(*[int(s.strip()) for s in type_args.split(',')])
                 elif type_class is sqltypes.DECIMAL:
-                    typ = type_class(row.numeric_precision, row.numeric_scale)
-                elif row.character_maximum_length is not None:
-                    typ = type_class(row.character_maximum_length)
+                    typ = type_class(
+                        precision=row.numeric_precision,
+                        scale=row.numeric_scale,
+                    )
+                elif type_class is sqltypes.VARCHAR:
+                    typ = type_class(length=row.character_maximum_length)
                 else:
                     typ = type_class()
             res.append(dict(
@@ -165,39 +198,50 @@ class CockroachDBDialect(PGDialect_psycopg2):
         return res
 
     def get_indexes(self, conn, table_name, schema=None, **kw):
-        # Maps names to a bool indicating whether the index is unique.
-
+        # The Cockroach database creates a UNIQUE INDEX implicitly whenever the
+        # UNIQUE CONSTRAINT construct is used. Currently we are just ignoring all unique indexes,
+        # but we might need to return them and add an additional key `duplicates_constraint` if
+        # it is detected as mirroring a constraint.
+        # https://www.cockroachlabs.com/docs/stable/unique.html
+        # https://github.com/sqlalchemy/sqlalchemy/blob/55f930ef3d4e60bed02a2dad16e331fe42cfd12b/lib/sqlalchemy/dialects/postgresql/base.py#L723
         if not self._is_v2plus:
-            # v1.1 or earlier.
-            # Bad: the table name is not properly escaped.
-            # Oh well. Hoping 1.1 won't be around for long.
-            rows = conn.execute('''
-SELECT "Name" as index_name,
-       "Column" as column_name,
-       "Unique" as unique,
-       "Implicit" as implicit
-FROM [SHOW INDEXES FROM "%s"."%s"]''' %
-                                (schema or self.default_schema_name, table_name))
+            q = '''
+                SELECT
+                    "Name" as index_name,
+                    "Column" as column_name,
+                    "Unique" as unique,
+                    "Implicit" as implicit
+                FROM
+                    [SHOW INDEXES FROM "%(schema)s"."%(name)s"]
+            '''
         else:
-            # v2.0: usable information schema.
-            rows = conn.execute('''
-SELECT index_name, column_name, (not non_unique::bool) as unique, implicit::bool as implicit
-FROM information_schema.statistics
-WHERE table_schema = %s AND table_name = %s
-        ''', (schema or self.default_schema_name, table_name))
-
-        uniques = collections.OrderedDict()
-        columns = collections.defaultdict(list)
+            q = '''
+                SELECT
+                    index_name,
+                    column_name,
+                    (not non_unique::bool) as unique,
+                    implicit::bool as implicit
+                FROM
+                    information_schema.statistics
+                WHERE
+                    table_schema = %(schema)s
+                    AND table_name = %(name)s
+            '''
+        rows = conn.execute(q, schema=(schema or self.default_schema_name), name=table_name)
+        indexes = collections.defaultdict(list)
         for row in rows:
-            if row.implicit:
+            if row.implicit or row.unique:
                 continue
-            columns[row.index_name].append(row.column_name)
-            uniques[row.index_name] = row.unique
-        res = []
-        # Map over uniques because it preserves order.
-        for name in uniques:
-            res.append(dict(name=name, column_names=columns[name], unique=uniques[name]))
-        return res
+            indexes[row.index_name].append(row)
+
+        result = []
+        for name, rows in indexes.items():
+            result.append({
+                'name': name,
+                'column_names': [r.column_name for r in rows],
+                'unique': False,
+            })
+        return result
 
     def get_foreign_keys_v1(self, conn, table_name, schema=None, **kw):
         fkeys = []
