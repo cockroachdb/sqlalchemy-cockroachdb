@@ -1,3 +1,9 @@
+# Version 0.3.1
+
+Released Feb 25, 2019
+
+- Support CockroachDB version numbers greater than 2.
+
 # Version 0.3.0
 
 Released Jan 23, 2019
