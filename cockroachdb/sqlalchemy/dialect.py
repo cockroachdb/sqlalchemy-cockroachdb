@@ -191,7 +191,7 @@ class CockroachDBDialect(PGDialect_psycopg2):
                 elif type_class is sqltypes.VARCHAR:
                     typ = type_class(length=row.character_maximum_length)
                 else:
-                    typ = type_class()
+                    typ = type_class
             res.append(dict(
                 name=name,
                 type=typ,
