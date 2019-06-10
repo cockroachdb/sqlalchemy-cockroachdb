@@ -13,9 +13,17 @@ lint:
 # bootstrap.sh for that)
 .PHONY: update-requirements
 update-requirements:
-	build/update-requirements.sh dev-requirements.txt
-	build/update-requirements.sh test-requirements.txt
+	./update-requirements.sh dev-requirements.txt
+	./update-requirements.sh test-requirements.txt
+
+.PHONY: build
+build: clean
+	python setup.py sdist
+
+.PHONY: clean
+clean:
+	rm -rf dist build
 
 .PHONY: detox
-detox:
+detox: clean
 	rm -rf .tox
