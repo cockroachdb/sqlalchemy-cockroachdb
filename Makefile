@@ -1,5 +1,5 @@
 .PHONY: all
-all: test
+all: test lint
 
 .PHONY: test
 test:
@@ -7,8 +7,7 @@ test:
 
 .PHONY: lint
 lint:
-	flake8 --max-line-length=100 cockroachdb test
-	python setup.py check
+	tox -e lint
 
 # Update the requirements files (but does not install the updates; use
 # bootstrap.sh for that)
@@ -16,3 +15,7 @@ lint:
 update-requirements:
 	build/update-requirements.sh dev-requirements.txt
 	build/update-requirements.sh test-requirements.txt
+
+.PHONY: detox
+detox:
+	rm -rf .tox
