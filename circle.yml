@@ -13,15 +13,15 @@ version: 2
 
 .x-py27: &py27
   environment:
-    TEST_ENV: py27
+    TOXENV: py27
     <<: *tox-version
 
 .x-py37: &py37
   environment:
-    TEST_ENV: py37
+    TOXENV: py37
     <<: *tox-version
 
-.x-test-base: &test-base
+.x-test-steps: &test-steps
   steps:
     - checkout
     - run:
@@ -32,40 +32,36 @@ version: 2
         command: pip install --user tox==${TOX_VERSION}
     - run:
         name: Test
-        command: ${HOME}/.local/bin/tox -e ${TEST_ENV}
-
-.x-test-py27: &test-py27
-  <<: *test-base
-  <<: *py27
-
-.x-test-py37: &test-py37
-  <<: *test-base
-  <<: *py37
+        command: ${HOME}/.local/bin/tox
 
 jobs:
   test-py27-2.1:
     docker:
       - image: circleci/python:2.7
       - *cockroach-2-1
-    <<: *test-py27
+    <<: *test-steps
+    <<: *py27
 
   test-py27-19.1:
     docker:
       - image: circleci/python:2.7
       - *cockroach-19-1
-    <<: *test-py27
+    <<: *test-steps
+    <<: *py27
 
   test-py37-2.1:
     docker:
       - image: circleci/python:3.7
       - *cockroach-2-1
-    <<: *test-py37
+    <<: *test-steps
+    <<: *py37
 
   test-py37-19.1:
     docker:
       - image: circleci/python:3.7
       - *cockroach-19-1
-    <<: *test-py37
+    <<: *test-steps
+    <<: *py37
 
   lint:
     docker:
