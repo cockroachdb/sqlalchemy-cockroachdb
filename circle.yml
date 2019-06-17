@@ -1,9 +1,88 @@
 version: 2
+
+.x-cockroach-2.1: &cockroach-2-1
+  image: cockroachdb/cockroach:v2.1.7
+  command: start --insecure
+
+.x-cockroach-19.1: &cockroach-19-1
+  image: cockroachdb/cockroach:v19.1.1
+  command: start --insecure
+
+.x-tox-version: &tox-version
+  TOX_VERSION: 3.12.1
+
+.x-py27: &py27
+  environment:
+    TOXENV: py27
+    <<: *tox-version
+
+.x-py37: &py37
+  environment:
+    TOXENV: py37
+    <<: *tox-version
+
+.x-test-steps: &test-steps
+  steps:
+    - checkout
+    - run:
+        name: Wait for database
+        command: dockerize -wait tcp://127.0.0.1:26257 -timeout 120s
+    - run:
+        name: Install testrunner
+        command: pip install --user tox==${TOX_VERSION}
+    - run:
+        name: Test
+        command: ${HOME}/.local/bin/tox
+
 jobs:
-  build:
+  test-py27-2.1:
+    docker:
+      - image: circleci/python:2.7
+      - *cockroach-2-1
+    <<: *test-steps
+    <<: *py27
+
+  test-py27-19.1:
+    docker:
+      - image: circleci/python:2.7
+      - *cockroach-19-1
+    <<: *test-steps
+    <<: *py27
+
+  test-py37-2.1:
     docker:
       - image: circleci/python:3.7
+      - *cockroach-2-1
+    <<: *test-steps
+    <<: *py37
+
+  test-py37-19.1:
+    docker:
+      - image: circleci/python:3.7
+      - *cockroach-19-1
+    <<: *test-steps
+    <<: *py37
+
+  lint:
+    docker:
+      - image: circleci/python:3.7
+    environment:
+      <<: *tox-version
     steps:
       - checkout
-      - run: build/circle-deps.sh
-      - run: build/circle-test.sh
+      - run:
+          name: Install testrunner
+          command: pip install --user tox==${TOX_VERSION}
+      - run:
+          name: Lint
+          command: ${HOME}/.local/bin/tox -e lint
+
+workflows:
+  version: 2
+  test-and-lint:
+    jobs:
+      - test-py27-2.1
+      - test-py27-19.1
+      - test-py37-2.1
+      - test-py37-19.1
+      - lint

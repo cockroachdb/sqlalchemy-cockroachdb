@@ -10,6 +10,7 @@ MANIFEST
 
 # created by release process
 dist/
+build/
 
 # created by running tests
 env/
