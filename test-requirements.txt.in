@@ -6,7 +6,7 @@
 
 SQLAlchemy==1.2.10 # the last known version of SQLAlchemy that passes all tests.
 more-itertools==5.0.0 #using older version to preserve Python 2.7 support.
-mock==2.0.0
+mock
 pytest==3.7.1
-futures==3.1.1
-psycopg2==2.8.3
+futures
+psycopg2
