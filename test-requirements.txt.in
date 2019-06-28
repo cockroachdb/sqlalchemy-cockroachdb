@@ -5,6 +5,7 @@
 # generated test-requirements.txt) and run make update-requirements
 
 SQLAlchemy
+more-itertools==5.0.0 #using older version to preserve Python 2.7 support.
 mock
 pytest
 futures
