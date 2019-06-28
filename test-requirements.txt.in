@@ -4,7 +4,7 @@
 # To add/update dependencies, update test-requirements.txt.in (not the
 # generated test-requirements.txt) and run make update-requirements
 
-SQLAlchemy
+SQLAlchemy==1.2.10 # the last known version of SQLAlchemy that passes all tests.
 more-itertools==5.0.0 #using older version to preserve Python 2.7 support.
 mock
 pytest
