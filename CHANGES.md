@@ -1,3 +1,10 @@
+# Version 0.3.2
+
+Released July 1, 2019
+
+- Removed requirement for psycopg2 so psycopg2-binary can be used as well.
+- Updated urllib3 to remove security vulnerability.
+
 # Version 0.3.1
 
 Released Feb 25, 2019

@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='cockroachdb',
-    version='0.3.1',
+    version='0.3.2',
     author='Cockroach Labs',
     author_email='cockroach-db@googlegroups.com',
     url='https://github.com/cockroachdb/cockroachdb-python',
