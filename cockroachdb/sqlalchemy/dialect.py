@@ -98,10 +98,13 @@ class CockroachDBDialect(PGDialect_psycopg2):
     preparer = CockroachIdentifierPreparer
 
     def __init__(self, *args, **kwargs):
-        super(CockroachDBDialect, self).__init__(*args,
-                                                 use_native_hstore=False,
-                                                 server_side_cursors=False,
-                                                 **kwargs)
+        if kwargs.get("use_native_hstore", False):
+            raise NotImplementedError("use_native_hstore is not supported")
+        if kwargs.get("server_side_cursors", False):
+            raise NotImplementedError("server_side_cursors is not supported")
+        kwargs["use_native_hstore"] = False
+        kwargs["server_side_cursors"] = False
+        super(CockroachDBDialect, self).__init__(*args, **kwargs)
 
     def initialize(self, connection):
         # Bypass PGDialect's initialize implementation, which looks at
