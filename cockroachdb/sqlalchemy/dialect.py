@@ -314,9 +314,8 @@ class CockroachDBDialect(PGDialect_psycopg2):
             r'[\s]?(INITIALLY (DEFERRED|IMMEDIATE)+)?'
         )
 
-        t = sql.text(FK_SQL, typemap={
-            'conname': sqltypes.Unicode,
-            'condef': sqltypes.Unicode})
+        t = sql.text(FK_SQL).columns(conname=sqltypes.Unicode,
+                                     condef=sqltypes.Unicode)
         c = connection.execute(t, table=table_oid)
         fkeys = []
         for conname, condef, conschema in c.fetchall():
