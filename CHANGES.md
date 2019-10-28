@@ -1,3 +1,11 @@
+# Version 0.3.3
+
+Released October 28, 2019
+
+- Fixed error when the use_native_hstore or server_side_cursors keyword
+  arguments were specified.
+- Stopped using the deprecated sql.text.typemap parameter.
+
 # Version 0.3.2
 
 Released July 1, 2019
