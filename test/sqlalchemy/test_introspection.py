@@ -1,3 +1,7 @@
+import warnings
+import pytest
+import contextlib
+
 from sqlalchemy import Table, Column, MetaData, testing, ForeignKey, UniqueConstraint, \
     CheckConstraint
 from sqlalchemy.types import Integer, String, Boolean
@@ -129,3 +133,30 @@ class TestTypeReflection(fixtures.TestBase):
 
     def test_inet(self):
         self._test('inet', INET)
+
+class UnknownTypeTest(fixtures.TestBase):
+    def setup_method(self):
+        testing.db.execute(
+            'CREATE TABLE t2 (c bool)'
+        )
+
+    def teardown_method(self):
+        testing.db.execute('DROP TABLE t2')
+
+    @pytest.mark.filterwarnings("ignore")
+    def test_unknown_type(self):
+        @contextlib.contextmanager
+        def make_bool_unknown():
+            import cockroachdb
+
+            t = cockroachdb.sqlalchemy.dialect._type_map.pop('bool')
+            cockroachdb.sqlalchemy.dialect._type_map.pop('boolean')
+            yield
+            cockroachdb.sqlalchemy.dialect._type_map['bool'] = t
+            cockroachdb.sqlalchemy.dialect._type_map['boolean'] = t
+
+        with make_bool_unknown():
+            meta2 = MetaData(testing.db)
+
+            t = Table('t2', meta2, autoload=True)
+        assert t.c['c'].type == sqltypes.NULLTYPE
