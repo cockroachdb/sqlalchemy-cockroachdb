@@ -1,4 +1,3 @@
-import warnings
 import pytest
 import contextlib
 
@@ -133,6 +132,7 @@ class TestTypeReflection(fixtures.TestBase):
 
     def test_inet(self):
         self._test('inet', INET)
+
 
 class UnknownTypeTest(fixtures.TestBase):
     def setup_method(self):
