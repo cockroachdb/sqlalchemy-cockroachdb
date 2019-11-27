@@ -172,7 +172,7 @@ class CockroachDBDialect(PGDialect_psycopg2):
             m = re.match(r'^(\w+(?: \w+)*)(?:\(([0-9, ]*)\))?$', type_str)
             if m is None:
                 warn("Could not parse type name '%s'" % type_str)
-                typ = sqltypes.NULLTYPE()
+                typ = sqltypes.NULLTYPE
             else:
                 type_name, type_args = m.groups()
                 try:
@@ -191,7 +191,7 @@ class CockroachDBDialect(PGDialect_psycopg2):
                 elif type_class is sqltypes.VARCHAR:
                     typ = type_class(length=row.character_maximum_length)
                 else:
-                    typ = type_class()
+                    typ = type_class
             res.append(dict(
                 name=name,
                 type=typ,
