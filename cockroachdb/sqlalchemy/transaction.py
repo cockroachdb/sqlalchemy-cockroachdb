@@ -7,7 +7,7 @@ import sqlalchemy.orm
 from .dialect import savepoint_state
 
 
-def run_transaction(transactor, callback):
+def run_transaction(transactor, callback, max_retries=None):
     """Run a transaction with retries.
 
     ``callback()`` will be called with one argument to execute the
@@ -20,15 +20,18 @@ def run_transaction(transactor, callback):
     * `sqlalchemy.engine.Connection`: the same connection is passed to the callback.
     * `sqlalchemy.engine.Engine`: a connection is created and passed to the callback.
     * `sqlalchemy.orm.sessionmaker`: a session is created and passed to the callback.
+
+    ``max_retries`` is an optional integer that specifies how many times the
+    transaction should be retried before giving up.
     """
     if isinstance(transactor, sqlalchemy.engine.Connection):
-        return _txn_retry_loop(transactor, callback)
+        return _txn_retry_loop(transactor, callback, max_retries)
     elif isinstance(transactor, sqlalchemy.engine.Engine):
         with transactor.connect() as connection:
-            return _txn_retry_loop(connection, callback)
+            return _txn_retry_loop(connection, callback, max_retries)
     elif isinstance(transactor, sqlalchemy.orm.sessionmaker):
         session = transactor(autocommit=True)
-        return _txn_retry_loop(session, callback)
+        return _txn_retry_loop(session, callback, max_retries)
     else:
         raise TypeError("don't know how to run a transaction on %s", type(transactor))
 
@@ -62,12 +65,13 @@ class _NestedTransaction(object):
             savepoint_state.cockroach_restart = False
 
 
-def _txn_retry_loop(conn, callback):
+def _txn_retry_loop(conn, callback, max_retries):
     """Inner transaction retry loop.
 
     ``conn`` may be either a Connection or a Session, but they both
     have compatible ``begin()`` and ``begin_nested()`` methods.
     """
+    retry_count = 0
     with conn.begin():
         while True:
             try:
@@ -75,6 +79,9 @@ def _txn_retry_loop(conn, callback):
                     ret = callback(conn)
                     return ret
             except sqlalchemy.exc.DatabaseError as e:
+                if max_retries is not None and retry_count >= max_retries:
+                    raise
+                retry_count += 1
                 if isinstance(e.orig, psycopg2.OperationalError):
                     if e.orig.pgcode == psycopg2.errorcodes.SERIALIZATION_FAILURE:
                         continue
