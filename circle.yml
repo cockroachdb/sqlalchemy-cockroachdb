@@ -1,11 +1,11 @@
 version: 2
 
 .x-cockroach-2.1: &cockroach-2-1
-  image: cockroachdb/cockroach:v2.1.7
+  image: cockroachdb/cockroach:v2.1.9
   command: start --insecure
 
 .x-cockroach-19.1: &cockroach-19-1
-  image: cockroachdb/cockroach:v19.1.1
+  image: cockroachdb/cockroach:v19.1.5
   command: start --insecure
 
 .x-tox-version: &tox-version
