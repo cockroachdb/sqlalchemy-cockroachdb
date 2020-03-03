@@ -105,6 +105,15 @@ class RunTransactionCoreTest(BaseRunTransactionTest):
                 run_transaction(conn, txn_body)
         self.run_parallel_transactions(callback)
 
+    def test_run_transaction_retry(self):
+        def txn_body(conn):
+            rs = conn.execute("select acct, balance from account where acct = 1")
+            conn.execute("select crdb_internal.force_retry('1s')")
+            return [r for r in rs]
+        with testing.db.connect() as conn:
+            rs = run_transaction(conn, txn_body)
+            assert rs[0] == (1, 100)
+
 
 class RunTransactionSessionTest(BaseRunTransactionTest):
     def test_run_transaction(self):
@@ -124,3 +133,12 @@ class RunTransactionSessionTest(BaseRunTransactionTest):
                     accounts[1].balance -= 100
             run_transaction(Session, txn_body)
         self.run_parallel_transactions(callback)
+
+    def test_run_transaction_retry(self):
+        def txn_body(sess):
+            rs = sess.execute("select acct, balance from account where acct = 1")
+            sess.execute("select crdb_internal.force_retry('1s')")
+            return [r for r in rs]
+        Session = sessionmaker(testing.db)
+        rs = run_transaction(Session, txn_body)
+        assert rs[0] == (1, 100)
