@@ -12,6 +12,10 @@ version: 2
   image: cockroachdb/cockroach:v19.2.4
   command: start --insecure
 
+.x-cockroach-20.1: &cockroach-20-1
+  image: cockroachdb/cockroach-unstable:v20.1.0-beta.3
+  command: start --insecure
+
 .x-tox-version: &tox-version
   TOX_VERSION: 3.12.1
 
@@ -60,6 +64,13 @@ jobs:
     <<: *test-steps
     <<: *py27
 
+  test-py27-20.1:
+    docker:
+      - image: circleci/python:2.7
+      - *cockroach-20-1
+    <<: *test-steps
+    <<: *py27
+
   test-py37-2.1:
     docker:
       - image: circleci/python:3.7
@@ -78,6 +89,13 @@ jobs:
     docker:
       - image: circleci/python:3.7
       - *cockroach-19-2
+    <<: *test-steps
+    <<: *py37
+
+  test-py37-20.1:
+    docker:
+      - image: circleci/python:3.7
+      - *cockroach-20-1
     <<: *test-steps
     <<: *py37
 
@@ -102,7 +120,9 @@ workflows:
       - test-py27-2.1
       - test-py27-19.1
       - test-py27-19.2
+      - test-py27-20.1
       - test-py37-2.1
       - test-py37-19.1
       - test-py37-19.2
+      - test-py37-20.1
       - lint
