@@ -5,6 +5,8 @@
 # then re-run bootstrap.sh.
 
 flake8
+psycopg2
+SQLAlchemy
 tox
 
 # Twine is used in the release process to upload the package.

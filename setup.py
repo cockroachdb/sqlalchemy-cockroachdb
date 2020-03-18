@@ -12,8 +12,9 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 3',
-        ],
+    ],
 
+    install_requires=['psycopg2', 'SQLAlchemy'],
     packages=['cockroachdb', 'cockroachdb.sqlalchemy'],
     entry_points={
         'sqlalchemy.dialects': [
