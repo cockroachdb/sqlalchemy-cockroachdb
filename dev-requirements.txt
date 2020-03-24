@@ -9,7 +9,7 @@ tox==3.13.1
 # Twine is used in the release process to upload the package.
 twine==1.13.0
 ## The following requirements were added by pip freeze:
-bleach==3.1.0
+bleach==3.1.2
 certifi==2019.6.16
 chardet==3.0.4
 docutils==0.14
