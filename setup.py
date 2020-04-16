@@ -1,11 +1,11 @@
 from setuptools import setup
 
 setup(
-    name='cockroachdb',
-    version='0.3.3',
+    name='sqlalchemy-cockroachdb',
+    version='0.4.0',
     author='Cockroach Labs',
     author_email='cockroach-db@googlegroups.com',
-    url='https://github.com/cockroachdb/cockroachdb-python',
+    url='https://github.com/cockroachdb/sqlalchemy-cockroachdb',
     description='CockroachDB adapter for SQLAlchemy',
     license="http://www.apache.org/licenses/LICENSE-2.0",
     classifiers=[
