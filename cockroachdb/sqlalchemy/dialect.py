@@ -5,6 +5,7 @@ from sqlalchemy.dialects.postgresql.base import PGDialect
 from sqlalchemy.dialects.postgresql.psycopg2 import PGDialect_psycopg2
 from sqlalchemy.dialects.postgresql import INET
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.ext.compiler import compiles
 from sqlalchemy.util import warn
 import sqlalchemy.sql as sql
 
@@ -453,6 +454,9 @@ else:
         __dialect__ = 'cockroachdb'
         transactional_ddl = False
 
+    @compiles(alembic.ddl.postgresql.PostgresqlColumnType, 'cockroachdb')
+    def visit_column_type(*args, **kwargs):
+        return alembic.ddl.postgresql.visit_column_type(*args, **kwargs)
 
 # If sqlalchemy-migrate is installed, register there too.
 try:
