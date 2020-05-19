@@ -1,3 +1,9 @@
+# Version 0.4.0
+
+Released April 10, 2020
+
+- Renamed package to sqlalchemy-cockroachdb.
+
 # Version 0.3.3
 
 Released October 28, 2019
