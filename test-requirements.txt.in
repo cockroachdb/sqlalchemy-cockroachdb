@@ -5,7 +5,7 @@
 # generated test-requirements.txt) and run make update-requirements
 
 SQLAlchemy==1.2.10 # the last known version of SQLAlchemy that passes all tests.
-more-itertools==5.0.0 #using older version to preserve Python 2.7 support.
+more-itertools
 mock
 pytest==3.7.1
 futures

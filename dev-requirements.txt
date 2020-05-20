@@ -4,35 +4,37 @@
 # generated dev-requirements.txt), run make update-requirements,
 # then re-run bootstrap.sh.
 
-flake8==3.7.7
-tox==3.13.1
+flake8==3.8.1
+tox==3.15.1
 # Twine is used in the release process to upload the package.
-twine==1.13.0
+twine==3.1.1
 ## The following requirements were added by pip freeze:
-bleach==3.1.4
-certifi==2019.6.16
+appdirs==1.4.4
+bleach==3.1.5
+certifi==2020.4.5.1
 chardet==3.0.4
-docutils==0.14
-entrypoints==0.3
+distlib==0.3.0
+docutils==0.16
 filelock==3.0.12
-idna==2.8
-importlib-metadata==0.18
+idna==2.9
+importlib-metadata==1.6.0
+keyring==21.2.1
 mccabe==0.6.1
-packaging==19.0
+packaging==20.4
 pkginfo==1.5.0.1
-pluggy==0.12.0
-py==1.8.0
-pycodestyle==2.5.0
-pyflakes==2.1.1
-Pygments==2.4.2
-pyparsing==2.4.0
-readme-renderer==24.0
-requests==2.22.0
+pluggy==0.13.1
+py==1.8.1
+pycodestyle==2.6.0
+pyflakes==2.2.0
+Pygments==2.6.1
+pyparsing==2.4.7
+readme-renderer==26.0
+requests==2.23.0
 requests-toolbelt==0.9.1
-six==1.12.0
-toml==0.10.0
-tqdm==4.32.2
-urllib3==1.25.3
-virtualenv==16.6.1
+six==1.14.0
+toml==0.10.1
+tqdm==4.46.0
+urllib3==1.25.9
+virtualenv==20.0.21
 webencodings==0.5.1
-zipp==0.5.1
+zipp==3.1.0
