@@ -12,6 +12,7 @@ import sqlalchemy.sql as sql
 import sqlalchemy.types as sqltypes
 
 from .stmt_compiler import CockroachCompiler, CockroachIdentifierPreparer
+from .ddl_compiler import CockroachDDLCompiler
 
 # Map type names (as returned by information_schema) to sqlalchemy type
 # objects.
@@ -97,6 +98,7 @@ class CockroachDBDialect(PGDialect_psycopg2):
     supports_sequences = False
     statement_compiler = CockroachCompiler
     preparer = CockroachIdentifierPreparer
+    ddl_compiler = CockroachDDLCompiler
 
     def __init__(self, *args, **kwargs):
         if kwargs.get("use_native_hstore", False):
