@@ -65,7 +65,8 @@ class Requirements(SuiteRequirements):
     precision_numerics_enotation_large = exclusions.open()
     precision_numerics_many_significant_digits = exclusions.open()
     precision_numerics_retains_significant_digits = exclusions.closed()
-    savepoints = exclusions.closed()
+    savepoints = exclusions.skip_if(lambda config: not config.db.dialect._supports_savepoints,
+                                    "versions before 20.x do not support savepoints.")
     two_phase_transactions = exclusions.closed()
     update_from = exclusions.open()
     mod_operator_as_percent_sign = exclusions.open()
