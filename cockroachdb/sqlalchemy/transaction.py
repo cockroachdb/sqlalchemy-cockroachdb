@@ -1,3 +1,6 @@
+from random import random
+from time import sleep
+
 import psycopg2
 import psycopg2.errorcodes
 import sqlalchemy.engine
@@ -65,6 +68,19 @@ class _NestedTransaction(object):
             savepoint_state.cockroach_restart = False
 
 
+def retry_exponential_backoff(retry_count: int) -> None:
+    """
+    This is a function for an exponential back-off whenever we encounter a retry error.
+    So we sleep for a bit before retrying,
+    and the sleep time increases for each failed transaction.
+
+    :param retry_count: The number for the current retry count
+    :return: None
+    """
+
+    sleep_secs = (2 ** retry_count) * 0.1 * (random() + 0.5)
+    sleep(sleep_secs)
+
 def _txn_retry_loop(conn, callback, max_retries):
     """Inner transaction retry loop.
 
@@ -84,5 +100,6 @@ def _txn_retry_loop(conn, callback, max_retries):
                 retry_count += 1
                 if isinstance(e.orig, psycopg2.OperationalError):
                     if e.orig.pgcode == psycopg2.errorcodes.SERIALIZATION_FAILURE:
+                        retry_exponential_backoff(retry_count)
                         continue
                 raise
