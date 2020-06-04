@@ -81,6 +81,7 @@ def retry_exponential_backoff(retry_count: int) -> None:
     sleep_secs = (2 ** retry_count) * 0.1 * (random() + 0.5)
     sleep(sleep_secs)
 
+
 def _txn_retry_loop(conn, callback, max_retries):
     """Inner transaction retry loop.
 
