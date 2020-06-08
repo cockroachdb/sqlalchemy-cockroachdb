@@ -1,4 +1,4 @@
-from random import random
+from random import uniform
 from time import sleep
 
 import psycopg2
@@ -82,7 +82,7 @@ def retry_exponential_backoff(retry_count: int, max_backoff: int = 0) -> None:
     :return: None
     """
 
-    sleep_secs = random.uniform(0, min(max_backoff, 0.1 * (2 ** retry_count)))
+    sleep_secs = uniform(0, min(max_backoff, 0.1 * (2 ** retry_count)))
     sleep(sleep_secs)
 
 
