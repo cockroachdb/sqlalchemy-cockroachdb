@@ -75,7 +75,8 @@ def retry_exponential_backoff(retry_count: int, max_backoff: int = 0) -> None:
     """
     This is a function for an exponential back-off whenever we encounter a retry error.
     So we sleep for a bit before retrying,
-    and the sleep time increases for each failed transaction.
+    and the sleep time varies for each failed transaction
+    capped by the max_backoff parameter.
 
     :param retry_count: The number for the current retry count
     :param max_backoff: The capped number of seconds for the exponential back-off
