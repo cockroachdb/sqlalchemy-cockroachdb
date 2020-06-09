@@ -1,3 +1,6 @@
+from random import uniform
+from time import sleep
+
 import psycopg2
 import psycopg2.errorcodes
 import sqlalchemy.engine
@@ -7,7 +10,7 @@ import sqlalchemy.orm
 from .dialect import savepoint_state
 
 
-def run_transaction(transactor, callback, max_retries=None):
+def run_transaction(transactor, callback, max_retries=None, max_backoff=0):
     """Run a transaction with retries.
 
     ``callback()`` will be called with one argument to execute the
@@ -23,15 +26,17 @@ def run_transaction(transactor, callback, max_retries=None):
 
     ``max_retries`` is an optional integer that specifies how many times the
     transaction should be retried before giving up.
+    ``max_backoff`` is an optional integer that specifies the capped number of seconds
+    for the exponential back-off.
     """
     if isinstance(transactor, sqlalchemy.engine.Connection):
-        return _txn_retry_loop(transactor, callback, max_retries)
+        return _txn_retry_loop(transactor, callback, max_retries, max_backoff)
     elif isinstance(transactor, sqlalchemy.engine.Engine):
         with transactor.connect() as connection:
-            return _txn_retry_loop(connection, callback, max_retries)
+            return _txn_retry_loop(connection, callback, max_retries, max_backoff)
     elif isinstance(transactor, sqlalchemy.orm.sessionmaker):
         session = transactor(autocommit=True)
-        return _txn_retry_loop(session, callback, max_retries)
+        return _txn_retry_loop(session, callback, max_retries, max_backoff)
     else:
         raise TypeError("don't know how to run a transaction on %s", type(transactor))
 
@@ -42,6 +47,7 @@ class _NestedTransaction(object):
     This causes the savepoint statements that are a part of this retry
     loop to be rewritten by the dialect.
     """
+
     def __init__(self, conn):
         self.conn = conn
 
@@ -65,7 +71,23 @@ class _NestedTransaction(object):
             savepoint_state.cockroach_restart = False
 
 
-def _txn_retry_loop(conn, callback, max_retries):
+def retry_exponential_backoff(retry_count: int, max_backoff: int = 0) -> None:
+    """
+    This is a function for an exponential back-off whenever we encounter a retry error.
+    So we sleep for a bit before retrying,
+    and the sleep time varies for each failed transaction
+    capped by the max_backoff parameter.
+
+    :param retry_count: The number for the current retry count
+    :param max_backoff: The capped number of seconds for the exponential back-off
+    :return: None
+    """
+
+    sleep_secs = uniform(0, min(max_backoff, 0.1 * (2 ** retry_count)))
+    sleep(sleep_secs)
+
+
+def _txn_retry_loop(conn, callback, max_retries, max_backoff):
     """Inner transaction retry loop.
 
     ``conn`` may be either a Connection or a Session, but they both
@@ -84,5 +106,7 @@ def _txn_retry_loop(conn, callback, max_retries):
                 retry_count += 1
                 if isinstance(e.orig, psycopg2.OperationalError):
                     if e.orig.pgcode == psycopg2.errorcodes.SERIALIZATION_FAILURE:
+                        if max_backoff > 0:
+                            retry_exponential_backoff(retry_count, max_backoff)
                         continue
                 raise
