@@ -1,3 +1,12 @@
+# Version 1.3.0
+
+Released June 10, 2020
+
+- Removed python2 support.
+- Version number increased to 1.3.0 to indicate compatibility with SQLAlchemy 1.3.x.
+- Column type changes via Alembic are now allowed. (#96)
+- Added exponential backoff to run_transaction(). (#115)
+
 # Version 0.4.0
 
 Released April 10, 2020
