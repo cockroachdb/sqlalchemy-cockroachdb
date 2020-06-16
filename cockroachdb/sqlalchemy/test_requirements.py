@@ -76,3 +76,11 @@ class Requirements(SuiteRequirements):
     order_by_label_with_expression = exclusions.open()
     order_by_col_from_union = exclusions.open()
     implicitly_named_constraints = exclusions.open()
+
+    def get_isolation_levels(self, config):
+        return {
+            "default": "SERIALIZABLE",
+            "supported": [
+                "SERIALIZABLE"
+            ]
+        }
