@@ -121,7 +121,10 @@ class CockroachDBDialect(PGDialect_psycopg2):
         sversion = connection.scalar("select version()")
         self._is_v2plus = " v1." not in sversion
         self._is_v21plus = self._is_v2plus and (" v2.0." not in sversion)
-        self._is_v201plus = self._is_v21plus and (" v19." not in sversion)
+        self._is_v191plus = self._is_v21plus and (" v2.1." not in sversion)
+        self._is_v192plus = self._is_v191plus and (" v19.1." not in sversion)
+        self._is_v201plus = self._is_v192plus and (" v19.2." not in sversion)
+        self._is_v202plus = self._is_v201plus and (" v20.1." not in sversion)
         self._has_native_json = self._is_v2plus
         self._has_native_jsonb = self._is_v2plus
         self._supports_savepoints = self._is_v201plus

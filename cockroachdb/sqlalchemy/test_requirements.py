@@ -22,6 +22,7 @@ class Requirements(SuiteRequirements):
                               "v1.x does not support TIME.")
     time_microseconds = exclusions.skip_if(lambda config: not config.db.dialect._is_v2plus,
                                            "v1.x does not support TIME.")
+    timestamp_microseconds = exclusions.open()
     server_side_cursors = exclusions.closed()
     cross_schema_fk_reflection = exclusions.closed()
 
@@ -71,6 +72,17 @@ class Requirements(SuiteRequirements):
     update_from = exclusions.open()
     mod_operator_as_percent_sign = exclusions.open()
     foreign_key_constraint_reflection = exclusions.open()
+    ctes = exclusions.skip_if(lambda config: not config.db.dialect._is_v201plus,
+                              "versions before 20.x do not fully support CTEs.")
+    ctes_with_update_delete = \
+        exclusions.skip_if(lambda config: not config.db.dialect._is_v201plus,
+                           "versions before 20.x do not fully support CTEs.")
+    ctes_on_dml = exclusions.skip_if(lambda config: not config.db.dialect._is_v201plus,
+                                     "versions before 20.x do not fully support CTEs.")
+    isolation_level = exclusions.open()
+    json_type = exclusions.skip_if(lambda config: not config.db.dialect._is_v192plus,
+                                   "versions before 19.2.x do not pass the JSON tests.")
+    tuple_in = exclusions.open()
     # The psycopg driver doesn't support these.
     percent_schema_names = exclusions.closed()
     order_by_label_with_expression = exclusions.open()
