@@ -12,6 +12,7 @@ import sqlalchemy.sql as sql
 import sqlalchemy.types as sqltypes
 
 from .stmt_compiler import CockroachCompiler, CockroachIdentifierPreparer
+from .ddl_compiler import CockroachDDLCompiler
 
 # Map type names (as returned by information_schema) to sqlalchemy type
 # objects.
@@ -97,6 +98,7 @@ class CockroachDBDialect(PGDialect_psycopg2):
     supports_sequences = False
     statement_compiler = CockroachCompiler
     preparer = CockroachIdentifierPreparer
+    ddl_compiler = CockroachDDLCompiler
 
     def __init__(self, *args, **kwargs):
         if kwargs.get("use_native_hstore", False):
@@ -160,11 +162,22 @@ class CockroachDBDialect(PGDialect_psycopg2):
             # Oh well. Hoping 1.1 won't be around for long.
             rows = conn.execute('SHOW COLUMNS FROM "%s"."%s"' %
                                 (schema or self.default_schema_name, table_name))
-        else:
-            # v2.0 or later. Information schema is usable.
+        elif not self._is_v191plus:
+            # v2.x does not have is_generated or generation_expression
             rows = conn.execute(
                 'SELECT column_name, data_type, is_nullable::bool, column_default, '
-                'numeric_precision, numeric_scale, character_maximum_length '
+                'numeric_precision, numeric_scale, character_maximum_length, '
+                'NULL AS is_generated, NULL AS generation_expression '
+                'FROM information_schema.columns '
+                'WHERE table_schema = %s AND table_name = %s AND NOT is_hidden::bool',
+                (schema or self.default_schema_name, table_name),
+            )
+        else:
+            # v19.1 or later. Information schema columns are all usable.
+            rows = conn.execute(
+                'SELECT column_name, data_type, is_nullable::bool, column_default, '
+                'numeric_precision, numeric_scale, character_maximum_length, '
+                'is_generated::bool, generation_expression '
                 'FROM information_schema.columns '
                 'WHERE table_schema = %s AND table_name = %s AND NOT is_hidden::bool',
                 (schema or self.default_schema_name, table_name),
@@ -198,12 +211,47 @@ class CockroachDBDialect(PGDialect_psycopg2):
                     typ = type_class(length=row.character_maximum_length)
                 else:
                     typ = type_class
-            res.append(dict(
+            if row.is_generated:
+                # Currently, all computed columns are persisted.
+                computed = dict(sqltext=row.generation_expression, persisted=True)
+                default = None
+            else:
+                computed = None
+            # Check if a sequence is being used and adjust the default value.
+            autoincrement = False
+            if default is not None:
+                nextval_match = re.search(r"""(nextval\(')([^']+)('.*$)""", default)
+                unique_rowid_match = re.search(r"""unique_rowid\(""", default)
+                if nextval_match is not None or unique_rowid_match is not None:
+                    print('affinity', type_class)
+                    if issubclass(type_class, sqltypes.Integer):
+                        autoincrement = True
+                    # the default is related to a Sequence
+                    sch = schema
+                    if nextval_match is not None \
+                            and "." not in nextval_match.group(2) \
+                            and sch is not None:
+                        # unconditionally quote the schema name.  this could
+                        # later be enhanced to obey quoting rules /
+                        # "quote schema"
+                        default = (
+                            nextval_match.group(1)
+                            + ('"%s"' % sch)
+                            + "."
+                            + nextval_match.group(2)
+                            + nextval_match.group(3)
+                            )
+
+            column_info = dict(
                 name=name,
                 type=typ,
                 nullable=nullable,
                 default=default,
-            ))
+                autoincrement=autoincrement,
+            )
+            if computed is not None:
+                column_info["computed"] = computed
+            res.append(column_info)
         return res
 
     def get_indexes(self, conn, table_name, schema=None, **kw):
