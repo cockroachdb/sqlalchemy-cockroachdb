@@ -72,6 +72,19 @@ class Requirements(SuiteRequirements):
     update_from = exclusions.open()
     mod_operator_as_percent_sign = exclusions.open()
     foreign_key_constraint_reflection = exclusions.open()
+    computed_columns = \
+        exclusions.skip_if(lambda config: not config.db.dialect._is_v191plus,
+                           "versions before 19.1 do not support reflection on computed columns")
+    computed_columns_stored = \
+        exclusions.skip_if(lambda config: not config.db.dialect._is_v191plus,
+                           "versions before 19.1 do not support reflection on computed columns")
+    computed_columns_default_persisted = \
+        exclusions.skip_if(lambda config: not config.db.dialect._is_v191plus,
+                           "versions before 19.1 do not support reflection on computed columns")
+    computed_columns_reflect_persisted = \
+        exclusions.skip_if(lambda config: not config.db.dialect._is_v191plus,
+                           "versions before 19.1 do not support reflection on computed columns")
+    computed_columns_virtual = exclusions.closed()
     ctes = exclusions.skip_if(lambda config: not config.db.dialect._is_v201plus,
                               "versions before 20.x do not fully support CTEs.")
     ctes_with_update_delete = \
