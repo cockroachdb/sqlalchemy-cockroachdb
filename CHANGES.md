@@ -1,3 +1,10 @@
+# Version 1.3.1
+
+Released July 13, 2020
+
+- Added more support computed columns. (#119)
+- Enabled more tests from SQLAlchemy test suite in CI.
+
 # Version 1.3.0
 
 Released June 10, 2020
