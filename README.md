@@ -1,4 +1,4 @@
-# CockroachDB adapter for SQLAlchemy
+# CockroachDB dialect for SQLAlchemy
 
 ## Prerequisites
 
