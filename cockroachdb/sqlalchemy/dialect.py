@@ -345,7 +345,8 @@ class CockroachDBDialect(PGDialect_psycopg2):
         FK_SQL = """
           SELECT r.conname,
                 pg_catalog.pg_get_constraintdef(r.oid, true) as condef,
-                n.nspname as conschema
+                n.nspname as conschema,
+                SELECT search_path from [SHOW search_path] as search_path
           FROM  pg_catalog.pg_constraint r,
                 pg_namespace n,
                 pg_class c
@@ -372,7 +373,7 @@ class CockroachDBDialect(PGDialect_psycopg2):
                                      condef=sqltypes.Unicode)
         c = connection.execute(t, table=table_oid)
         fkeys = []
-        for conname, condef, conschema in c.fetchall():
+        for conname, condef, conschema, search_path in c.fetchall():
             m = re.search(FK_REGEX, condef).groups()
 
             constrained_columns, referred_schema, \
@@ -395,10 +396,15 @@ class CockroachDBDialect(PGDialect_psycopg2):
                     referred_schema = schema
             elif referred_schema:
                 # referred_schema is the schema that we regexp'ed from
-                # pg_get_constraintdef().  If the schema is in the search
+                # pg_get_constraintdef().
+                # For versions before 20.2, if the schema is in the search
                 # path, pg_get_constraintdef() will give us None.
-                referred_schema = \
-                    preparer._unquote_identifier(referred_schema)
+                # For later versions, we inspect the search_path and only
+                # include the referred_schema if it is not in search_path.
+                search_path_list = [s.strip() for s in search_path.split(',')]
+                if referred_schema not in search_path_list:
+                    referred_schema = \
+                        preparer._unquote_identifier(referred_schema)
             elif schema is not None and schema == conschema:
                 # If the actual schema matches the schema of the table
                 # we're reflecting, then we will use that.
