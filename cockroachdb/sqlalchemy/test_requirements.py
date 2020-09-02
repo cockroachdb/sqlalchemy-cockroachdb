@@ -53,7 +53,8 @@ class Requirements(SuiteRequirements):
     emulated_lastrowid = exclusions.open()
     dbapi_lastrowid = exclusions.open()
     views = exclusions.open()
-    schemas = exclusions.closed()
+    schemas = exclusions.skip_if(lambda config: not config.db.dialect._is_v202plus,
+                                 "versions before 20.2 do not suport schemas")
     sequences = exclusions.closed()
     sequences_optional = exclusions.closed()
     temporary_views = exclusions.closed()

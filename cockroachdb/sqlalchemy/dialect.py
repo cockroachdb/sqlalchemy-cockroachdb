@@ -117,7 +117,6 @@ class CockroachDBDialect(PGDialect_psycopg2):
         # often.
         super(PGDialect, self).initialize(connection)
         self.implicit_returning = True
-        self.supports_native_enum = False
         self.supports_smallserial = False
         self._backslash_escapes = False
         sversion = connection.scalar("select version()")
@@ -130,6 +129,7 @@ class CockroachDBDialect(PGDialect_psycopg2):
         self._has_native_json = self._is_v2plus
         self._has_native_jsonb = self._is_v2plus
         self._supports_savepoints = self._is_v201plus
+        self.supports_native_enum = self._is_v202plus
 
     def _get_server_version_info(self, conn):
         # PGDialect expects a postgres server version number here,
