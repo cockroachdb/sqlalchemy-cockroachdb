@@ -1,20 +1,20 @@
 version: 2
 
-.x-cockroach-2.1: &cockroach-2-1
-  image: cockroachdb/cockroach:v2.1.11
-  command: start --insecure
-
 .x-cockroach-19.1: &cockroach-19-1
-  image: cockroachdb/cockroach:v19.1.9
+  image: cockroachdb/cockroach:v19.1.11
   command: start --insecure
 
 .x-cockroach-19.2: &cockroach-19-2
-  image: cockroachdb/cockroach:v19.2.7
-  command: start --insecure
+  image: cockroachdb/cockroach:v19.2.10
+  command: start-single-node --insecure
 
 .x-cockroach-20.1: &cockroach-20-1
-  image: cockroachdb/cockroach:v20.1.0
-  command: start --insecure
+  image: cockroachdb/cockroach:v20.1.5
+  command: start-single-node --insecure
+
+.x-cockroach-20.2: &cockroach-20-2
+  image: cockroachdb/cockroach-unstable:v20.2.0-alpha.3
+  command: start-single-node --insecure
 
 .x-tox-version: &tox-version
   TOX_VERSION: 3.12.1
@@ -38,13 +38,6 @@ version: 2
         command: ${HOME}/.local/bin/tox
 
 jobs:
-  test-py37-2.1:
-    docker:
-      - image: circleci/python:3.7
-      - *cockroach-2-1
-    <<: *test-steps
-    <<: *py37
-
   test-py37-19.1:
     docker:
       - image: circleci/python:3.7
@@ -66,6 +59,13 @@ jobs:
     <<: *test-steps
     <<: *py37
 
+  test-py37-20.2:
+    docker:
+      - image: circleci/python:3.7
+      - *cockroach-20-2
+    <<: *test-steps
+    <<: *py37
+
   lint:
     docker:
       - image: circleci/python:3.7
@@ -84,8 +84,8 @@ workflows:
   version: 2
   test-and-lint:
     jobs:
-      - test-py37-2.1
       - test-py37-19.1
       - test-py37-19.2
       - test-py37-20.1
+      - test-py37-20.2
       - lint
