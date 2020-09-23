@@ -255,35 +255,27 @@ class CockroachDBDialect(PGDialect_psycopg2):
         return res
 
     def get_indexes(self, conn, table_name, schema=None, **kw):
+        if self._is_v192plus:
+            return super().get_indexes(conn, table_name, schema, **kw)
+
         # The Cockroach database creates a UNIQUE INDEX implicitly whenever the
         # UNIQUE CONSTRAINT construct is used. Currently we are just ignoring all unique indexes,
         # but we might need to return them and add an additional key `duplicates_constraint` if
         # it is detected as mirroring a constraint.
         # https://www.cockroachlabs.com/docs/stable/unique.html
         # https://github.com/sqlalchemy/sqlalchemy/blob/55f930ef3d4e60bed02a2dad16e331fe42cfd12b/lib/sqlalchemy/dialects/postgresql/base.py#L723
-        if not self._is_v2plus:
-            q = '''
-                SELECT
-                    "Name" as index_name,
-                    "Column" as column_name,
-                    "Unique" as unique,
-                    "Implicit" as implicit
-                FROM
-                    [SHOW INDEXES FROM "%(schema)s"."%(name)s"]
-            '''
-        else:
-            q = '''
-                SELECT
-                    index_name,
-                    column_name,
-                    (not non_unique::bool) as unique,
-                    implicit::bool as implicit
-                FROM
-                    information_schema.statistics
-                WHERE
-                    table_schema = %(schema)s
-                    AND table_name = %(name)s
-            '''
+        q = '''
+            SELECT
+                index_name,
+                column_name,
+                (not non_unique::bool) as unique,
+                implicit::bool as implicit
+            FROM
+                information_schema.statistics
+            WHERE
+                table_schema = %(schema)s
+                AND table_name = %(name)s
+        '''
         rows = conn.execute(q, schema=(schema or self.default_schema_name), name=table_name)
         indexes = collections.defaultdict(list)
         for row in rows:
