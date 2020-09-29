@@ -1,5 +1,10 @@
-# Version 1.3.1
+# Version 1.3.2
+Released September 29, 2020
 
+- Stopped returning primary keys in get_indexes. (#42)
+- Enabled tests for enums and user-defined schemas for CockroachDB v20.2.
+
+# Version 1.3.1
 Released July 13, 2020
 
 - Added more support computed columns. (#119)
