@@ -10,7 +10,7 @@ tox==3.15.2
 twine==3.1.1
 ## The following requirements were added by pip freeze:
 appdirs==1.4.4
-bleach==3.1.5
+bleach==3.3.0
 certifi==2020.4.5.2
 chardet==3.0.4
 distlib==0.3.0
