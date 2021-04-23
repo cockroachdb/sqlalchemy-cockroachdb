@@ -256,7 +256,14 @@ class CockroachDBDialect(PGDialect_psycopg2):
 
     def get_indexes(self, conn, table_name, schema=None, **kw):
         if self._is_v192plus:
-            return super().get_indexes(conn, table_name, schema, **kw)
+            indexes = super().get_indexes(conn, table_name, schema, **kw)
+            # We need to remove the `duplicates_constraints` value from unique indexes, otherwise
+            # alembic tries to delete and recreate unique indexes.  This is consistent with
+            # postgresql which doesn't set the duplicates_constraint flag on unique indexes
+            for index in indexes:
+                if index["unique"] and "duplicates_constraint" in index:
+                    del index["duplicates_constraint"]
+            return indexes
 
         # The Cockroach database creates a UNIQUE INDEX implicitly whenever the
         # UNIQUE CONSTRAINT construct is used. Currently we are just ignoring all unique indexes,
