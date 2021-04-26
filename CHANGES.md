@@ -1,3 +1,8 @@
+# Version 1.3.3
+Released April 26, 2021
+
+- Remove `duplicates_constraint` property for unique indexes
+
 # Version 1.3.2
 Released September 29, 2020
 
