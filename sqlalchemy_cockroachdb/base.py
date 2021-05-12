@@ -1,8 +1,8 @@
 import collections
 import re
 import threading
+from sqlalchemy import text
 from sqlalchemy.dialects.postgresql.base import PGDialect
-from sqlalchemy.dialects.postgresql.psycopg2 import PGDialect_psycopg2
 from sqlalchemy.dialects.postgresql import INET
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.compiler import compiles
@@ -22,58 +22,46 @@ import pkg_resources
 # TODO(bdarnell): test more of these. The stock test suite only covers
 # a few basic ones.
 _type_map = {
-    'bool': sqltypes.BOOLEAN,  # introspection returns "BOOL" not boolean
-    'boolean': sqltypes.BOOLEAN,
-
-    'bigint': sqltypes.INT,
-    'int': sqltypes.INT,
-    'int2': sqltypes.INT,
-    'int4': sqltypes.INT,
-    'int64': sqltypes.INT,
-    'int8': sqltypes.INT,
-    'integer': sqltypes.INT,
-    'smallint': sqltypes.INT,
-
-    'double precision': sqltypes.FLOAT,
-    'float': sqltypes.FLOAT,
-    'float4': sqltypes.FLOAT,
-    'float8': sqltypes.FLOAT,
-    'real': sqltypes.FLOAT,
-
-    'dec': sqltypes.DECIMAL,
-    'decimal': sqltypes.DECIMAL,
-    'numeric': sqltypes.DECIMAL,
-
-    'date': sqltypes.DATE,
-
-    'time': sqltypes.Time,
-    'time without time zone': sqltypes.Time,
-
-    'timestamp': sqltypes.TIMESTAMP,
-    'timestamptz': sqltypes.TIMESTAMP,
-    'timestamp with time zone': sqltypes.TIMESTAMP,
-    'timestamp without time zone': sqltypes.TIMESTAMP,
-
-    'interval': sqltypes.Interval,
-
-    'char': sqltypes.VARCHAR,
-    'char varying': sqltypes.VARCHAR,
-    'character': sqltypes.VARCHAR,
-    'character varying': sqltypes.VARCHAR,
-    'string': sqltypes.VARCHAR,
-    'text': sqltypes.VARCHAR,
-    'varchar': sqltypes.VARCHAR,
-
-    'blob': sqltypes.BLOB,
-    'bytea': sqltypes.BLOB,
-    'bytes': sqltypes.BLOB,
-
-    'json': sqltypes.JSON,
-    'jsonb': sqltypes.JSON,
-
-    'uuid': UUID,
-
-    'inet': INET,
+    "bool": sqltypes.BOOLEAN,  # introspection returns "BOOL" not boolean
+    "boolean": sqltypes.BOOLEAN,
+    "bigint": sqltypes.INT,
+    "int": sqltypes.INT,
+    "int2": sqltypes.INT,
+    "int4": sqltypes.INT,
+    "int64": sqltypes.INT,
+    "int8": sqltypes.INT,
+    "integer": sqltypes.INT,
+    "smallint": sqltypes.INT,
+    "double precision": sqltypes.FLOAT,
+    "float": sqltypes.FLOAT,
+    "float4": sqltypes.FLOAT,
+    "float8": sqltypes.FLOAT,
+    "real": sqltypes.FLOAT,
+    "dec": sqltypes.DECIMAL,
+    "decimal": sqltypes.DECIMAL,
+    "numeric": sqltypes.DECIMAL,
+    "date": sqltypes.DATE,
+    "time": sqltypes.Time,
+    "time without time zone": sqltypes.Time,
+    "timestamp": sqltypes.TIMESTAMP,
+    "timestamptz": sqltypes.TIMESTAMP,
+    "timestamp with time zone": sqltypes.TIMESTAMP,
+    "timestamp without time zone": sqltypes.TIMESTAMP,
+    "interval": sqltypes.Interval,
+    "char": sqltypes.VARCHAR,
+    "char varying": sqltypes.VARCHAR,
+    "character": sqltypes.VARCHAR,
+    "character varying": sqltypes.VARCHAR,
+    "string": sqltypes.VARCHAR,
+    "text": sqltypes.VARCHAR,
+    "varchar": sqltypes.VARCHAR,
+    "blob": sqltypes.BLOB,
+    "bytea": sqltypes.BLOB,
+    "bytes": sqltypes.BLOB,
+    "json": sqltypes.JSON,
+    "jsonb": sqltypes.JSON,
+    "uuid": UUID,
+    "inet": INET,
 }
 
 
@@ -87,6 +75,7 @@ class _SavepointState(threading.local):
     the interface leaves us with no way to pass this information along
     except via a thread-local variable.
     """
+
     def __init__(self):
         self.cockroach_restart = False
 
@@ -94,9 +83,11 @@ class _SavepointState(threading.local):
 savepoint_state = _SavepointState()
 
 
-class CockroachDBDialect(PGDialect_psycopg2):
-    name = 'cockroachdb'
+class CockroachDBDialect(PGDialect):
+    name = "cockroachdb"
     supports_comments = False
+    supports_empty_insert = True
+    supports_multivalues_insert = True
     supports_sequences = False
     statement_compiler = CockroachCompiler
     preparer = CockroachIdentifierPreparer
@@ -125,6 +116,11 @@ class CockroachDBDialect(PGDialect_psycopg2):
         kwargs["server_side_cursors"] = False
         super(CockroachDBDialect, self).__init__(*args, **kwargs)
 
+    @classmethod
+    def dbapi(cls):
+        # this gets defined at the driver level (e.g. psycopg2)
+        raise NotImplementedError
+
     def initialize(self, connection):
         # Bypass PGDialect's initialize implementation, which looks at
         # server_version_info and performs postgres-specific queries
@@ -135,7 +131,7 @@ class CockroachDBDialect(PGDialect_psycopg2):
         self.implicit_returning = True
         self.supports_smallserial = False
         self._backslash_escapes = False
-        sversion = connection.scalar("select version()")
+        sversion = connection.scalar(text("select version()"))
         self._is_v2plus = " v1." not in sversion
         self._is_v21plus = self._is_v2plus and (" v2.0." not in sversion)
         self._is_v191plus = self._is_v21plus and (" v2.1." not in sversion)
@@ -170,12 +166,16 @@ class CockroachDBDialect(PGDialect_psycopg2):
 
         if not self._is_v2plus:
             # v1.1 or earlier.
-            return [row.Table for row in conn.execute("SHOW TABLES")]
+            return [row.Table for row in conn.execute(text("SHOW TABLES"))]
 
         # v2.0+ have a good information schema. Use it.
-        return [row.table_name for row in conn.execute(
-            "SELECT table_name FROM information_schema.tables WHERE table_schema=%s",
-            (schema or self.default_schema_name,))]
+        return [
+            row.table_name
+            for row in conn.execute(
+                text("SELECT table_name FROM information_schema.tables WHERE table_schema=:schema"),
+                {"schema": schema or self.default_schema_name},
+            )
+        ]
 
     def has_table(self, conn, table, schema=None):
         # Upstream implementation needs pg_table_is_visible().
@@ -188,27 +188,36 @@ class CockroachDBDialect(PGDialect_psycopg2):
             # v1.1.
             # Bad: the table name is not properly escaped.
             # Oh well. Hoping 1.1 won't be around for long.
-            rows = conn.execute('SHOW COLUMNS FROM "%s"."%s"' %
-                                (schema or self.default_schema_name, table_name))
+            rows = conn.execute(
+                text(
+                    'SHOW COLUMNS FROM "%s"."%s"' % (schema or self.default_schema_name, table_name)
+                )
+            )
         elif not self._is_v191plus:
             # v2.x does not have is_generated or generation_expression
             rows = conn.execute(
-                'SELECT column_name, data_type, is_nullable::bool, column_default, '
-                'numeric_precision, numeric_scale, character_maximum_length, '
-                'NULL AS is_generated, NULL AS generation_expression '
-                'FROM information_schema.columns '
-                'WHERE table_schema = %s AND table_name = %s AND NOT is_hidden::bool',
-                (schema or self.default_schema_name, table_name),
+                text(
+                    "SELECT column_name, data_type, is_nullable::bool, column_default, "
+                    "numeric_precision, numeric_scale, character_maximum_length, "
+                    "NULL AS is_generated, NULL AS generation_expression "
+                    "FROM information_schema.columns "
+                    "WHERE table_schema = :table_schema AND table_name = :table_name "
+                    "    AND NOT is_hidden::bool"
+                ),
+                {"table_schema": schema or self.default_schema_name, "table_name": table_name},
             )
         else:
             # v19.1 or later. Information schema columns are all usable.
             rows = conn.execute(
-                'SELECT column_name, data_type, is_nullable::bool, column_default, '
-                'numeric_precision, numeric_scale, character_maximum_length, '
-                'is_generated::bool, generation_expression '
-                'FROM information_schema.columns '
-                'WHERE table_schema = %s AND table_name = %s AND NOT is_hidden::bool',
-                (schema or self.default_schema_name, table_name),
+                text(
+                    "SELECT column_name, data_type, is_nullable::bool, column_default, "
+                    "numeric_precision, numeric_scale, character_maximum_length, "
+                    "is_generated::bool, generation_expression "
+                    "FROM information_schema.columns "
+                    "WHERE table_schema = :table_schema AND table_name = :table_name "
+                    "    AND NOT is_hidden::bool"
+                ),
+                {"table_schema": schema or self.default_schema_name, "table_name": table_name},
             )
 
         res = []
@@ -216,7 +225,7 @@ class CockroachDBDialect(PGDialect_psycopg2):
             name, type_str, nullable, default = row[:4]
             # When there are type parameters, attach them to the
             # returned type object.
-            m = re.match(r'^(\w+(?: \w+)*)(?:\(([0-9, ]*)\))?$', type_str)
+            m = re.match(r"^(\w+(?: \w+)*)(?:\(([0-9, ]*)\))?$", type_str)
             if m is None:
                 warn("Could not parse type name '%s'" % type_str)
                 typ = sqltypes.NULLTYPE
@@ -225,11 +234,10 @@ class CockroachDBDialect(PGDialect_psycopg2):
                 try:
                     type_class = _type_map[type_name.lower()]
                 except KeyError:
-                    warn("Did not recognize type '%s' of column '%s'" %
-                         (type_name, name))
+                    warn("Did not recognize type '%s' of column '%s'" % (type_name, name))
                     type_class = sqltypes.NULLTYPE
                 if type_args:
-                    typ = type_class(*[int(s.strip()) for s in type_args.split(',')])
+                    typ = type_class(*[int(s.strip()) for s in type_args.split(",")])
                 elif type_class is sqltypes.DECIMAL:
                     typ = type_class(
                         precision=row.numeric_precision,
@@ -251,14 +259,16 @@ class CockroachDBDialect(PGDialect_psycopg2):
                 nextval_match = re.search(r"""(nextval\(')([^']+)('.*$)""", default)
                 unique_rowid_match = re.search(r"""unique_rowid\(""", default)
                 if nextval_match is not None or unique_rowid_match is not None:
-                    print('affinity', type_class)
+                    print("affinity", type_class)
                     if issubclass(type_class, sqltypes.Integer):
                         autoincrement = True
                     # the default is related to a Sequence
                     sch = schema
-                    if nextval_match is not None \
-                            and "." not in nextval_match.group(2) \
-                            and sch is not None:
+                    if (
+                        nextval_match is not None
+                        and "." not in nextval_match.group(2)
+                        and sch is not None
+                    ):
                         # unconditionally quote the schema name.  this could
                         # later be enhanced to obey quoting rules /
                         # "quote schema"
@@ -268,7 +278,7 @@ class CockroachDBDialect(PGDialect_psycopg2):
                             + "."
                             + nextval_match.group(2)
                             + nextval_match.group(3)
-                            )
+                        )
 
             column_info = dict(
                 name=name,
@@ -301,7 +311,7 @@ class CockroachDBDialect(PGDialect_psycopg2):
         # it is detected as mirroring a constraint.
         # https://www.cockroachlabs.com/docs/stable/unique.html
         # https://github.com/sqlalchemy/sqlalchemy/blob/55f930ef3d4e60bed02a2dad16e331fe42cfd12b/lib/sqlalchemy/dialects/postgresql/base.py#L723
-        q = '''
+        q = """
             SELECT
                 index_name,
                 column_name,
@@ -310,10 +320,13 @@ class CockroachDBDialect(PGDialect_psycopg2):
             FROM
                 information_schema.statistics
             WHERE
-                table_schema = %(schema)s
-                AND table_name = %(name)s
-        '''
-        rows = conn.execute(q, schema=(schema or self.default_schema_name), name=table_name)
+                table_schema = :table_schema
+                AND table_name = :table_name
+        """
+        rows = conn.execute(
+            text(q),
+            {"table_schema": (schema or self.default_schema_name), "table_name": table_name},
+        )
         indexes = collections.defaultdict(list)
         for row in rows:
             if row.implicit or row.unique:
@@ -322,41 +335,45 @@ class CockroachDBDialect(PGDialect_psycopg2):
 
         result = []
         for name, rows in indexes.items():
-            result.append({
-                'name': name,
-                'column_names': [r.column_name for r in rows],
-                'unique': False,
-            })
+            result.append(
+                {
+                    "name": name,
+                    "column_names": [r.column_name for r in rows],
+                    "unique": False,
+                }
+            )
         return result
 
     def get_foreign_keys_v1(self, conn, table_name, schema=None, **kw):
         fkeys = []
-        FK_REGEX = re.compile(
-            r'(?P<referred_table>.+)?\.\[(?P<referred_columns>.+)?]')
+        FK_REGEX = re.compile(r"(?P<referred_table>.+)?\.\[(?P<referred_columns>.+)?]")
 
         for row in conn.execute(
-                'SHOW CONSTRAINTS FROM "%s"."%s"' %
-                (schema or self.default_schema_name, table_name)):
+            text(
+                'SHOW CONSTRAINTS FROM "%s"."%s"' % (schema or self.default_schema_name, table_name)
+            )
+        ):
             if row.Type.startswith("FOREIGN KEY"):
                 m = re.search(FK_REGEX, row.Details)
 
                 name = row.Name
-                constrained_columns = row['Column(s)'].split(', ')
-                referred_table = m.group('referred_table')
-                referred_columns = m.group('referred_columns').split()
+                constrained_columns = row["Column(s)"].split(", ")
+                referred_table = m.group("referred_table")
+                referred_columns = m.group("referred_columns").split()
                 referred_schema = schema
                 fkey_d = {
-                    'name': name,
-                    'constrained_columns': constrained_columns,
-                    'referred_table': referred_table,
-                    'referred_columns': referred_columns,
-                    'referred_schema': referred_schema
+                    "name": name,
+                    "constrained_columns": constrained_columns,
+                    "referred_table": referred_table,
+                    "referred_columns": referred_columns,
+                    "referred_schema": referred_schema,
                 }
                 fkeys.append(fkey_d)
         return fkeys
 
-    def get_foreign_keys(self, connection, table_name, schema=None,
-                         postgresql_ignore_search_path=False, **kw):
+    def get_foreign_keys(
+        self, connection, table_name, schema=None, postgresql_ignore_search_path=False, **kw
+    ):
         if not self._is_v2plus:
             # v1.1 or earlier.
             return self.get_foreign_keys_v1(connection, table_name, schema, **kw)
@@ -368,8 +385,9 @@ class CockroachDBDialect(PGDialect_psycopg2):
         # See also: https://github.com/cockroachdb/cockroach/issues/27123
 
         preparer = self.identifier_preparer
-        table_oid = self.get_table_oid(connection, table_name, schema,
-                                       info_cache=kw.get('info_cache'))
+        table_oid = self.get_table_oid(
+            connection, table_name, schema, info_cache=kw.get("info_cache")
+        )
 
         FK_SQL = """
           SELECT r.conname,
@@ -387,33 +405,43 @@ class CockroachDBDialect(PGDialect_psycopg2):
         """
         # http://www.postgresql.org/docs/9.0/static/sql-createtable.html
         FK_REGEX = re.compile(
-            r'FOREIGN KEY \((.*?)\) REFERENCES (?:(.*?)\.)?(.*?)[\s]?\((.*?)\)'
-            r'[\s]?(MATCH (FULL|PARTIAL|SIMPLE)+)?'
-            r'[\s]?(ON UPDATE '
-            r'(CASCADE|RESTRICT|NO ACTION|SET NULL|SET DEFAULT)+)?'
-            r'[\s]?(ON DELETE '
-            r'(CASCADE|RESTRICT|NO ACTION|SET NULL|SET DEFAULT)+)?'
-            r'[\s]?(DEFERRABLE|NOT DEFERRABLE)?'
-            r'[\s]?(INITIALLY (DEFERRED|IMMEDIATE)+)?'
+            r"FOREIGN KEY \((.*?)\) REFERENCES (?:(.*?)\.)?(.*?)[\s]?\((.*?)\)"
+            r"[\s]?(MATCH (FULL|PARTIAL|SIMPLE)+)?"
+            r"[\s]?(ON UPDATE "
+            r"(CASCADE|RESTRICT|NO ACTION|SET NULL|SET DEFAULT)+)?"
+            r"[\s]?(ON DELETE "
+            r"(CASCADE|RESTRICT|NO ACTION|SET NULL|SET DEFAULT)+)?"
+            r"[\s]?(DEFERRABLE|NOT DEFERRABLE)?"
+            r"[\s]?(INITIALLY (DEFERRED|IMMEDIATE)+)?"
         )
 
-        t = sql.text(FK_SQL).columns(conname=sqltypes.Unicode,
-                                     condef=sqltypes.Unicode)
-        c = connection.execute(t, table=table_oid)
+        t = sql.text(FK_SQL).columns(conname=sqltypes.Unicode, condef=sqltypes.Unicode)
+        c = connection.execute(t, {"table": table_oid})
         fkeys = []
         for conname, condef, conschema in c.fetchall():
             m = re.search(FK_REGEX, condef).groups()
 
-            constrained_columns, referred_schema, \
-                referred_table, referred_columns, \
-                _, match, _, onupdate, _, ondelete, \
-                deferrable, _, initially = m
+            (
+                constrained_columns,
+                referred_schema,
+                referred_table,
+                referred_columns,
+                _,
+                match,
+                _,
+                onupdate,
+                _,
+                ondelete,
+                deferrable,
+                _,
+                initially,
+            ) = m
 
             if deferrable is not None:
-                deferrable = True if deferrable == 'DEFERRABLE' else False
-            constrained_columns = [preparer._unquote_identifier(x)
-                                   for x in re.split(
-                                       r'\s*,\s*', constrained_columns)]
+                deferrable = True if deferrable == "DEFERRABLE" else False
+            constrained_columns = [
+                preparer._unquote_identifier(x) for x in re.split(r"\s*,\s*", constrained_columns)
+            ]
 
             if postgresql_ignore_search_path:
                 # when ignoring search path, we use the actual schema
@@ -426,30 +454,29 @@ class CockroachDBDialect(PGDialect_psycopg2):
                 # referred_schema is the schema that we regexp'ed from
                 # pg_get_constraintdef().  If the schema is in the search
                 # path, pg_get_constraintdef() will give us None.
-                referred_schema = \
-                    preparer._unquote_identifier(referred_schema)
+                referred_schema = preparer._unquote_identifier(referred_schema)
             elif schema is not None and schema == conschema:
                 # If the actual schema matches the schema of the table
                 # we're reflecting, then we will use that.
                 referred_schema = schema
 
             referred_table = preparer._unquote_identifier(referred_table)
-            referred_columns = [preparer._unquote_identifier(x)
-                                for x in
-                                re.split(r'\s*,\s', referred_columns)]
+            referred_columns = [
+                preparer._unquote_identifier(x) for x in re.split(r"\s*,\s", referred_columns)
+            ]
             fkey_d = {
-                'name': conname,
-                'constrained_columns': constrained_columns,
-                'referred_schema': referred_schema,
-                'referred_table': referred_table,
-                'referred_columns': referred_columns,
-                'options': {
-                    'onupdate': onupdate,
-                    'ondelete': ondelete,
-                    'deferrable': deferrable,
-                    'initially': initially,
-                    'match': match
-                }
+                "name": conname,
+                "constrained_columns": constrained_columns,
+                "referred_schema": referred_schema,
+                "referred_table": referred_table,
+                "referred_columns": referred_columns,
+                "options": {
+                    "onupdate": onupdate,
+                    "ondelete": ondelete,
+                    "deferrable": deferrable,
+                    "initially": initially,
+                    "match": match,
+                },
             }
             fkeys.append(fkey_d)
         return fkeys
@@ -479,7 +506,8 @@ class CockroachDBDialect(PGDialect_psycopg2):
     def get_unique_constraints(self, conn, table_name, schema=None, **kw):
         if self._is_v21plus:
             return super(CockroachDBDialect, self).get_unique_constraints(
-                conn, table_name, schema, **kw)
+                conn, table_name, schema, **kw
+            )
 
         # v2.0 does not know about enough SQL to understand the query done by
         # the upstream dialect. So run a dumbed down version instead.
@@ -498,7 +526,8 @@ class CockroachDBDialect(PGDialect_psycopg2):
     def get_check_constraints(self, conn, table_name, schema=None, **kw):
         if self._is_v21plus:
             return super(CockroachDBDialect, self).get_check_constraints(
-                conn, table_name, schema, **kw)
+                conn, table_name, schema, **kw
+            )
         # TODO(bdarnell): The postgres dialect implementation depends on
         # pg_table_is_visible, which is supported in cockroachdb 1.1
         # but not in 1.0. Figure out a versioning strategy.
@@ -507,21 +536,21 @@ class CockroachDBDialect(PGDialect_psycopg2):
     def do_savepoint(self, connection, name):
         # Savepoint logic customized to work with run_transaction().
         if savepoint_state.cockroach_restart:
-            connection.execute('SAVEPOINT cockroach_restart')
+            connection.execute(text("SAVEPOINT cockroach_restart"))
         else:
             super(CockroachDBDialect, self).do_savepoint(connection, name)
 
     def do_rollback_to_savepoint(self, connection, name):
         # Savepoint logic customized to work with run_transaction().
         if savepoint_state.cockroach_restart:
-            connection.execute('ROLLBACK TO SAVEPOINT cockroach_restart')
+            connection.execute(text("ROLLBACK TO SAVEPOINT cockroach_restart"))
         else:
             super(CockroachDBDialect, self).do_rollback_to_savepoint(connection, name)
 
     def do_release_savepoint(self, connection, name):
         # Savepoint logic customized to work with run_transaction().
         if savepoint_state.cockroach_restart:
-            connection.execute('RELEASE SAVEPOINT cockroach_restart')
+            connection.execute(text("RELEASE SAVEPOINT cockroach_restart"))
         else:
             super(CockroachDBDialect, self).do_release_savepoint(connection, name)
 
@@ -532,13 +561,15 @@ try:
 except ImportError:
     pass
 else:
+
     class CockroachDBImpl(alembic.ddl.postgresql.PostgresqlImpl):
-        __dialect__ = 'cockroachdb'
+        __dialect__ = "cockroachdb"
         transactional_ddl = False
 
-    @compiles(alembic.ddl.postgresql.PostgresqlColumnType, 'cockroachdb')
+    @compiles(alembic.ddl.postgresql.PostgresqlColumnType, "cockroachdb")
     def visit_column_type(*args, **kwargs):
         return alembic.ddl.postgresql.visit_column_type(*args, **kwargs)
+
 
 # If sqlalchemy-migrate is installed, register there too.
 try:
@@ -546,4 +577,4 @@ try:
 except ImportError:
     pass
 else:
-    migrate_dialects['cockroachdb'] = migrate_dialects['postgresql']
+    migrate_dialects["cockroachdb"] = migrate_dialects["postgresql"]

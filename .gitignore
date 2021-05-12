@@ -16,3 +16,6 @@ build/
 env/
 cockroach-data/
 cockroach.pid
+
+# local test configuration
+test.cfg
