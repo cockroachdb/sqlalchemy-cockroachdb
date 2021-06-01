@@ -37,7 +37,7 @@ six==1.15.0
 toml==0.10.2
 tqdm==4.60.0
 typing-extensions==3.7.4.3
-urllib3==1.26.4
+urllib3==1.26.5
 virtualenv==20.4.4
 webencodings==0.5.1
 zipp==3.4.1
