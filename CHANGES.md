@@ -1,3 +1,9 @@
+# Version 1.3.4
+- Add telemetry to SQLAlchemy CockroachDB
+- Telemetry is enabled by default, set disable_cockroachdb_telemetry in create_engine's connect_args field to disable.
+  - ```Example: engine = create_engine('cockroachdb://...', connect_args={"disable_cockroachdb_telemetry": True})```
+
+
 # Version 1.3.3
 Released April 26, 2021
 
