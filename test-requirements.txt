@@ -4,20 +4,21 @@
 # To add/update dependencies, update test-requirements.txt.in (not the
 # generated test-requirements.txt) and run make update-requirements
 
-SQLAlchemy==1.3.24
-more-itertools==8.7.0
+SQLAlchemy==1.4.17
+more-itertools==8.8.0
 mock==4.0.3
-pytest==6.2.3
+pytest==6.2.4
 futures==3.1.1
 psycopg2==2.8.6
 ## The following requirements were added by pip freeze:
-attrs==20.3.0
-importlib-metadata==4.0.1
+attrs==21.2.0
+greenlet==1.1.0
+importlib-metadata==4.4.0
 iniconfig==1.1.1
 packaging==20.9
 pluggy==0.13.1
 py==1.10.0
 pyparsing==2.4.7
 toml==0.10.2
-typing-extensions==3.7.4.3
+typing-extensions==3.10.0.0
 zipp==3.4.1

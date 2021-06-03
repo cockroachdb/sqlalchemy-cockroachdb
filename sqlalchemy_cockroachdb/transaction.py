@@ -7,7 +7,7 @@ import sqlalchemy.engine
 import sqlalchemy.exc
 import sqlalchemy.orm
 
-from .dialect import savepoint_state
+from .base import savepoint_state
 
 
 def run_transaction(transactor, callback, max_retries=None, max_backoff=0):
