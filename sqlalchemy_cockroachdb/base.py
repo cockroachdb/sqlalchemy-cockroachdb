@@ -153,7 +153,7 @@ class CockroachDBDialect(PGDialect):
                 "SELECT crdb_internal.increment_feature_counter"
                 + "('SQLAlchemy {version}')".format(version=version)
             )
-            connection.execute(telemetry_query)
+            connection.execute(text(telemetry_query))
 
     def _get_server_version_info(self, conn):
         # PGDialect expects a postgres server version number here,

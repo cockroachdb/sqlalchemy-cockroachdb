@@ -4,7 +4,7 @@ from sqlalchemy.testing import fixtures
 from sqlalchemy.types import Integer
 import threading
 
-from sqlalchemy_cockroachdb.transaction import run_transaction
+from sqlalchemy_cockroachdb import run_transaction
 
 """ This file is named "test_aab_run_transaction_core.py" to keep it close to its more
     temperamental "session" sibling.

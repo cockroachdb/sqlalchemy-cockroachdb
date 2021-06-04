@@ -1,4 +1,5 @@
 from sqlalchemy.dialects import registry as _registry
+from .transaction import run_transaction  # noqa
 
 __version__ = "1.3.4.dev0"
 
