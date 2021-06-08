@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='sqlalchemy-cockroachdb',
-    version='1.3.3',
+    version='1.3.4',
     author='Cockroach Labs',
     author_email='cockroach-db@googlegroups.com',
     url='https://github.com/cockroachdb/sqlalchemy-cockroachdb',
