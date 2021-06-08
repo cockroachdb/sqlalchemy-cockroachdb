@@ -5,5 +5,5 @@ util.warn_limited(
     "Importing ``run_transaction`` from ``cockroachdb.sqlalchemy`` is deprecated since "
     "version %s of this dialect. "
     "Please import it from ``sqlalchemy_cockroachdb`` instead.",
-    "1.3.4",
+    "1.4",
 )
