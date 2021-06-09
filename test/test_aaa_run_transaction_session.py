@@ -6,7 +6,7 @@ from sqlalchemy.testing import fixtures
 from sqlalchemy.types import Integer
 import threading
 
-from sqlalchemy_cockroachdb.transaction import run_transaction
+from sqlalchemy_cockroachdb import run_transaction
 
 """ This file is named "test_aaa_run_transaction_session.py" to ensure that it is run before any
     other tests. Testing under SQLA 1.4 revealed that it ran by itself just fine, but if *any*

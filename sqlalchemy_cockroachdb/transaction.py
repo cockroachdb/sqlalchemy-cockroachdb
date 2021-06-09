@@ -35,6 +35,9 @@ def run_transaction(transactor, callback, max_retries=None, max_backoff=0):
         with transactor.connect() as connection:
             return _txn_retry_loop(connection, callback, max_retries, max_backoff)
     elif isinstance(transactor, sqlalchemy.orm.sessionmaker):
+        # TODO: `autocommit=` is deprecated in SQLA 1.4 (to be removed in 2.0).
+        #       Keep this here for the time being (for compatibility with SQLA 1.3),
+        #       but may not be necessary for 1.4 since _txn_retry_loop uses .begin()
         session = transactor(autocommit=True)
         return _txn_retry_loop(session, callback, max_retries, max_backoff)
     else:
