@@ -5,6 +5,9 @@
 # generated test-requirements.txt) and run make update-requirements
 
 SQLAlchemy
+# a temporary tweak in test-requirements.txt is required until Alembic 1.7 is released:
+# git+https://github.com/sqlalchemy/alembic
+alembic
 more-itertools
 mock
 pytest
