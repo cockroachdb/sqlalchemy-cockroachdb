@@ -5,15 +5,15 @@ version: 2
   command: start-single-node --insecure
 
 .x-cockroach-20.1: &cockroach-20-1
-  image: cockroachdb/cockroach:v20.1.14
+  image: cockroachdb/cockroach:v20.1.17
   command: start-single-node --insecure
 
 .x-cockroach-20.2: &cockroach-20-2
-  image: cockroachdb/cockroach:v20.2.7
+  image: cockroachdb/cockroach:v20.2.11
   command: start-single-node --insecure
 
 .x-cockroach-21.1: &cockroach-21-1
-  image: cockroachdb/cockroach-unstable:v21.1.0-beta.4
+  image: cockroachdb/cockroach:v21.1.2
   command: start-single-node --insecure
 
 .x-tox-version: &tox-version
