@@ -17,7 +17,7 @@ version: 2
   command: start-single-node --insecure
 
 .x-tox-version: &tox-version
-  TOX_VERSION: 3.12.1
+  TOX_VERSION: 3.23.1
 
 .x-py37: &py37
   environment:
