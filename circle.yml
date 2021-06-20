@@ -19,9 +19,9 @@ version: 2
 .x-tox-version: &tox-version
   TOX_VERSION: 3.12.1
 
-.x-py37: &py37
+.x-py39: &py39
   environment:
-    TOXENV: py37
+    TOXENV: py39
     <<: *tox-version
 
 .x-test-steps: &test-steps
@@ -38,37 +38,37 @@ version: 2
         command: ${HOME}/.local/bin/tox
 
 jobs:
-  test-py37-19.2:
+  test-py39-19.2:
     docker:
-      - image: circleci/python:3.7
+      - image: circleci/python:3.9
       - *cockroach-19-2
     <<: *test-steps
-    <<: *py37
+    <<: *py39
 
-  test-py37-20.1:
+  test-py39-20.1:
     docker:
-      - image: circleci/python:3.7
+      - image: circleci/python:3.9
       - *cockroach-20-1
     <<: *test-steps
-    <<: *py37
+    <<: *py39
 
-  test-py37-20.2:
+  test-py39-20.2:
     docker:
-      - image: circleci/python:3.7
+      - image: circleci/python:3.9
       - *cockroach-20-2
     <<: *test-steps
-    <<: *py37
+    <<: *py39
 
-  test-py37-21.1:
+  test-py39-21.1:
     docker:
-      - image: circleci/python:3.7
+      - image: circleci/python:3.9
       - *cockroach-21-1
     <<: *test-steps
-    <<: *py37
+    <<: *py39
 
   lint:
     docker:
-      - image: circleci/python:3.7
+      - image: circleci/python:3.9
     environment:
       <<: *tox-version
     steps:
@@ -84,8 +84,8 @@ workflows:
   version: 2
   test-and-lint:
     jobs:
-      - test-py37-19.2
-      - test-py37-20.1
-      - test-py37-20.2
-      - test-py37-21.1
+      - test-py39-19.2
+      - test-py39-20.1
+      - test-py39-20.2
+      - test-py39-21.1
       - lint
