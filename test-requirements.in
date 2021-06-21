@@ -1,0 +1,14 @@
+# Packages used when running tests. Installed by tox into multiple
+# virtualenvs.
+#
+# To add/update dependencies, update test-requirements.in (not the
+# generated test-requirements.txt) and run make update-requirements
+
+# Remove this once alembic 1.7 has been released
+git+https://github.com/sqlalchemy/alembic
+futures
+mock
+more-itertools
+psycopg2
+pytest
+sqlalchemy

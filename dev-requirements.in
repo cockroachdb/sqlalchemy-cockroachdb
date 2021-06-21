@@ -1,0 +1,10 @@
+# Packages used by the Makefile
+#
+# To add/update dependencies, update dev-requirements.in (not the
+# generated dev-requirements.txt), run make update-requirements,
+# then make bootstrap.
+
+tox
+
+# Twine is used in the release process to upload the package.
+twine
