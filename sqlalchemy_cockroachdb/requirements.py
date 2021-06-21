@@ -157,3 +157,9 @@ class Requirements(SuiteRequirementsSQLA, SuiteRequirementsAlembic):
 
     def get_isolation_levels(self, config):
         return {"default": "SERIALIZABLE", "supported": ["SERIALIZABLE"]}
+
+# non-default requirements for Alembic test suite
+
+    @property
+    def autoincrement_on_composite_pk(self):
+        return exclusions.open()
