@@ -1,30 +1,36 @@
-# Packages used when running tests. Installed by tox into multiple
-# virtualenvs.
-#
-# To add/update dependencies, update test-requirements.txt.in (not the
-# generated test-requirements.txt) and run make update-requirements
-
-SQLAlchemy==1.4.17
-# temporary tweak required until Alembic 1.7 is released:
 git+https://github.com/sqlalchemy/alembic
-more-itertools==8.8.0
-mock==4.0.3
-pytest==6.2.4
-futures==3.1.1
-psycopg2==2.8.6
-## The following requirements were added by pip freeze:
+    # via -r test-requirements.in
 attrs==21.2.0
+    # via pytest
+futures==3.1.1
+    # via -r test-requirements.in
 greenlet==1.1.0
-importlib-metadata==4.4.0
+    # via sqlalchemy
 iniconfig==1.1.1
+    # via pytest
+mako==1.1.4
+    # via alembic
+markupsafe==2.0.1
+    # via mako
+mock==4.0.3
+    # via -r test-requirements.in
+more-itertools==8.8.0
+    # via -r test-requirements.in
 packaging==20.9
+    # via pytest
 pluggy==0.13.1
+    # via pytest
+psycopg2==2.9.1
+    # via -r test-requirements.in
 py==1.10.0
+    # via pytest
 pyparsing==2.4.7
+    # via packaging
+pytest==6.2.4
+    # via -r test-requirements.in
+sqlalchemy==1.4.18
+    # via
+    #   -r test-requirements.in
+    #   alembic
 toml==0.10.2
-typing-extensions==3.10.0.0
-zipp==3.4.1
-Mako
-python-editor>=0.3
-python-dateutil
-six
+    # via pytest

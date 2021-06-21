@@ -1,24 +1,35 @@
+ENV_BASE=~/envs
+ENV=${ENV_BASE}/sqlalchemy-cockroachdb
+TOX=${ENV}/bin/tox
+
 .PHONY: all
 all: test lint
 
+.PHONY: bootstrap
+bootstrap:
+	@mkdir -p ${ENV}
+	virtualenv ${ENV}
+	${ENV}/bin/pip install -r dev-requirements.txt
+
+.PHONY: clean-bootstrap-env
+clean-bootstrap-env:
+	rm -rf ${ENV}
+
 .PHONY: test
 test:
-	tox
+	${TOX} -e py39
 
 .PHONY: lint
 lint:
-	tox -e lint
+	${TOX} -e lint
 
-# Update the requirements files (but does not install the updates; use
-# bootstrap.sh for that)
 .PHONY: update-requirements
 update-requirements:
-	./update-requirements.sh dev-requirements.txt
-	./update-requirements.sh test-requirements.txt
+	${TOX} -e pip-compile
 
 .PHONY: build
 build: clean
-	python setup.py sdist
+	${ENV}/bin/python setup.py sdist
 
 .PHONY: clean
 clean:

@@ -28,9 +28,11 @@ Install them with
 
 Then, to run a complete test simply invoke
 
-    pytest
+    make test
 
-at a command prompt in your virtual environment.
+at a command prompt after you bootstrapped your environment with 
+
+    make bootstrap
 
 To run just the SQLAlchemy test suite, use
 
