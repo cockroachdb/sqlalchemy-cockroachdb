@@ -5,6 +5,8 @@
 # generated test-requirements.txt) and run make update-requirements
 
 SQLAlchemy==1.4.17
+# temporary tweak required until Alembic 1.7 is released:
+git+https://github.com/sqlalchemy/alembic
 more-itertools==8.8.0
 mock==4.0.3
 pytest==6.2.4
@@ -22,3 +24,7 @@ pyparsing==2.4.7
 toml==0.10.2
 typing-extensions==3.10.0.0
 zipp==3.4.1
+Mako
+python-editor>=0.3
+python-dateutil
+six

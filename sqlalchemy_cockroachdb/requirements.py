@@ -1,9 +1,10 @@
-from sqlalchemy.testing.requirements import SuiteRequirements
+from sqlalchemy.testing.requirements import SuiteRequirements as SuiteRequirementsSQLA
+from alembic.testing.requirements import SuiteRequirements as SuiteRequirementsAlembic
 
 from sqlalchemy.testing import exclusions
 
 
-class Requirements(SuiteRequirements):
+class Requirements(SuiteRequirementsSQLA, SuiteRequirementsAlembic):
     # This class configures the sqlalchemy test suite. Oddly, it must
     # be importable in the main codebase and not alongside the tests.
     #
@@ -156,3 +157,9 @@ class Requirements(SuiteRequirements):
 
     def get_isolation_levels(self, config):
         return {"default": "SERIALIZABLE", "supported": ["SERIALIZABLE"]}
+
+# non-default requirements for Alembic test suite
+
+    @property
+    def autoincrement_on_composite_pk(self):
+        return exclusions.open()
