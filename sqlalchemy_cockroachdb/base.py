@@ -103,7 +103,7 @@ class CockroachDBDialect(PGDialect):
         **kwargs,
     ):
         self.disable_cockroachdb_telemetry = disable_cockroachdb_telemetry
-        return super(CockroachDBDialect, self).connect(
+        return super().connect(
             dsn, connection_factory,
             cursor_factory, **kwargs)
 
@@ -114,7 +114,7 @@ class CockroachDBDialect(PGDialect):
             raise NotImplementedError("server_side_cursors is not supported")
         kwargs["use_native_hstore"] = False
         kwargs["server_side_cursors"] = False
-        super(CockroachDBDialect, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     @classmethod
     def dbapi(cls):
@@ -151,7 +151,7 @@ class CockroachDBDialect(PGDialect):
             version = pkg_resources.require("sqlalchemy-cockroachdb")[0].version
             telemetry_query = (
                 "SELECT crdb_internal.increment_feature_counter"
-                + "('SQLAlchemy {version}')".format(version=version)
+                + f"('SQLAlchemy {version}')"
             )
             connection.execute(text(telemetry_query))
 
@@ -190,7 +190,7 @@ class CockroachDBDialect(PGDialect):
             # Oh well. Hoping 1.1 won't be around for long.
             rows = conn.execute(
                 text(
-                    'SHOW COLUMNS FROM "%s"."%s"' % (schema or self.default_schema_name, table_name)
+                    f'SHOW COLUMNS FROM "{schema or self.default_schema_name}"."{table_name}"'
                 )
             )
         elif not self._is_v191plus:
@@ -234,7 +234,7 @@ class CockroachDBDialect(PGDialect):
                 try:
                     type_class = _type_map[type_name.lower()]
                 except KeyError:
-                    warn("Did not recognize type '%s' of column '%s'" % (type_name, name))
+                    warn(f"Did not recognize type '{type_name}' of column '{name}'")
                     type_class = sqltypes.NULLTYPE
                 if type_args:
                     typ = type_class(*[int(s.strip()) for s in type_args.split(",")])
@@ -350,7 +350,7 @@ class CockroachDBDialect(PGDialect):
 
         for row in conn.execute(
             text(
-                'SHOW CONSTRAINTS FROM "%s"."%s"' % (schema or self.default_schema_name, table_name)
+                f'SHOW CONSTRAINTS FROM "{schema or self.default_schema_name}"."{table_name}"'
             )
         ):
             if row.Type.startswith("FOREIGN KEY"):
@@ -483,7 +483,7 @@ class CockroachDBDialect(PGDialect):
 
     def get_pk_constraint(self, conn, table_name, schema=None, **kw):
         if self._is_v21plus:
-            return super(CockroachDBDialect, self).get_pk_constraint(conn, table_name, schema, **kw)
+            return super().get_pk_constraint(conn, table_name, schema, **kw)
 
         # v2.0 does not know about enough SQL to understand the query done by
         # the upstream dialect. So run a dumbed down version instead.
@@ -505,7 +505,7 @@ class CockroachDBDialect(PGDialect):
 
     def get_unique_constraints(self, conn, table_name, schema=None, **kw):
         if self._is_v21plus:
-            return super(CockroachDBDialect, self).get_unique_constraints(
+            return super().get_unique_constraints(
                 conn, table_name, schema, **kw
             )
 
@@ -525,7 +525,7 @@ class CockroachDBDialect(PGDialect):
 
     def get_check_constraints(self, conn, table_name, schema=None, **kw):
         if self._is_v21plus:
-            return super(CockroachDBDialect, self).get_check_constraints(
+            return super().get_check_constraints(
                 conn, table_name, schema, **kw
             )
         # TODO(bdarnell): The postgres dialect implementation depends on
@@ -538,21 +538,21 @@ class CockroachDBDialect(PGDialect):
         if savepoint_state.cockroach_restart:
             connection.execute(text("SAVEPOINT cockroach_restart"))
         else:
-            super(CockroachDBDialect, self).do_savepoint(connection, name)
+            super().do_savepoint(connection, name)
 
     def do_rollback_to_savepoint(self, connection, name):
         # Savepoint logic customized to work with run_transaction().
         if savepoint_state.cockroach_restart:
             connection.execute(text("ROLLBACK TO SAVEPOINT cockroach_restart"))
         else:
-            super(CockroachDBDialect, self).do_rollback_to_savepoint(connection, name)
+            super().do_rollback_to_savepoint(connection, name)
 
     def do_release_savepoint(self, connection, name):
         # Savepoint logic customized to work with run_transaction().
         if savepoint_state.cockroach_restart:
             connection.execute(text("RELEASE SAVEPOINT cockroach_restart"))
         else:
-            super(CockroachDBDialect, self).do_release_savepoint(connection, name)
+            super().do_release_savepoint(connection, name)
 
 
 # If alembic is installed, register an alias in its dialect mapping.

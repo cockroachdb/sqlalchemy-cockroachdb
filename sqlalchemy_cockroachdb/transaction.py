@@ -44,7 +44,7 @@ def run_transaction(transactor, callback, max_retries=None, max_backoff=0):
         raise TypeError("don't know how to run a transaction on %s", type(transactor))
 
 
-class _NestedTransaction(object):
+class _NestedTransaction:
     """Wraps begin_nested() to set the savepoint_state thread-local.
 
     This causes the savepoint statements that are a part of this retry

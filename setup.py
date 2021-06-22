@@ -6,7 +6,8 @@ from setuptools import setup, find_packages
 with open(os.path.join(os.path.dirname(__file__), "sqlalchemy_cockroachdb", "__init__.py")) as v:
     VERSION = re.compile(r'.*__version__ = "(.*?)"', re.S).match(v.read()).group(1)
 
-readme = os.path.join(os.path.dirname(__file__), "README.md")
+with open(os.path.join(os.path.dirname(__file__), "README.md")) as f:
+    README = f.read()
 
 setup(
     name="sqlalchemy-cockroachdb",
@@ -15,13 +16,17 @@ setup(
     author_email="cockroach-db@googlegroups.com",
     url="https://github.com/cockroachdb/sqlalchemy-cockroachdb",
     description="CockroachDB dialect for SQLAlchemy",
-    long_description=open(readme).read(),
+    long_description=README,
     long_description_content_type="text/markdown",
     license="http://www.apache.org/licenses/LICENSE-2.0",
     classifiers=[
         "License :: OSI Approved :: Apache Software License",
-        "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
     ],
     keywords="SQLAlchemy CockroachDB",
     project_urls={
