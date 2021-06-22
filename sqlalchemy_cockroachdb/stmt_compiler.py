@@ -90,7 +90,7 @@ crdb_grammar_reserved = """
 | WITH
 | WORK
 """
-CRDB_RESERVED_WORDS = set([x.strip().lower() for x in crdb_grammar_reserved.split("|")])
+CRDB_RESERVED_WORDS = {x.strip().lower() for x in crdb_grammar_reserved.split("|")}
 
 
 class CockroachIdentifierPreparer(PGIdentifierPreparer):
