@@ -148,12 +148,17 @@ class CockroachDBDialect(PGDialect):
         # The crdb_internal.increment_feature_counter only exists in v21.1 of CRDB
         # and onwards.
         if self._is_v211plus and not self.disable_cockroachdb_telemetry:
-            version = pkg_resources.require("sqlalchemy-cockroachdb")[0].version
-            telemetry_query = (
-                "SELECT crdb_internal.increment_feature_counter"
-                + f"('SQLAlchemy {version}')"
+            dialect_version = pkg_resources.require("sqlalchemy-cockroachdb")[0].version
+            sqlalchemy_version = pkg_resources.require("sqlalchemy")[0].version
+            telemetry_query = "SELECT crdb_internal.increment_feature_counter(:val)"
+            connection.execute(
+                text(telemetry_query),
+                dict(val=f'sqlalchemy-cockroachdb {dialect_version}')
             )
-            connection.execute(text(telemetry_query))
+            connection.execute(
+                text(telemetry_query),
+                dict(val=f'sqlalchemy {sqlalchemy_version}')
+            )
 
     def _get_server_version_info(self, conn):
         # PGDialect expects a postgres server version number here,
