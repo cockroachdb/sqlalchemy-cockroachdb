@@ -35,7 +35,7 @@ class BaseRunTransactionTest(fixtures.TestBase):
         """Returns the balances of the two accounts as a list."""
         result = []
         query = (
-            select([account_table.c.balance])
+            select(account_table.c.balance)
             .where(account_table.c.acct.in_((1, 2)))
             .order_by(account_table.c.acct)
         )
@@ -84,7 +84,7 @@ class BaseRunTransactionTest(fixtures.TestBase):
             iters1,
             iters2,
         )
-        balances = self.get_balances(testing.db)
+        balances = self.get_balances(testing.db.connect())
         assert balances == [100, 100], (
             "expected balances to be restored without error; " "got %s" % balances
         )

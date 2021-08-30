@@ -20,11 +20,7 @@ The minimum requirements for testing are:
 
 Install them with 
 
-    pip install sqlalchemy pytest psycopg2-binary
-
-    # A pre-release version of Alembic is required until version 1.7 is released.
-    # (Bear this in mind if you rebuild test-requirements.txt via make.)
-    pip install git+https://github.com/sqlalchemy/alembic
+    pip install sqlalchemy alembic pytest psycopg2-binary
 
 Then, to run a complete test simply invoke
 

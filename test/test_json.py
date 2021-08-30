@@ -37,9 +37,7 @@ class JSONTest(fixtures.TablesTest):
             return
         json_table = self.tables.json_model
         result = []
-        query = select(
-            [json_table.c.jsonb_data, json_table.c.json_data, json_table.c.base_json_data]
-        )
+        query = select(json_table.c.jsonb_data, json_table.c.json_data, json_table.c.base_json_data)
         for row in connection.execute(query):
             result.append((row.jsonb_data, row.json_data, row.base_json_data))
         eq_(result, [({"a": 1}, {"b": 2}, {"c": 3}), ({"d": 4}, {"e": 5}, {"f": 6})])
