@@ -4,8 +4,7 @@
 # To add/update dependencies, update test-requirements.in (not the
 # generated test-requirements.txt) and run make update-requirements
 
-# Remove this once alembic 1.7 has been released
-git+https://github.com/sqlalchemy/alembic
+alembic
 futures
 mock
 more-itertools

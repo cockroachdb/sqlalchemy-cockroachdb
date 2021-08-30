@@ -1,4 +1,4 @@
-git+https://github.com/sqlalchemy/alembic
+alembic==1.7.0
     # via -r test-requirements.in
 attrs==21.2.0
     # via pytest
