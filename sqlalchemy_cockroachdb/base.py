@@ -148,8 +148,14 @@ class CockroachDBDialect(PGDialect):
         # The crdb_internal.increment_feature_counter only exists in v21.1 of CRDB
         # and onwards.
         if self._is_v211plus and not self.disable_cockroachdb_telemetry:
+            sqlalchemy_version_string = ""
             dialect_version = pkg_resources.require("sqlalchemy-cockroachdb")[0].version
             sqlalchemy_version = pkg_resources.require("sqlalchemy")[0].version
+            matches = re.findall(r"(\d+\.\d+)(\.|$)", sqlalchemy_version)
+            if len(matches) == 0:
+                sqlalchemy_version_string = sqlalchemy_version
+            else:
+                sqlalchemy_version_string = matches[0][0]
             telemetry_query = "SELECT crdb_internal.increment_feature_counter(:val)"
             connection.execute(
                 text(telemetry_query),
@@ -157,7 +163,7 @@ class CockroachDBDialect(PGDialect):
             )
             connection.execute(
                 text(telemetry_query),
-                dict(val=f'sqlalchemy {sqlalchemy_version}')
+                dict(val=f'sqlalchemy {sqlalchemy_version_string}')
             )
 
     def _get_server_version_info(self, conn):
