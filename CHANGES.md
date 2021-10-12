@@ -1,3 +1,6 @@
+# Version 1.4.2
+Unreleased
+
 # Version 1.4.1
 Released October 12, 2021
 
