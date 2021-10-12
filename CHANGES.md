@@ -1,5 +1,7 @@
 # Version 1.4.1
-Unreleased
+Released October 12, 2021
+
+- Updated test suite to work with Alembic 1.7.
 
 # Version 1.4.0
 Released July 29, 2021
