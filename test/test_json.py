@@ -1,6 +1,6 @@
 from sqlalchemy import Table, Column, select, testing
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.postgresql import JSONB, JSON
+from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.testing import fixtures, eq_
 from sqlalchemy.types import Integer

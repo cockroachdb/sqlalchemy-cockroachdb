@@ -1,6 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor
 from sqlalchemy import Table, Column, MetaData, select, testing, text
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.testing import fixtures
 from sqlalchemy.types import Integer
@@ -103,6 +103,8 @@ class BaseRunTransactionTest(fixtures.TestBase):
 
 
 class RunTransactionSessionTest(BaseRunTransactionTest):
+    __requires__ = ("sync_driver",)
+
     def test_run_transaction(self):
         def callback(barrier):
             Session = sessionmaker(testing.db)
@@ -119,7 +121,10 @@ class RunTransactionSessionTest(BaseRunTransactionTest):
                     accounts[0].balance += 100
                     accounts[1].balance -= 100
 
-            run_transaction(Session, txn_body)
+            with testing.expect_deprecated_20(
+                "The Session.autocommit parameter is deprecated"
+            ):
+                run_transaction(Session, txn_body)
 
         self.run_parallel_transactions(callback)
 
@@ -129,6 +134,9 @@ class RunTransactionSessionTest(BaseRunTransactionTest):
             sess.execute(text("select crdb_internal.force_retry('1s')"))
             return [r for r in rs]
 
-        Session = sessionmaker(testing.db)
-        rs = run_transaction(Session, txn_body)
-        assert rs[0] == (1, 100)
+        with testing.expect_deprecated_20(
+                "The Session.autocommit parameter is deprecated"
+        ):
+            Session = sessionmaker(testing.db)
+            rs = run_transaction(Session, txn_body)
+            assert rs[0] == (1, 100)
