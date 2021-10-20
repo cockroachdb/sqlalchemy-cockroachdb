@@ -91,6 +91,8 @@ class BaseRunTransactionTest(fixtures.TestBase):
 
 
 class RunTransactionCoreTest(BaseRunTransactionTest):
+    __requires__ = ("sync_driver",)
+
     def perform_transfer(self, conn, balances):
         if balances[0] > balances[1]:
             conn.execute(

@@ -4,6 +4,8 @@ from sqlalchemy.testing import fixtures
 
 
 class AcrossSchemaTest(fixtures.TestBase):
+    __requires__ = ("sync_driver",)
+
     def teardown_method(self, method):
         if not testing.db.dialect._is_v2plus:
             return

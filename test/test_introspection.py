@@ -43,6 +43,8 @@ view_table = Table("view", meta, Column("view", Integer, primary_key=True))
 
 
 class IntrospectionTest(fixtures.TestBase):
+    __requires__ = ("sync_driver",)
+
     def teardown_method(self, method):
         meta.drop_all(testing.db)
 
@@ -65,6 +67,8 @@ class IntrospectionTest(fixtures.TestBase):
 
 
 class TestTypeReflection(fixtures.TestBase):
+    __requires__ = ("sync_driver",)
+
     TABLE_NAME = "t"
     COLUMN_NAME = "c"
 
@@ -150,6 +154,8 @@ class TestTypeReflection(fixtures.TestBase):
 
 
 class UnknownTypeTest(fixtures.TestBase):
+    __requires__ = ("sync_driver",)
+
     def setup_method(self):
         with testing.db.begin() as conn:
             conn.execute(text("CREATE TABLE t2 (c bool)"))

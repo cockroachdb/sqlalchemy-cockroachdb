@@ -5,6 +5,7 @@
 # generated test-requirements.txt) and run make update-requirements
 
 alembic
+asyncpg
 futures
 mock
 more-itertools

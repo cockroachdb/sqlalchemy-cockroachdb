@@ -6,6 +6,7 @@ from sqlalchemy.dialects.postgresql.base import PGDialect
 from sqlalchemy.dialects.postgresql import INET
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.compiler import compiles
+from sqlalchemy.util import asbool
 from sqlalchemy.util import warn
 import sqlalchemy.sql as sql
 
@@ -96,16 +97,11 @@ class CockroachDBDialect(PGDialect):
     # Override connect so we can take disable_cockroachdb_telemetry as a connect_arg to sqlalchemy.
     def connect(
         self,
-        dsn=None,
-        connection_factory=None,
-        cursor_factory=None,
         disable_cockroachdb_telemetry=False,
         **kwargs,
     ):
-        self.disable_cockroachdb_telemetry = disable_cockroachdb_telemetry
-        return super().connect(
-            dsn, connection_factory,
-            cursor_factory, **kwargs)
+        self.disable_cockroachdb_telemetry = asbool(disable_cockroachdb_telemetry)
+        return super().connect(**kwargs)
 
     def __init__(self, *args, **kwargs):
         if kwargs.get("use_native_hstore", False):

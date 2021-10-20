@@ -70,10 +70,10 @@ class Requirements(SuiteRequirementsSQLA, SuiteRequirementsAlembic):
         lambda config: not config.db.dialect._is_v202plus,
         "older versions don't support this correctly.",
     )
-    # TODO: enable after 20.2 beta comes out
-    # check_constraint_reflection = \
-    #        exclusions.skip_if(lambda config: not config.db.dialect._is_v202plus,
-    #                           "older versions don't support this correctly.")
+    check_constraint_reflection = exclusions.skip_if(
+        lambda config: not config.db.dialect._is_v202plus,
+        "older versions don't support this correctly.",
+    )
     cross_schema_fk_reflection = exclusions.closed()
     non_updating_cascade = exclusions.open()
     deferrable_fks = exclusions.closed()
@@ -155,10 +155,16 @@ class Requirements(SuiteRequirementsSQLA, SuiteRequirementsAlembic):
     implicitly_named_constraints = exclusions.open()
     supports_distinct_on = exclusions.open()
 
+    @property
+    def sync_driver(self):
+        return exclusions.skip_if(
+            lambda config: config.db.dialect.is_async
+        )
+
     def get_isolation_levels(self, config):
         return {"default": "SERIALIZABLE", "supported": ["SERIALIZABLE"]}
 
-# non-default requirements for Alembic test suite
+    # non-default requirements for Alembic test suite
 
     @property
     def autoincrement_on_composite_pk(self):
