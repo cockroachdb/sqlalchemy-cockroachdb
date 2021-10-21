@@ -1,5 +1,7 @@
 # Version 1.4.2
-Unreleased
+Release October 21, 2021
+
+- Updated version telemetry to only report major/minor version of SQLAlchemy.
 
 # Version 1.4.1
 Released October 12, 2021
@@ -8,6 +10,7 @@ Released October 12, 2021
 
 # Version 1.4.0
 Released July 29, 2021
+
 - Add telemetry to SQLAlchemy CockroachDB
 - Telemetry is enabled by default, set disable_cockroachdb_telemetry in create_engine's connect_args field to disable.
   - ```Example: engine = create_engine('cockroachdb://...', connect_args={"disable_cockroachdb_telemetry": True})```
