@@ -13,3 +13,8 @@ _registry.register(
     "sqlalchemy_cockroachdb.asyncpg",
     "CockroachDBDialect_asyncpg",
 )
+_registry.register(
+    "cockroachdb.psycopg",
+    "sqlalchemy_cockroachdb.psycopg",
+    "CockroachDBDialect_psycopg",
+)

@@ -11,8 +11,6 @@ from sqlalchemy.testing import provide_metadata
 
 
 class WithHintTest(fixtures.TestBase, AssertsCompiledSQL):
-    __requires__ = ("sync_driver",)
-
     @provide_metadata
     def test_with_hint(self):
         meta = self.metadata
@@ -27,8 +25,16 @@ class WithHintTest(fixtures.TestBase, AssertsCompiledSQL):
             select(t).with_hint(t, "ix_t_txt"),
             "SELECT t.id, t.txt FROM t@ix_t_txt",
         )
-        param_placeholder = "%s" if config.db.dialect.is_async else "%(id_1)s"
+        if config.db.dialect.driver == "psycopg2":
+            param_placeholder = "%(id_1)s"
+            cast_str = ""
+        elif config.db.dialect.driver == "asyncpg":
+            param_placeholder = "$1"
+            cast_str = "::INTEGER"
+        elif config.db.dialect.driver == "psycopg":
+            param_placeholder = "%(id_1)s"
+            cast_str = "::INTEGER"
         self.assert_compile(
             select(t).with_hint(t, "ix_t_txt").where(t.c.id < 3),
-            f"SELECT t.id, t.txt FROM t@ix_t_txt WHERE t.id < {param_placeholder}",
+            f"SELECT t.id, t.txt FROM t@ix_t_txt WHERE t.id < {param_placeholder}{cast_str}",
         )

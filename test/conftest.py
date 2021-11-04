@@ -16,6 +16,11 @@ registry.register(
     "sqlalchemy_cockroachdb.asyncpg",
     "CockroachDBDialect_asyncpg",
 )
+registry.register(
+    "cockroachdb.psycopg",
+    "sqlalchemy_cockroachdb.psycopg",
+    "CockroachDBDialect_psycopg",
+)
 
 pytest.register_assert_rewrite("sqlalchemy.testing.assertions")
 

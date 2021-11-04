@@ -157,8 +157,8 @@ class Requirements(SuiteRequirementsSQLA, SuiteRequirementsAlembic):
 
     @property
     def sync_driver(self):
-        return exclusions.skip_if(
-            lambda config: config.db.dialect.is_async
+        return exclusions.only_if(
+            lambda config: config.db.dialect.driver in ["psycopg2", "psycopg"]
         )
 
     @property
@@ -173,6 +173,12 @@ class Requirements(SuiteRequirementsSQLA, SuiteRequirementsAlembic):
     @property
     def uuid_data_type(self):
         return exclusions.open()
+
+    @property
+    def json_deserializer_binary(self):
+        return exclusions.only_if(
+            lambda config: config.db.dialect.driver in ["psycopg"]
+        )
 
     def get_isolation_levels(self, config):
         return {"default": "SERIALIZABLE", "supported": ["SERIALIZABLE", "AUTOCOMMIT"]}

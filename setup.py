@@ -43,6 +43,7 @@ setup(
             "cockroachdb = sqlalchemy_cockroachdb.psycopg2:CockroachDBDialect_psycopg2",
             "cockroachdb.psycopg2 = sqlalchemy_cockroachdb.psycopg2:CockroachDBDialect_psycopg2",
             "cockroachdb.asyncpg = sqlalchemy_cockroachdb.asyncpg:CockroachDBDialect_asyncpg",
+            "cockroachdb.psycopg = sqlalchemy_cockroachdb.psycopg:CockroachDBDialect_psycopg",
         ],
     },
 )

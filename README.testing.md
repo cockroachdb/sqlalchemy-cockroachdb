@@ -1,15 +1,15 @@
 ## Testing this dialect with SQLAlchemy and Alembic
 
-"setup.cfg" contains a default SQLAlchemy connection URI that should
+"setup.cfg" contains a default SQLAlchemy connection URL that should
 work if you have a local instance of CockroachDB installed:
 
     [db]
     default=cockroachdb://root@localhost:26257/defaultdb
 
 If you want to test against a remote server (or otherwise need to tweak
-the connection URI) simply create a file named "test.cfg" in the same
+the connection URL) simply create a file named "test.cfg" in the same
 folder as "setup.cfg", copy the ``[db]`` section into it, and adjust the
-``default=`` URI accordingly.
+``default=`` URL accordingly.
 
 The minimum requirements for testing are:
 
@@ -40,4 +40,4 @@ and to run just the Alembic test suite, use
 
 For more detailed information see the corresponding SQLAlchemy document
 
-https://github.com/sqlalchemy/sqlalchemy/blob/master/README.unittests.rst
+https://github.com/sqlalchemy/sqlalchemy/blob/main/README.unittests.rst
