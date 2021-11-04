@@ -1,8 +1,6 @@
 from random import uniform
 from time import sleep
 
-import psycopg2
-import psycopg2.errorcodes
 import sqlalchemy.engine
 import sqlalchemy.exc
 import sqlalchemy.orm
@@ -93,6 +91,11 @@ def _txn_retry_loop(conn, callback, max_retries, max_backoff):
     ``conn`` may be either a Connection or a Session, but they both
     have compatible ``begin()`` and ``begin_nested()`` methods.
     """
+    if isinstance(conn, sqlalchemy.orm.Session):
+        dbapi_name = conn.bind.driver
+    else:
+        dbapi_name = conn.engine.driver
+
     retry_count = 0
     with conn.begin():
         while True:
@@ -103,10 +106,20 @@ def _txn_retry_loop(conn, callback, max_retries, max_backoff):
             except sqlalchemy.exc.DatabaseError as e:
                 if max_retries is not None and retry_count >= max_retries:
                     raise
-                retry_count += 1
-                if isinstance(e.orig, psycopg2.OperationalError):
-                    if e.orig.pgcode == psycopg2.errorcodes.SERIALIZATION_FAILURE:
-                        if max_backoff > 0:
-                            retry_exponential_backoff(retry_count, max_backoff)
-                        continue
+                do_retry = False
+                if dbapi_name == "psycopg2":
+                    import psycopg2
+                    import psycopg2.errorcodes
+                    if isinstance(e.orig, psycopg2.OperationalError):
+                        if e.orig.pgcode == psycopg2.errorcodes.SERIALIZATION_FAILURE:
+                            do_retry = True
+                else:
+                    import psycopg
+                    if isinstance(e.orig, psycopg.errors.SerializationFailure):
+                        do_retry = True
+                if do_retry:
+                    retry_count += 1
+                    if max_backoff > 0:
+                        retry_exponential_backoff(retry_count, max_backoff)
+                    continue
                 raise

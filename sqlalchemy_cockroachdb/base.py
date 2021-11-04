@@ -118,7 +118,7 @@ class CockroachDBDialect(PGDialect):
         # to detect certain features on the server. Set the attributes
         # by hand and hope things don't change out from under us too
         # often.
-        super(PGDialect, self).initialize(connection)
+        super().initialize(connection)
         self.implicit_returning = True
         self.supports_smallserial = False
         self._backslash_escapes = False
@@ -130,10 +130,16 @@ class CockroachDBDialect(PGDialect):
         self._is_v201plus = self._is_v192plus and (" v19.2." not in sversion)
         self._is_v202plus = self._is_v201plus and (" v20.1." not in sversion)
         self._is_v211plus = self._is_v202plus and (" v20.2." not in sversion)
+        self._is_v212plus = self._is_v211plus and (" v21.1." not in sversion)
+        self._is_v221plus = self._is_v212plus and (" v21.2." not in sversion)
+        self._is_v222plus = self._is_v221plus and (" v22.1." not in sversion)
+        self._is_v231plus = self._is_v222plus and (" v22.2." not in sversion)
+        self._is_v232plus = self._is_v231plus and (" v23.1." not in sversion)
         self._has_native_json = self._is_v2plus
         self._has_native_jsonb = self._is_v2plus
         self._supports_savepoints = self._is_v201plus
         self.supports_native_enum = self._is_v202plus
+        self.supports_identity_columns = True
 
     def _get_server_version_info(self, conn):
         # PGDialect expects a postgres server version number here,
