@@ -1,4 +1,5 @@
 from sqlalchemy import __version__ as sa_version
+from sqlalchemy.testing import combinations
 from sqlalchemy.testing import skip
 from sqlalchemy.testing.suite import *  # noqa
 from sqlalchemy.testing.suite import ComponentReflectionTest as _ComponentReflectionTest
@@ -13,7 +14,7 @@ class ComponentReflectionTest(_ComponentReflectionTest):
         if connection.dialect._is_v202plus and sa_version >= "1.4":
             super().test_get_indexes(connection, None, None)
 
-    @testing.combinations(
+    @combinations(
         ("noncol_idx_test_nopk", "noncol_idx_nopk"),
         ("noncol_idx_test_pk", "noncol_idx_pk"),
         argnames="tname,ixname",
@@ -33,7 +34,7 @@ class ExpandingBoundInTest(_ExpandingBoundInTest):
 
 
 class LongNameBlowoutTest(_LongNameBlowoutTest):
-    @testing.combinations(
+    @combinations(
         ("fk",),
         ("pk",),
         ("ix",),
@@ -51,19 +52,19 @@ class NumericTest(_NumericTest):
     def test_float_as_decimal(self, do_numeric_test):
         # asyncpg.exceptions.DatatypeMismatchError: value type decimal doesn't match type
         # float4 of column "x"
-        if config.db.dialect.driver != "asyncpg":
+        if config.db.dialect.driver != "asyncpg":  # noqa
             super().test_float_as_decimal(do_numeric_test)
 
     def test_float_as_float(self, do_numeric_test):
         # asyncpg.exceptions.DatatypeMismatchError: value type decimal doesn't match type
         # float4 of column "x"
-        if config.db.dialect.driver != "asyncpg":
+        if config.db.dialect.driver != "asyncpg":  # noqa
             super().test_float_as_decimal(do_numeric_test)
 
     def test_float_custom_scale(self, do_numeric_test):
         # asyncpg.exceptions.DatatypeMismatchError: value type decimal doesn't match type
         # float4 of column "x"
-        if config.db.dialect.driver != "asyncpg":
+        if config.db.dialect.driver != "asyncpg":  # noqa
             super().test_float_as_decimal(do_numeric_test)
 
 
