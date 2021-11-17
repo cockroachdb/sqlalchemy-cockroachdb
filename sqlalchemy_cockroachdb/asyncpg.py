@@ -1,5 +1,3 @@
-import json as _py_json
-
 from sqlalchemy.dialects.postgresql.asyncpg import PGDialect_asyncpg
 from .base import CockroachDBDialect
 from .ddl_compiler import CockroachDDLCompiler
