@@ -1,8 +1,10 @@
 # Version 1.4.3
-Unreleased
+Released Devember 10, 2021
+
+- Added preliminary support for asyncpg. See instructions in the README.
 
 # Version 1.4.2
-Release October 21, 2021
+Released October 21, 2021
 
 - Updated version telemetry to only report major/minor version of SQLAlchemy.
 
