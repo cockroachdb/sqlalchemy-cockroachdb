@@ -11,7 +11,6 @@ class CockroachDDLCompiler(PGDDLCompiler):
                 "CockroachDB support."
             )
 
-        print("sqltext", generated.sqltext)
         return "AS (%s) STORED" % self.sql_compiler.process(
             generated.sqltext, include_table=False, literal_binds=True
         )
