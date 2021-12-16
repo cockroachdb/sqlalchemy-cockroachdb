@@ -266,7 +266,6 @@ class CockroachDBDialect(PGDialect):
                 nextval_match = re.search(r"""(nextval\(')([^']+)('.*$)""", default)
                 unique_rowid_match = re.search(r"""unique_rowid\(""", default)
                 if nextval_match is not None or unique_rowid_match is not None:
-                    print("affinity", type_class)
                     if issubclass(type_class, sqltypes.Integer):
                         autoincrement = True
                     # the default is related to a Sequence
