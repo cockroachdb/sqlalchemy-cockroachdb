@@ -1,6 +1,8 @@
 # Version 1.4.4
 Unreleased
 
+- Added `include_hidden` option to `get_columns()` to enable reflection of columns like "rowid". (#173)
+
 # Version 1.4.3
 Released Devember 10, 2021
 

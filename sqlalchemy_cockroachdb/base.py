@@ -154,12 +154,10 @@ class CockroachDBDialect(PGDialect):
                 sqlalchemy_version_string = matches[0][0]
             telemetry_query = "SELECT crdb_internal.increment_feature_counter(:val)"
             connection.execute(
-                text(telemetry_query),
-                dict(val=f'sqlalchemy-cockroachdb {dialect_version}')
+                text(telemetry_query), dict(val=f"sqlalchemy-cockroachdb {dialect_version}")
             )
             connection.execute(
-                text(telemetry_query),
-                dict(val=f'sqlalchemy {sqlalchemy_version_string}')
+                text(telemetry_query), dict(val=f"sqlalchemy {sqlalchemy_version_string}")
             )
 
     def _get_server_version_info(self, conn):
@@ -191,39 +189,40 @@ class CockroachDBDialect(PGDialect):
     # The upstream implementations of the reflection functions below depend on
     # correlated subqueries which are not yet supported.
     def get_columns(self, conn, table_name, schema=None, **kw):
+        _include_hidden = kw.get("include_hidden", False)
         if not self._is_v2plus:
             # v1.1.
             # Bad: the table name is not properly escaped.
             # Oh well. Hoping 1.1 won't be around for long.
             rows = conn.execute(
-                text(
-                    f'SHOW COLUMNS FROM "{schema or self.default_schema_name}"."{table_name}"'
-                )
+                text(f'SHOW COLUMNS FROM "{schema or self.default_schema_name}"."{table_name}"')
             )
         elif not self._is_v191plus:
             # v2.x does not have is_generated or generation_expression
+            sql = (
+                "SELECT column_name, data_type, is_nullable::bool, column_default, "
+                "numeric_precision, numeric_scale, character_maximum_length, "
+                "NULL AS is_generated, NULL AS generation_expression, is_hidden::bool "
+                "FROM information_schema.columns "
+                "WHERE table_schema = :table_schema AND table_name = :table_name "
+            )
+            sql += "" if _include_hidden else "AND NOT is_hidden::bool"
             rows = conn.execute(
-                text(
-                    "SELECT column_name, data_type, is_nullable::bool, column_default, "
-                    "numeric_precision, numeric_scale, character_maximum_length, "
-                    "NULL AS is_generated, NULL AS generation_expression "
-                    "FROM information_schema.columns "
-                    "WHERE table_schema = :table_schema AND table_name = :table_name "
-                    "    AND NOT is_hidden::bool"
-                ),
+                text(sql),
                 {"table_schema": schema or self.default_schema_name, "table_name": table_name},
             )
         else:
             # v19.1 or later. Information schema columns are all usable.
+            sql = (
+                "SELECT column_name, data_type, is_nullable::bool, column_default, "
+                "numeric_precision, numeric_scale, character_maximum_length, "
+                "is_generated::bool, generation_expression, is_hidden::bool "
+                "FROM information_schema.columns "
+                "WHERE table_schema = :table_schema AND table_name = :table_name "
+            )
+            sql += "" if _include_hidden else "AND NOT is_hidden::bool"
             rows = conn.execute(
-                text(
-                    "SELECT column_name, data_type, is_nullable::bool, column_default, "
-                    "numeric_precision, numeric_scale, character_maximum_length, "
-                    "is_generated::bool, generation_expression "
-                    "FROM information_schema.columns "
-                    "WHERE table_schema = :table_schema AND table_name = :table_name "
-                    "    AND NOT is_hidden::bool"
-                ),
+                text(sql),
                 {"table_schema": schema or self.default_schema_name, "table_name": table_name},
             )
 
@@ -292,6 +291,7 @@ class CockroachDBDialect(PGDialect):
                 nullable=nullable,
                 default=default,
                 autoincrement=autoincrement,
+                is_hidden=row.is_hidden,
             )
             if computed is not None:
                 column_info["computed"] = computed
@@ -355,9 +355,7 @@ class CockroachDBDialect(PGDialect):
         FK_REGEX = re.compile(r"(?P<referred_table>.+)?\.\[(?P<referred_columns>.+)?]")
 
         for row in conn.execute(
-            text(
-                f'SHOW CONSTRAINTS FROM "{schema or self.default_schema_name}"."{table_name}"'
-            )
+            text(f'SHOW CONSTRAINTS FROM "{schema or self.default_schema_name}"."{table_name}"')
         ):
             if row.Type.startswith("FOREIGN KEY"):
                 m = re.search(FK_REGEX, row.Details)
@@ -511,9 +509,7 @@ class CockroachDBDialect(PGDialect):
 
     def get_unique_constraints(self, conn, table_name, schema=None, **kw):
         if self._is_v21plus:
-            return super().get_unique_constraints(
-                conn, table_name, schema, **kw
-            )
+            return super().get_unique_constraints(conn, table_name, schema, **kw)
 
         # v2.0 does not know about enough SQL to understand the query done by
         # the upstream dialect. So run a dumbed down version instead.
@@ -531,9 +527,7 @@ class CockroachDBDialect(PGDialect):
 
     def get_check_constraints(self, conn, table_name, schema=None, **kw):
         if self._is_v21plus:
-            return super().get_check_constraints(
-                conn, table_name, schema, **kw
-            )
+            return super().get_check_constraints(conn, table_name, schema, **kw)
         # TODO(bdarnell): The postgres dialect implementation depends on
         # pg_table_is_visible, which is supported in cockroachdb 1.1
         # but not in 1.0. Figure out a versioning strategy.
