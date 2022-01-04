@@ -190,14 +190,7 @@ class CockroachDBDialect(PGDialect):
     # correlated subqueries which are not yet supported.
     def get_columns(self, conn, table_name, schema=None, **kw):
         _include_hidden = kw.get("include_hidden", False)
-        if not self._is_v2plus:
-            # v1.1.
-            # Bad: the table name is not properly escaped.
-            # Oh well. Hoping 1.1 won't be around for long.
-            rows = conn.execute(
-                text(f'SHOW COLUMNS FROM "{schema or self.default_schema_name}"."{table_name}"')
-            )
-        elif not self._is_v191plus:
+        if not self._is_v191plus:
             # v2.x does not have is_generated or generation_expression
             sql = (
                 "SELECT column_name, data_type, is_nullable::bool, column_default, "
