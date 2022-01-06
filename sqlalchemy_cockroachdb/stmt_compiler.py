@@ -98,4 +98,5 @@ class CockroachIdentifierPreparer(PGIdentifierPreparer):
 
 
 class CockroachCompiler(PGCompiler_psycopg2):
-    pass
+    def format_from_hint_text(self, sqltext, table, hint, iscrud):
+        return f"{sqltext}@{hint}"
