@@ -2,9 +2,10 @@
 Unreleased
 
 - Added `include_hidden` option to `get_columns()` to enable reflection of columns like "rowid". (#173)
+- Added support for `.with_hint()` (patch courtesy of Jonathan Dieter)
 
 # Version 1.4.3
-Released Devember 10, 2021
+Released December 10, 2021
 
 - Added preliminary support for asyncpg. See instructions in the README.
 

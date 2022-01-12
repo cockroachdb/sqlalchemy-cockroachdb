@@ -1,5 +1,5 @@
+from sqlalchemy.dialects.postgresql.base import PGCompiler
 from sqlalchemy.dialects.postgresql.base import PGIdentifierPreparer
-from sqlalchemy.dialects.postgresql.psycopg2 import PGCompiler_psycopg2
 
 # This is extracted from CockroachDB's `sql.y`. Add keywords here if *NEW* reserved keywords
 # are added to sql.y. DO NOT DELETE keywords here, even if they are deleted from sql.y:
@@ -97,6 +97,6 @@ class CockroachIdentifierPreparer(PGIdentifierPreparer):
     reserved_words = CRDB_RESERVED_WORDS
 
 
-class CockroachCompiler(PGCompiler_psycopg2):
+class CockroachCompiler(PGCompiler):
     def format_from_hint_text(self, sqltext, table, hint, iscrud):
         return f"{sqltext}@{hint}"

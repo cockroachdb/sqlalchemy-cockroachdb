@@ -1,6 +1,7 @@
 from sqlalchemy.dialects.postgresql.asyncpg import PGDialect_asyncpg
 from .base import CockroachDBDialect
 from .ddl_compiler import CockroachDDLCompiler
+from .stmt_compiler import CockroachCompiler
 from .stmt_compiler import CockroachIdentifierPreparer
 
 
@@ -8,6 +9,7 @@ class CockroachDBDialect_asyncpg(PGDialect_asyncpg, CockroachDBDialect):
     driver = "asyncpg"  # driver name
     preparer = CockroachIdentifierPreparer
     ddl_compiler = CockroachDDLCompiler
+    statement_compiler = CockroachCompiler
 
     supports_statement_cache = True
 
