@@ -26,3 +26,7 @@ class WithHintTest(fixtures.TestBase, AssertsCompiledSQL):
             select(t).with_hint(t, "ix_t_txt"),
             "SELECT t.id, t.txt FROM t@ix_t_txt",
         )
+        self.assert_compile(
+            select(t).with_hint(t, "ix_t_txt").where(t.c.id < 3),
+            "SELECT t.id, t.txt FROM t@ix_t_txt WHERE t.id < %(id_1)s",
+        )
