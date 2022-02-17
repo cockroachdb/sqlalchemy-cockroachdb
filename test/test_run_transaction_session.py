@@ -1,5 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
-from sqlalchemy import Table, Column, MetaData, select, testing, text
+from sqlalchemy import Column, select, testing, text
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.testing import fixtures
