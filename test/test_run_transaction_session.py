@@ -1,6 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor
-from sqlalchemy import Table, Column, MetaData, select, testing, text
-from sqlalchemy.orm import declarative_base
+from sqlalchemy import Column, select, testing, text
+from sqlalchemy.orm import Session
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.testing import fixtures
 from sqlalchemy.types import Integer
@@ -8,56 +8,39 @@ import threading
 
 from sqlalchemy_cockroachdb import run_transaction
 
-""" This file is named "test_aaa_run_transaction_session.py" to ensure that it is run before any
-    other tests. Testing under SQLA 1.4 revealed that it ran by itself just fine, but if *any*
-    other test ran before it (even the corresponding "core" test) then it would crash with
 
-    sqlalchemy.exc.ArgumentError: Column expression or FROM clause expected,
-    got <class 'test.test_run_transaction.Account'>.
-"""
-# TODO: Investigate SQLA_1.4 testing configuration to try and determine why this is happening.
-#       (It didn't happen with the old name under SQLA_1.3.)
+class BaseRunTransactionTest(fixtures.DeclarativeMappedTest):
+    @classmethod
+    def setup_classes(cls):
+        Base = cls.DeclarativeBasic
 
-meta = MetaData()
+        class Account(Base):
+            __tablename__ = "account"
 
-account_table = Table(
-    "account",
-    meta,
-    Column("acct", Integer, primary_key=True, autoincrement=False),
-    Column("balance", Integer),
-)
+            acct = Column(Integer, primary_key=True, autoincrement=False)
+            balance = Column(Integer)
 
+    @classmethod
+    def insert_data(cls, connection):
+        Account = cls.classes.Account
 
-class Account(declarative_base()):
-    __table__ = account_table
-
-
-class BaseRunTransactionTest(fixtures.TestBase):
-    def setup_method(self, method):
-        meta.create_all(testing.db)
-        with testing.db.begin() as conn:
-            conn.execute(
-                account_table.insert(), [dict(acct=1, balance=100), dict(acct=2, balance=100)]
-            )
-
-    def teardown_method(self, method):
-        meta.drop_all(testing.db)
+        session = Session(connection)
+        session.add_all([Account(acct=1, balance=100), Account(acct=2, balance=100)])
+        session.commit()
 
     def get_balances(self, conn):
+        Account = self.classes.Account
+
         """Returns the balances of the two accounts as a list."""
         result = []
-        query = (
-            select(account_table.c.balance)
-            .where(account_table.c.acct.in_((1, 2)))
-            .order_by(account_table.c.acct)
-        )
+        query = select(Account.balance).where(Account.acct.in_((1, 2))).order_by(Account.acct)
         for row in conn.execute(query):
             result.append(row.balance)
         if len(result) != 2:
             raise Exception("Expected two balances; got %d", len(result))
         return result
 
-    def run_parallel_transactions(self, callback):
+    def run_parallel_transactions(self, callback, conn):
         """Runs the callback in two parallel transactions.
 
         A barrier function is passed to the callback and should be run
@@ -96,7 +79,7 @@ class BaseRunTransactionTest(fixtures.TestBase):
             iters1,
             iters2,
         )
-        balances = self.get_balances(testing.db.connect())
+        balances = self.get_balances(conn)
         assert balances == [100, 100], (
             "expected balances to be restored without error; " "got %s" % balances
         )
@@ -105,7 +88,9 @@ class BaseRunTransactionTest(fixtures.TestBase):
 class RunTransactionSessionTest(BaseRunTransactionTest):
     __requires__ = ("sync_driver",)
 
-    def test_run_transaction(self):
+    def test_run_transaction(self, connection):
+        Account = self.classes.Account
+
         def callback(barrier):
             Session = sessionmaker(testing.db)
 
@@ -121,12 +106,10 @@ class RunTransactionSessionTest(BaseRunTransactionTest):
                     accounts[0].balance += 100
                     accounts[1].balance -= 100
 
-            with testing.expect_deprecated_20(
-                "The Session.autocommit parameter is deprecated"
-            ):
+            with testing.expect_deprecated_20("The Session.autocommit parameter is deprecated"):
                 run_transaction(Session, txn_body)
 
-        self.run_parallel_transactions(callback)
+        self.run_parallel_transactions(callback, connection)
 
     def test_run_transaction_retry(self):
         def txn_body(sess):
@@ -134,9 +117,7 @@ class RunTransactionSessionTest(BaseRunTransactionTest):
             sess.execute(text("select crdb_internal.force_retry('1s')"))
             return [r for r in rs]
 
-        with testing.expect_deprecated_20(
-                "The Session.autocommit parameter is deprecated"
-        ):
+        with testing.expect_deprecated_20("The Session.autocommit parameter is deprecated"):
             Session = sessionmaker(testing.db)
             rs = run_transaction(Session, txn_body)
             assert rs[0] == (1, 100)
