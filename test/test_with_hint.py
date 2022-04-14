@@ -5,12 +5,12 @@ from sqlalchemy import select
 from sqlalchemy import String
 from sqlalchemy import Table
 from sqlalchemy.testing import AssertsCompiledSQL
+from sqlalchemy.testing import config
 from sqlalchemy.testing import fixtures
 from sqlalchemy.testing import provide_metadata
 
 
 class WithHintTest(fixtures.TestBase, AssertsCompiledSQL):
-    # __requires__ = ("sync_driver",)
 
     @provide_metadata
     def test_with_hint(self):
@@ -26,7 +26,8 @@ class WithHintTest(fixtures.TestBase, AssertsCompiledSQL):
             select(t).with_hint(t, "ix_t_txt"),
             "SELECT t.id, t.txt FROM t@ix_t_txt",
         )
+        param_placeholder = "%s" if config.db.dialect.is_async else "%(id_1)s"
         self.assert_compile(
             select(t).with_hint(t, "ix_t_txt").where(t.c.id < 3),
-            "SELECT t.id, t.txt FROM t@ix_t_txt WHERE t.id < %(id_1)s",
+            f"SELECT t.id, t.txt FROM t@ix_t_txt WHERE t.id < {param_placeholder}",
         )
