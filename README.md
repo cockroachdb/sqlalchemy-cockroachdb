@@ -13,7 +13,7 @@ For psycopg2 support you must install either:
 (The binary package is a practical choice for development and testing but in
 production it is advised to use the package built from sources.)
 
-Or, for asyncpg support (experimental) you must install
+Or, for asyncpg support (⚠️ experimental 🏗) you must install
 
 * [asyncpg](https://pypi.org/project/asyncpg/)
  
@@ -38,7 +38,7 @@ from sqlalchemy import create_engine
 engine = create_engine('cockroachdb+psycopg2://root@localhost:26257/defaultdb?sslmode=disable')
 ```
 
-To connect using asyncpg:
+To connect using asyncpg (⚠️ experimental 🏗):
 
 ```
 from sqlalchemy import create_async_engine
