@@ -1,5 +1,5 @@
 # Version 1.4.4
-Unreleased
+Released September 9, 2022
 
 - Added `include_hidden` option to `get_columns()` to enable reflection of columns like "rowid". (#173)
 - Added support for `.with_hint()` (patch courtesy of Jonathan Dieter)
