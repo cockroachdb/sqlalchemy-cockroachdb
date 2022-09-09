@@ -209,7 +209,9 @@ class CockroachDBDialect(PGDialect):
             sql = (
                 "SELECT column_name, data_type, is_nullable::bool, column_default, "
                 "numeric_precision, numeric_scale, character_maximum_length, "
-                "is_generated::bool, generation_expression, is_hidden::bool "
+                "CASE is_generated WHEN 'ALWAYS' THEN true WHEN 'NEVER' THEN false "
+                "ELSE is_generated::bool END AS is_generated, "
+                "generation_expression, is_hidden::bool "
                 "FROM information_schema.columns "
                 "WHERE table_schema = :table_schema AND table_name = :table_name "
             )
