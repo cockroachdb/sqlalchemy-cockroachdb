@@ -3,6 +3,7 @@ Unreleased
 
 - Added `include_hidden` option to `get_columns()` to enable reflection of columns like "rowid". (#173)
 - Added support for `.with_hint()` (patch courtesy of Jonathan Dieter)
+- Updated column introspection query to work with CockroachDB v22.2.
 
 # Version 1.4.3
 Released December 10, 2021

@@ -1,19 +1,19 @@
 version: 2
 
-.x-cockroach-19.2: &cockroach-19-2
-  image: cockroachdb/cockroach:v19.2.12
-  command: start-single-node --insecure
-
-.x-cockroach-20.1: &cockroach-20-1
-  image: cockroachdb/cockroach:v20.1.17
-  command: start-single-node --insecure
-
-.x-cockroach-20.2: &cockroach-20-2
-  image: cockroachdb/cockroach:v20.2.11
-  command: start-single-node --insecure
-
 .x-cockroach-21.1: &cockroach-21-1
-  image: cockroachdb/cockroach:v21.1.2
+  image: cockroachdb/cockroach:v21.1.19
+  command: start-single-node --insecure
+
+.x-cockroach-21.2: &cockroach-21-2
+  image: cockroachdb/cockroach:v21.2.15
+  command: start-single-node --insecure
+
+.x-cockroach-22.1: &cockroach-22-1
+  image: cockroachdb/cockroach:v22.1.6
+  command: start-single-node --insecure
+
+.x-cockroach-22.2: &cockroach-22-2
+  image: cockroachdb/cockroach-unstable:v22.2.0-alpha.2
   command: start-single-node --insecure
 
 .x-tox-version: &tox-version
@@ -38,31 +38,33 @@ version: 2
         command: ${HOME}/.local/bin/tox
 
 jobs:
-  test-py39-19.2:
-    docker:
-      - image: circleci/python:3.9
-      - *cockroach-19-2
-    <<: *test-steps
-    <<: *py39
-
-  test-py39-20.1:
-    docker:
-      - image: circleci/python:3.9
-      - *cockroach-20-1
-    <<: *test-steps
-    <<: *py39
-
-  test-py39-20.2:
-    docker:
-      - image: circleci/python:3.9
-      - *cockroach-20-2
-    <<: *test-steps
-    <<: *py39
-
   test-py39-21.1:
     docker:
       - image: circleci/python:3.9
       - *cockroach-21-1
+    <<: *test-steps
+    <<: *py39
+
+  test-py39-21.2:
+    docker:
+      - image: circleci/python:3.9
+      - *cockroach-21-2
+    <<: *test-steps
+    <<: *py39
+
+
+  test-py39-22.1:
+    docker:
+      - image: circleci/python:3.9
+      - *cockroach-22-1
+    <<: *test-steps
+    <<: *py39
+
+
+  test-py39-22.2:
+    docker:
+      - image: circleci/python:3.9
+      - *cockroach-22-2
     <<: *test-steps
     <<: *py39
 
@@ -84,8 +86,8 @@ workflows:
   version: 2
   test-and-lint:
     jobs:
-      - test-py39-19.2
-      - test-py39-20.1
-      - test-py39-20.2
       - test-py39-21.1
+      - test-py39-21.2
+      - test-py39-22.1
+      - test-py39-22.2
       - lint
