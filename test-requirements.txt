@@ -10,7 +10,7 @@ greenlet==1.1.0
     # via sqlalchemy
 iniconfig==1.1.1
     # via pytest
-mako==1.1.4
+mako==1.2.2
     # via alembic
 markupsafe==2.0.1
     # via mako
