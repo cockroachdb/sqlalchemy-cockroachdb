@@ -1,7 +1,7 @@
 from sqlalchemy.dialects import registry as _registry
 from .transaction import run_transaction  # noqa
 
-__version__ = "1.4.5.dev0"
+__version__ = "2.0.0.dev0"
 
 _registry.register(
     "cockroachdb.psycopg2",

@@ -11,6 +11,7 @@ from sqlalchemy.testing import provide_metadata
 
 
 class WithHintTest(fixtures.TestBase, AssertsCompiledSQL):
+    __requires__ = ("sync_driver",)
 
     @provide_metadata
     def test_with_hint(self):
