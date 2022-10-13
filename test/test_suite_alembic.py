@@ -67,10 +67,11 @@ class AutogenerateForeignKeysTest(_AutogenerateForeignKeysTest):
 
 
 class BackendAlterColumnTest(_BackendAlterColumnTest):
+    @skip("cockroachdb")  # noqa
     def test_modify_nullable_to_non(self):
-        # we seem to need autocommit for this operation
-        with self.op.get_context().autocommit_block():
-            super().test_modify_nullable_to_non()
+        # previously needed "with self.op.get_context().autocommit_block():"
+        # which is no longer valid in SQLA 2.0
+        pass
 
     @skip("cockroachdb")  # noqa
     def test_modify_type_int_str(self):

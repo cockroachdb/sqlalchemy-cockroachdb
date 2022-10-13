@@ -16,3 +16,6 @@ class CockroachDBDialect_asyncpg(PGDialect_asyncpg, CockroachDBDialect):
     async def setup_asyncpg_json_codec(self, conn):
         # https://github.com/cockroachdb/cockroach/issues/9990#issuecomment-579202144
         pass
+
+    def get_isolation_level_values(self, dbapi_conn):
+        return ("SERIALIZABLE",)

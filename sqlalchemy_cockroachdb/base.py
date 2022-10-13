@@ -112,11 +112,6 @@ class CockroachDBDialect(PGDialect):
         kwargs["server_side_cursors"] = False
         super().__init__(*args, **kwargs)
 
-    @classmethod
-    def dbapi(cls):
-        # this gets defined at the driver level (e.g. psycopg2)
-        raise NotImplementedError
-
     def initialize(self, connection):
         # Bypass PGDialect's initialize implementation, which looks at
         # server_version_info and performs postgres-specific queries
@@ -185,6 +180,21 @@ class CockroachDBDialect(PGDialect):
     def has_table(self, conn, table, schema=None):
         # Upstream implementation needs pg_table_is_visible().
         return any(t == table for t in self.get_table_names(conn, schema=schema))
+
+    def get_multi_columns(
+        self, connection, schema, filter_names, scope, kind, **kw
+    ):
+        """
+        PGDialect in SQLA 2.0 uses get_multi_columns() when reflecting a table
+        using Table(…, autoload_with=engine), so we'll just return the values
+        for the first table in the filter_names list for now (since there
+        should only be just one).
+        """
+        if not filter_names or not isinstance(filter_names, list) or len(filter_names) > 1:
+            raise ValueError("filter_names must be a single-value list (for now)")
+        table_name = filter_names[0]
+        col_info = self.get_columns(connection, table_name, schema, **kw)
+        return {(schema, table_name): col_info}
 
     # The upstream implementations of the reflection functions below depend on
     # correlated subqueries which are not yet supported.

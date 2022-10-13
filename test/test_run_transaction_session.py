@@ -106,8 +106,7 @@ class RunTransactionSessionTest(BaseRunTransactionTest):
                     accounts[0].balance += 100
                     accounts[1].balance -= 100
 
-            with testing.expect_deprecated_20("The Session.autocommit parameter is deprecated"):
-                run_transaction(Session, txn_body)
+            run_transaction(Session, txn_body)
 
         self.run_parallel_transactions(callback, connection)
 
@@ -117,7 +116,6 @@ class RunTransactionSessionTest(BaseRunTransactionTest):
             sess.execute(text("select crdb_internal.force_retry('1s')"))
             return [r for r in rs]
 
-        with testing.expect_deprecated_20("The Session.autocommit parameter is deprecated"):
-            Session = sessionmaker(testing.db)
-            rs = run_transaction(Session, txn_body)
-            assert rs[0] == (1, 100)
+        Session = sessionmaker(testing.db)
+        rs = run_transaction(Session, txn_body)
+        assert rs[0] == (1, 100)

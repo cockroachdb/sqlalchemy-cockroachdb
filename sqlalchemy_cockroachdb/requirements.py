@@ -161,6 +161,19 @@ class Requirements(SuiteRequirementsSQLA, SuiteRequirementsAlembic):
             lambda config: config.db.dialect.is_async
         )
 
+    @property
+    def array_type(self):
+        # DDL like
+        #
+        # CREATE TABLE foo (thing INTEGER[])
+        #
+        # throws 'FeatureNotSupported: at or near "]": syntax error: unimplemented'
+        return exclusions.closed()
+
+    @property
+    def uuid_data_type(self):
+        return exclusions.open()
+
     def get_isolation_levels(self, config):
         return {"default": "SERIALIZABLE", "supported": ["SERIALIZABLE"]}
 
