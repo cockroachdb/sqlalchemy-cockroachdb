@@ -11,4 +11,4 @@ mock
 more-itertools
 psycopg2
 pytest
-sqlalchemy
+sqlalchemy==2.0.0b1

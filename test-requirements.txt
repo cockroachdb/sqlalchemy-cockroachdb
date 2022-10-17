@@ -30,7 +30,7 @@ pyparsing==2.4.7
     # via packaging
 pytest==6.2.4
     # via -r test-requirements.in
-sqlalchemy==1.4.27
+sqlalchemy==2.0.0b1
     # via
     #   -r test-requirements.in
     #   alembic
