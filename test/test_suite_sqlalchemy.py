@@ -1,5 +1,4 @@
 from sqlalchemy import __version__ as sa_version
-from sqlalchemy.testing import combinations
 from sqlalchemy.testing import skip
 from sqlalchemy.testing.suite import *  # noqa
 from sqlalchemy.testing.suite import ComponentReflectionTest as _ComponentReflectionTest
@@ -95,7 +94,9 @@ class CompositeKeyReflectionTest(_CompositeKeyReflectionTest):
 class HasIndexTest(_HasIndexTest):
     @skip("cockroachdb")  # noqa
     def test_has_index(self):
-        # ObjectNotInPrerequisiteState: index "my_idx_2" in the middle of being added, try again later
+        """
+        ObjectNotInPrerequisiteState: index "my_idx_2" in the middle of being added, try again later
+        """  # noqa
         pass
 
 
@@ -120,7 +121,7 @@ class ExpandingBoundInTest(_ExpandingBoundInTest):
 
 
 class LongNameBlowoutTest(_LongNameBlowoutTest):
-    @combinations(
+    @testing.combinations(
         ("fk",),
         ("pk",),
         ("ix",),
@@ -129,9 +130,11 @@ class LongNameBlowoutTest(_LongNameBlowoutTest):
         argnames="type_",
     )
     def test_long_convention_name(self, type_, metadata, connection):
-        # https://github.com/cockroachdb/cockroach/issues/71908
-        # ... and also issues with ...
-        # "asyncpg.exceptions.InvalidParameterValueError: invalid locale C: language: tag is not well-formed"
+        """ 
+        https://github.com/cockroachdb/cockroach/issues/71908
+        ... and also issues with ...
+        "asyncpg.exceptions.InvalidParameterValueError: invalid locale C: language: tag is not well-formed"
+        """  # noqa
         if connection.dialect.driver != "asyncpg":
             super().test_long_convention_name(type_, metadata, connection, None)
 
