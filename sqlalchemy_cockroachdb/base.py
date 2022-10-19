@@ -15,7 +15,7 @@ import sqlalchemy.types as sqltypes
 from .stmt_compiler import CockroachCompiler, CockroachIdentifierPreparer
 from .ddl_compiler import CockroachDDLCompiler
 
-import pkg_resources
+from importlib.metadata import version
 
 # Map type names (as returned by information_schema) to sqlalchemy type
 # objects.
@@ -145,8 +145,8 @@ class CockroachDBDialect(PGDialect):
         # and onwards.
         if self._is_v211plus and not self.disable_cockroachdb_telemetry:
             sqlalchemy_version_string = ""
-            dialect_version = pkg_resources.require("sqlalchemy-cockroachdb")[0].version
-            sqlalchemy_version = pkg_resources.require("sqlalchemy")[0].version
+            dialect_version = version("sqlalchemy-cockroachdb")
+            sqlalchemy_version = version("SQLAlchemy")
             matches = re.findall(r"(\d+\.\d+)(\.|$)", sqlalchemy_version)
             if len(matches) == 0:
                 sqlalchemy_version_string = sqlalchemy_version
