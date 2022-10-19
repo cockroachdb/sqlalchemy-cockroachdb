@@ -146,7 +146,7 @@ class CockroachDBDialect(PGDialect):
         if self._is_v211plus and not self.disable_cockroachdb_telemetry:
             sqlalchemy_version_string = ""
             dialect_version = version("sqlalchemy-cockroachdb")
-            sqlalchemy_version = version("SQLAlchemy")
+            sqlalchemy_version = version("sqlalchemy")
             matches = re.findall(r"(\d+\.\d+)(\.|$)", sqlalchemy_version)
             if len(matches) == 0:
                 sqlalchemy_version_string = sqlalchemy_version
