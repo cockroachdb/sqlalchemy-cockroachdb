@@ -1,0 +1,5 @@
+[tool.pytest.ini_options]
+addopts = "--tb native -v -r sfxX --maxfail=250 -p warnings -p logging --strict-markers"
+markers = [
+    "backend: tests that should run on all backends; typically dialect-sensitive",
+]
