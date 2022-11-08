@@ -29,7 +29,7 @@ def run_transaction(transactor, callback, max_retries=None, max_backoff=0):
     ``max_backoff`` is an optional integer that specifies the capped number of seconds
     for the exponential back-off.
     """
-    if isinstance(transactor, sqlalchemy.engine.Connection):
+    if isinstance(transactor, (sqlalchemy.engine.Connection, sqlalchemy.orm.Session)):
         return _txn_retry_loop(transactor, callback, max_retries, max_backoff)
     elif isinstance(transactor, sqlalchemy.engine.Engine):
         with transactor.connect() as connection:
