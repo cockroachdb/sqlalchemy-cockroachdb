@@ -112,11 +112,6 @@ class CockroachDBDialect(PGDialect):
         kwargs["server_side_cursors"] = False
         super().__init__(*args, **kwargs)
 
-    @classmethod
-    def import_dbapi(cls):
-        # this gets defined at the driver level (e.g. psycopg2)
-        raise NotImplementedError
-
     def initialize(self, connection):
         # Bypass PGDialect's initialize implementation, which looks at
         # server_version_info and performs postgres-specific queries
