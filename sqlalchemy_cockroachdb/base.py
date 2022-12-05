@@ -113,7 +113,7 @@ class CockroachDBDialect(PGDialect):
         super().__init__(*args, **kwargs)
 
     @classmethod
-    def dbapi(cls):
+    def import_dbapi(cls):
         # this gets defined at the driver level (e.g. psycopg2)
         raise NotImplementedError
 
