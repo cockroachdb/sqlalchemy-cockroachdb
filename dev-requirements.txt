@@ -1,8 +1,8 @@
-backports.entry-points-selectable==1.1.1
+backports-entry-points-selectable==1.1.1
     # via virtualenv
 bleach==4.1.0
     # via readme-renderer
-certifi==2021.10.8
+certifi==2022.12.7
     # via requests
 cffi==1.15.0
     # via cryptography
@@ -24,12 +24,8 @@ idna==3.3
     # via requests
 importlib-metadata==4.8.2
     # via
-    #   backports.entry-points-selectable
     #   keyring
-    #   pluggy
-    #   tox
     #   twine
-    #   virtualenv
 jeepney==0.7.1
     # via
     #   keyring
@@ -56,12 +52,12 @@ pyparsing==2.4.7
     # via packaging
 readme-renderer==30.0
     # via twine
-requests-toolbelt==0.9.1
-    # via twine
 requests==2.26.0
     # via
     #   requests-toolbelt
     #   twine
+requests-toolbelt==0.9.1
+    # via twine
 rfc3986==1.5.0
     # via twine
 secretstorage==3.3.1
@@ -79,8 +75,6 @@ tqdm==4.62.3
     # via twine
 twine==3.6.0
     # via -r dev-requirements.in
-typing-extensions==3.10.0.2
-    # via importlib-metadata
 urllib3==1.26.7
     # via requests
 virtualenv==20.10.0
