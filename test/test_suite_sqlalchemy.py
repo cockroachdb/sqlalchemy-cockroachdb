@@ -103,7 +103,7 @@ class HasIndexTest(_HasIndexTest):
 class HasTableTest(_HasTableTest):
     @skip("cockroachdb")  # noqa
     def test_has_table_view(self):
-        # FeatureNotSupported: unimplemented: views do not currently support * expressions
+        # has_table() kwarg 'info_cache' not supported here
         pass
 
     @skip("cockroachdb")  # noqa
