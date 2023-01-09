@@ -3,7 +3,7 @@ from sqlalchemy.dialects.postgresql.base import PGDDLCompiler
 
 
 class CockroachDDLCompiler(PGDDLCompiler):
-    def visit_computed_column(self, generated):
+    def visit_computed_column(self, generated, **kw):
         if generated.persisted is False:
             raise exc.CompileError(
                 "CockroachDB computed columns do not support 'virtual' "
