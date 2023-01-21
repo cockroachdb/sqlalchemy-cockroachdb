@@ -4,7 +4,7 @@
 # To add/update dependencies, update test-requirements.in (not the
 # generated test-requirements.txt) and run make update-requirements
 
-alembic==1.8.1
+alembic
 asyncpg
 futures
 mock
