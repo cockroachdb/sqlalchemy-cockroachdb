@@ -1,4 +1,4 @@
-alembic==1.8.1
+alembic==1.9.2
     # via -r test-requirements.in
 asyncpg==0.24.0
     # via -r test-requirements.in
