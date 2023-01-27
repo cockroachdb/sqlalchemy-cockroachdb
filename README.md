@@ -23,6 +23,12 @@ Use `pip` to install the latest version.
 
 `pip install sqlalchemy-cockroachdb`
 
+NOTE: This version of the dialect requires SQLAlchemy 2.0 or later. To work with
+earlier versions of SQLAlchemy you'll need to install an earlier version of this
+dialect.
+
+`pip install sqlalchemy-cockroachdb<2.0.0`
+
 Use a `cockroachdb` connection string when creating the `Engine`. For example,
 to connect to an insecure, local CockroachDB cluster using psycopg2:
 

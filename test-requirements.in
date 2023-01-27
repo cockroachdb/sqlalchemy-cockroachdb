@@ -10,5 +10,5 @@ futures
 mock
 more-itertools
 psycopg2
-pytest
-sqlalchemy==2.0.0b1
+pytest==7.1.3
+sqlalchemy>=2.0.0
