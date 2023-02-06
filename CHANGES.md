@@ -1,5 +1,7 @@
-# Version 1.4.5
-Unreleased
+# Version 2.0.0
+Released February ??, 2023
+
+- Applied dialect code and test changes for compatibility with SQLAlchemy 2.0.
 
 # Version 1.4.4
 Released September 9, 2022

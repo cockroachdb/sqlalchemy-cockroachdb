@@ -165,9 +165,9 @@ class Requirements(SuiteRequirementsSQLA, SuiteRequirementsAlembic):
     def array_type(self):
         # DDL like
         #
-        # CREATE TABLE foo (thing INTEGER[])
+        # CREATE TABLE foo (thing INTEGER[][])
         #
-        # throws 'FeatureNotSupported: at or near "]": syntax error: unimplemented'
+        # throws 'invalid syntax: statement ignored: at or near "]": syntax error: unimplemented'
         return exclusions.closed()
 
     @property
