@@ -177,7 +177,7 @@ class CockroachDBDialect(PGDialect):
             )
         ]
 
-    def has_table(self, conn, table, schema=None):
+    def has_table(self, conn, table, schema=None, info_cache=None):
         # Upstream implementation needs pg_table_is_visible().
         return any(t == table for t in self.get_table_names(conn, schema=schema))
 
