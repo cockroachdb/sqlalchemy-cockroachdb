@@ -10,7 +10,7 @@ charset-normalizer==2.0.7
     # via requests
 colorama==0.4.4
     # via twine
-cryptography==35.0.0
+cryptography==39.0.1
     # via secretstorage
 distlib==0.3.3
     # via virtualenv
