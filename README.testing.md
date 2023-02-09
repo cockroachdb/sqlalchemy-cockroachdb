@@ -4,7 +4,7 @@
 work if you have a local instance of CockroachDB installed:
 
     [db]
-    default=cockroachdb://root@localhost:26257/defaultdb?disable_cockroachdb_telemetry=True
+    default=cockroachdb://root@localhost:26257/defaultdb
 
 If you want to test against a remote server (or otherwise need to tweak
 the connection URI) simply create a file named "test.cfg" in the same
