@@ -6,7 +6,6 @@ from sqlalchemy.dialects.postgresql.base import PGDialect
 from sqlalchemy.dialects.postgresql import INET
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.compiler import compiles
-from sqlalchemy.util import asbool
 from sqlalchemy.util import warn
 import sqlalchemy.sql as sql
 
@@ -15,7 +14,6 @@ import sqlalchemy.types as sqltypes
 from .stmt_compiler import CockroachCompiler, CockroachIdentifierPreparer
 from .ddl_compiler import CockroachDDLCompiler
 
-from importlib.metadata import version
 
 # Map type names (as returned by information_schema) to sqlalchemy type
 # objects.
@@ -94,15 +92,6 @@ class CockroachDBDialect(PGDialect):
     preparer = CockroachIdentifierPreparer
     ddl_compiler = CockroachDDLCompiler
 
-    # Override connect so we can take disable_cockroachdb_telemetry as a connect_arg to sqlalchemy.
-    def connect(
-        self,
-        disable_cockroachdb_telemetry=False,
-        **kwargs,
-    ):
-        self.disable_cockroachdb_telemetry = asbool(disable_cockroachdb_telemetry)
-        return super().connect(**kwargs)
-
     def __init__(self, *args, **kwargs):
         if kwargs.get("use_native_hstore", False):
             raise NotImplementedError("use_native_hstore is not supported")
@@ -134,26 +123,6 @@ class CockroachDBDialect(PGDialect):
         self._has_native_jsonb = self._is_v2plus
         self._supports_savepoints = self._is_v201plus
         self.supports_native_enum = self._is_v202plus
-
-        # Increment third party tool telemetry counter for SQLAlchemy.
-        # The crdb_internal.increment_feature_counter only exists in v21.1 of CRDB
-        # and onwards.
-        if self._is_v211plus and not self.disable_cockroachdb_telemetry:
-            sqlalchemy_version_string = ""
-            dialect_version = version("sqlalchemy-cockroachdb")
-            sqlalchemy_version = version("sqlalchemy")
-            matches = re.findall(r"(\d+\.\d+)(\.|$)", sqlalchemy_version)
-            if len(matches) == 0:
-                sqlalchemy_version_string = sqlalchemy_version
-            else:
-                sqlalchemy_version_string = matches[0][0]
-            telemetry_query = "SELECT crdb_internal.increment_feature_counter(:val)"
-            connection.execute(
-                text(telemetry_query), dict(val=f"sqlalchemy-cockroachdb {dialect_version}")
-            )
-            connection.execute(
-                text(telemetry_query), dict(val=f"sqlalchemy {sqlalchemy_version_string}")
-            )
 
     def _get_server_version_info(self, conn):
         # PGDialect expects a postgres server version number here,
