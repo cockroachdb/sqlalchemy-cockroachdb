@@ -92,6 +92,15 @@ class CockroachDBDialect(PGDialect):
     preparer = CockroachIdentifierPreparer
     ddl_compiler = CockroachDDLCompiler
 
+    # Override connect so we can take disable_cockroachdb_telemetry as a connect_arg to sqlalchemy.
+    # The option is not used any more, but removing it is a backwards-incompatible change.
+    def connect(
+        self,
+        disable_cockroachdb_telemetry=False,
+        **kwargs,
+    ):
+        return super().connect(**kwargs)
+
     def __init__(self, *args, **kwargs):
         if kwargs.get("use_native_hstore", False):
             raise NotImplementedError("use_native_hstore is not supported")
