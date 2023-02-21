@@ -1,5 +1,5 @@
 # Version 2.0.0
-Released February ??, 2023
+Released February 21, 2023
 
 - Applied dialect code and test changes for compatibility with SQLAlchemy 2.0. This
   version of the dialect requires SQLAlchemy 2.0, so to work with earlier versions of
