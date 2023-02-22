@@ -1,0 +1,60 @@
+name: Test and Lint
+
+on:
+  # Triggers the workflow on push or pull request events.
+  push:
+    # This should disable running the workflow on tags, according to the
+    # on.<push|pull_request>.<branches|tags> GitHub Actions docs.
+    branches:
+      - "*"
+  pull_request:
+    types: [opened, reopened]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# This allows a subsequently queued workflow run to interrupt previous runs.
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
+jobs:
+  test-py39:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        crdb-version: ["latest-v21.2", "latest-v22.1", "latest-v22.2"]
+    env:
+      TOXENV: py39
+      TOX_VERSION: 3.23.1
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9' 
+      - name: Start CockroachDB
+        run: |
+          docker pull cockroachdb/cockroach:${{ matrix.crdb-version }}
+          docker run --rm -d --name crdb -p 26257:26257 \
+            cockroachdb/cockroach:${{ matrix.crdb-version }} start-single-node --insecure
+      - name: Install testrunner
+        run: pip install --user tox==${TOX_VERSION}
+      - name: Test
+        run: ${HOME}/.local/bin/tox
+
+  lint:
+    runs-on: ubuntu-latest
+    env:
+      TOXENV: py39
+      TOX_VERSION: 3.23.1
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9' 
+      - name: Install testrunner
+        run: pip install --user tox==${TOX_VERSION}
+      - name: Lint
+        run: ${HOME}/.local/bin/tox -e lint
+
