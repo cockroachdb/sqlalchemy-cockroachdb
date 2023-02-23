@@ -8,7 +8,7 @@ on:
     branches:
       - "*"
   pull_request:
-    types: [opened, reopened]
+    types: [opened, reopened, synchronize]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
