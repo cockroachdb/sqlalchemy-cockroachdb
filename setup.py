@@ -3,10 +3,10 @@ import re
 
 from setuptools import setup, find_packages
 
-with open(os.path.join(os.path.dirname(__file__), "sqlalchemy_cockroachdb", "__init__.py")) as v:
+with open(os.path.join(os.path.dirname(__file__), "sqlalchemy_cockroachdb", "__init__.py"), encoding='UTF-8') as v:
     VERSION = re.compile(r'.*__version__ = "(.*?)"', re.S).match(v.read()).group(1)
 
-with open(os.path.join(os.path.dirname(__file__), "README.md")) as f:
+with open(os.path.join(os.path.dirname(__file__), "README.md"), encoding='UTF-8') as f:
     README = f.read()
 
 setup(
