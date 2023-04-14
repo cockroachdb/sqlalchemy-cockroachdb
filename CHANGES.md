@@ -1,5 +1,5 @@
 # Version 2.0.1
-Unreleased
+April 14, 2023
 
 - Enable AUTOCOMMIT isolation_level for SQLA 2.0 (#205)
 
