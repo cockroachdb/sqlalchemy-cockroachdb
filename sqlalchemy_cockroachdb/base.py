@@ -3,6 +3,7 @@ import re
 import threading
 from sqlalchemy import text
 from sqlalchemy.dialects.postgresql.base import PGDialect
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.dialects.postgresql import INET
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.compiler import compiles
@@ -199,7 +200,7 @@ class CockroachDBDialect(PGDialect):
                 "numeric_precision, numeric_scale, character_maximum_length, "
                 "CASE is_generated WHEN 'ALWAYS' THEN true WHEN 'NEVER' THEN false "
                 "ELSE is_generated::bool END AS is_generated, "
-                "generation_expression, is_hidden::bool "
+                "generation_expression, is_hidden::bool, crdb_sql_type "
                 "FROM information_schema.columns "
                 "WHERE table_schema = :table_schema AND table_name = :table_name "
             )
@@ -212,6 +213,11 @@ class CockroachDBDialect(PGDialect):
         res = []
         for row in rows:
             name, type_str, nullable, default = row[:4]
+            if type_str == "ARRAY":
+                is_array = True
+                type_str, _ = row.crdb_sql_type.split("[", maxsplit=1)
+            else:
+                is_array = False
             # When there are type parameters, attach them to the
             # returned type object.
             m = re.match(r"^(\w+(?: \w+)*)(?:\(([0-9, ]*)\))?$", type_str)
@@ -270,7 +276,7 @@ class CockroachDBDialect(PGDialect):
 
             column_info = dict(
                 name=name,
-                type=typ,
+                type=ARRAY(typ) if is_array else typ,
                 nullable=nullable,
                 default=default,
                 autoincrement=autoincrement,
