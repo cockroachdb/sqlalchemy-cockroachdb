@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        crdb-version: ["latest-v21.2", "latest-v22.1", "latest-v22.2"]
+        crdb-version: ["latest-v22.1", "latest-v22.2", "latest-v23.1"]
     env:
       TOXENV: py39
       TOX_VERSION: 3.23.1

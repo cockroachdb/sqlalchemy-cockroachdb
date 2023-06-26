@@ -4,7 +4,7 @@
 # generated dev-requirements.txt), run make update-requirements,
 # then make bootstrap.
 
-tox
+tox==3.23.1
 
 # Twine is used in the release process to upload the package.
 twine
