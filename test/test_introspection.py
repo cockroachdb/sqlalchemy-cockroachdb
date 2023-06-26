@@ -73,7 +73,7 @@ class TestTypeReflection(fixtures.TestBase):
     COLUMN_NAME = "c"
 
     @testing.provide_metadata
-    def _test(self, typ, expected):
+    def _test(self, typ, expected, array_item_type=None):
         with testing.db.begin() as conn:
             conn.execute(
                 text(
@@ -88,6 +88,17 @@ class TestTypeReflection(fixtures.TestBase):
         t = Table(self.TABLE_NAME, self.metadata, autoload_with=testing.db)
         c = t.c[self.COLUMN_NAME]
         assert isinstance(c.type, expected)
+        if array_item_type:
+            assert isinstance(c.type.item_type, array_item_type)
+
+    def test_array(self):
+        self._test("boolean[]", sqltypes.ARRAY, sqltypes.BOOLEAN)
+        self._test("date[]", sqltypes.ARRAY, sqltypes.DATE)
+        self._test("decimal[]", sqltypes.ARRAY, sqltypes.DECIMAL)
+        self._test("float[]", sqltypes.ARRAY, sqltypes.FLOAT)
+        self._test("int[]", sqltypes.ARRAY, sqltypes.INTEGER)
+        self._test("timestamp[]", sqltypes.ARRAY, sqltypes.TIMESTAMP)
+        self._test("varchar(10)[]", sqltypes.ARRAY, sqltypes.VARCHAR)
 
     def test_boolean(self):
         for t in ["bool", "boolean"]:

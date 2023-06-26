@@ -1,6 +1,7 @@
 # Version 2.0.2
 Unreleased
 
+- Implement reflection for array types (#213)
 
 # Version 2.0.1
 April 14, 2023
