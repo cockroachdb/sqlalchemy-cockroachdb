@@ -37,7 +37,6 @@ class ComponentReflectionTest(_ComponentReflectionTest):
         # https://github.com/cockroachdb/cockroach/issues/71908
         pass
 
-    # @skip("cockroachdb")  # noqa
     def test_get_multi_columns(self):
         insp = inspect(config.db)
         actual = insp.get_multi_columns()
