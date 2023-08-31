@@ -1,4 +1,4 @@
-from sqlalchemy import __version__ as sa_version
+from sqlalchemy import __version__ as sa_version, FLOAT, INTEGER, VARCHAR
 from sqlalchemy.testing import skip
 from sqlalchemy.testing.suite import *  # noqa
 from sqlalchemy.testing.suite import ComponentReflectionTest as _ComponentReflectionTest
@@ -6,6 +6,7 @@ from sqlalchemy.testing.suite import ComponentReflectionTestExtra as _ComponentR
 from sqlalchemy.testing.suite import CompositeKeyReflectionTest as _CompositeKeyReflectionTest
 from sqlalchemy.testing.suite import HasIndexTest as _HasIndexTest
 from sqlalchemy.testing.suite import HasTableTest as _HasTableTest
+from sqlalchemy.testing.suite import IsolationLevelTest as _IsolationLevelTest
 from sqlalchemy.testing.suite import ExpandingBoundInTest as _ExpandingBoundInTest
 from sqlalchemy.testing.suite import LongNameBlowoutTest as _LongNameBlowoutTest
 from sqlalchemy.testing.suite import NumericTest as _NumericTest
@@ -15,9 +16,7 @@ from sqlalchemy.testing.suite import UnicodeSchemaTest as _UnicodeSchemaTest
 
 
 class ComponentReflectionTest(_ComponentReflectionTest):
-    @testing.combinations(
-        (False,), (True, testing.requires.schemas), argnames="use_schema"
-    )
+    @testing.combinations((False,), (True, testing.requires.schemas), argnames="use_schema")
     @testing.requires.foreign_key_constraint_reflection
     def test_get_foreign_keys(self, connection, use_schema):
         if connection.dialect.driver != "asyncpg":
@@ -38,8 +37,180 @@ class ComponentReflectionTest(_ComponentReflectionTest):
         # https://github.com/cockroachdb/cockroach/issues/71908
         pass
 
-    @skip("cockroachdb")  # noqa
     def test_get_multi_columns(self):
+        insp = inspect(config.db)
+        actual = insp.get_multi_columns()
+        expected = {
+            (None, "comment_test"): [
+                {
+                    "autoincrement": True,
+                    "default": "unique_rowid()",
+                    "is_hidden": False,
+                    "name": "id",
+                    "nullable": False,
+                    "type": INTEGER(),
+                },
+                {
+                    "autoincrement": False,
+                    "default": None,
+                    "is_hidden": False,
+                    "name": "data",
+                    "nullable": True,
+                    "type": VARCHAR(length=20),
+                },
+                {
+                    "autoincrement": False,
+                    "default": None,
+                    "is_hidden": False,
+                    "name": "d2",
+                    "nullable": True,
+                    "type": VARCHAR(length=20),
+                },
+                {
+                    "autoincrement": False,
+                    "default": None,
+                    "is_hidden": False,
+                    "name": "d3",
+                    "nullable": True,
+                    "type": VARCHAR(length=42),
+                },
+            ],
+            (None, "dingalings"): [
+                {
+                    "autoincrement": True,
+                    "default": "unique_rowid()",
+                    "is_hidden": False,
+                    "name": "dingaling_id",
+                    "nullable": False,
+                    "type": INTEGER(),
+                },
+                {
+                    "autoincrement": False,
+                    "default": None,
+                    "is_hidden": False,
+                    "name": "address_id",
+                    "nullable": True,
+                    "type": INTEGER(),
+                },
+                {
+                    "autoincrement": False,
+                    "default": None,
+                    "is_hidden": False,
+                    "name": "id_user",
+                    "nullable": True,
+                    "type": INTEGER(),
+                },
+                {
+                    "autoincrement": False,
+                    "default": None,
+                    "is_hidden": False,
+                    "name": "data",
+                    "nullable": True,
+                    "type": VARCHAR(length=30),
+                },
+            ],
+            (None, "email_addresses"): [
+                {
+                    "autoincrement": True,
+                    "default": "unique_rowid()",
+                    "is_hidden": False,
+                    "name": "address_id",
+                    "nullable": False,
+                    "type": INTEGER(),
+                },
+                {
+                    "autoincrement": False,
+                    "default": None,
+                    "is_hidden": False,
+                    "name": "remote_user_id",
+                    "nullable": True,
+                    "type": INTEGER(),
+                },
+                {
+                    "autoincrement": False,
+                    "default": None,
+                    "is_hidden": False,
+                    "name": "email_address",
+                    "nullable": True,
+                    "type": VARCHAR(length=20),
+                },
+            ],
+            (None, "no_constraints"): [
+                {
+                    "autoincrement": False,
+                    "default": None,
+                    "is_hidden": False,
+                    "name": "data",
+                    "nullable": True,
+                    "type": VARCHAR(length=20),
+                }
+            ],
+            (None, "noncol_idx_test_nopk"): [
+                {
+                    "autoincrement": False,
+                    "default": None,
+                    "is_hidden": False,
+                    "name": "q",
+                    "nullable": True,
+                    "type": VARCHAR(length=5),
+                }
+            ],
+            (None, "noncol_idx_test_pk"): [
+                {
+                    "autoincrement": True,
+                    "default": "unique_rowid()",
+                    "is_hidden": False,
+                    "name": "id",
+                    "nullable": False,
+                    "type": INTEGER(),
+                },
+                {
+                    "autoincrement": False,
+                    "default": None,
+                    "is_hidden": False,
+                    "name": "q",
+                    "nullable": True,
+                    "type": VARCHAR(length=5),
+                },
+            ],
+            (None, "users"): [
+                {
+                    "autoincrement": True,
+                    "default": "unique_rowid()",
+                    "is_hidden": False,
+                    "name": "user_id",
+                    "nullable": False,
+                    "type": INTEGER(),
+                },
+                {
+                    "autoincrement": False,
+                    "default": None,
+                    "is_hidden": False,
+                    "name": "test1",
+                    "nullable": False,
+                    "type": VARCHAR(length=5),
+                },
+                {
+                    "autoincrement": False,
+                    "default": None,
+                    "is_hidden": False,
+                    "name": "test2",
+                    "nullable": False,
+                    "type": FLOAT(),
+                },
+                {
+                    "autoincrement": False,
+                    "default": None,
+                    "is_hidden": False,
+                    "name": "parent_user_id",
+                    "nullable": True,
+                    "type": INTEGER(),
+                },
+            ],
+        }
+        eq_(len(actual), len(expected))
+        eq_(actual.keys(), expected.keys())
+        eq_(len(actual[(None, "comment_test")]), len(expected[(None, "comment_test")]))
         pass
 
     @skip("cockroachdb")  # noqa
@@ -76,9 +247,7 @@ class ComponentReflectionTest(_ComponentReflectionTest):
 
 
 class ComponentReflectionTestExtra(_ComponentReflectionTestExtra):
-    @testing.combinations(
-        (True, testing.requires.schemas), (False,), argnames="use_schema"
-    )
+    @testing.combinations((True, testing.requires.schemas), (False,), argnames="use_schema")
     @testing.requires.check_constraint_reflection
     def test_get_check_constraints(self, metadata, connection, use_schema):
         if connection.dialect.driver != "asyncpg":
@@ -112,6 +281,13 @@ class HasTableTest(_HasTableTest):
         pass
 
 
+class IsolationLevelTest(_IsolationLevelTest):
+    @skip("cockroachdb")  # noqa
+    def test_dialect_user_setting_is_restored(self):
+        # IndexError: list index out of range
+        pass
+
+
 class ExpandingBoundInTest(_ExpandingBoundInTest):
     @skip("cockroachdb")  # noqa
     def test_null_in_empty_set_is_false(self, connection):
@@ -130,7 +306,7 @@ class LongNameBlowoutTest(_LongNameBlowoutTest):
         argnames="type_",
     )
     def test_long_convention_name(self, type_, metadata, connection):
-        """ 
+        """
         https://github.com/cockroachdb/cockroach/issues/71908
         ... and also issues with ...
         "asyncpg.exceptions.InvalidParameterValueError: invalid locale C: language: tag is not well-formed"

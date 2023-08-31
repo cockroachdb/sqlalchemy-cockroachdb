@@ -160,20 +160,13 @@ class CockroachDBDialect(PGDialect):
         # Upstream implementation needs pg_table_is_visible().
         return any(t == table for t in self.get_table_names(conn, schema=schema))
 
-    def get_multi_columns(
-        self, connection, schema, filter_names, scope, kind, **kw
-    ):
-        """
-        PGDialect in SQLA 2.0 uses get_multi_columns() when reflecting a table
-        using Table(…, autoload_with=engine), so we'll just return the values
-        for the first table in the filter_names list for now (since there
-        should only be just one).
-        """
-        if not filter_names or not isinstance(filter_names, list) or len(filter_names) > 1:
-            raise ValueError("filter_names must be a single-value list (for now)")
-        table_name = filter_names[0]
-        col_info = self.get_columns(connection, table_name, schema, **kw)
-        return {(schema, table_name): col_info}
+    def get_multi_columns(self, connection, schema, filter_names, scope, kind, **kw):
+        if not filter_names:
+            filter_names = self.get_table_names(connection, schema)
+        return {
+            (schema, table_name): self.get_columns(connection, table_name, schema, **kw)
+            for table_name in filter_names
+        }
 
     # The upstream implementations of the reflection functions below depend on
     # correlated subqueries which are not yet supported.

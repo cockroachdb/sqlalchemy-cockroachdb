@@ -2,6 +2,7 @@
 Unreleased
 
 - Implement reflection for array types (#213)
+- Fix get_multi_columns() to support multiple table names in filter_array (#220)
 
 # Version 2.0.1
 April 14, 2023
