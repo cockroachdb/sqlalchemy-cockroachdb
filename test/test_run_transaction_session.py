@@ -1,9 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
-from sqlalchemy import Column, select, testing, text
-from sqlalchemy.orm import Session
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Column, DateTime, func, Integer, select, testing, text
+from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.testing import fixtures
-from sqlalchemy.types import Integer
 import threading
 
 from sqlalchemy_cockroachdb import run_transaction
@@ -119,3 +117,37 @@ class RunTransactionSessionTest(BaseRunTransactionTest):
         Session = sessionmaker(testing.db)
         rs = run_transaction(Session, txn_body)
         assert rs[0] == (1, 100)
+
+
+class InsertReturningTest(fixtures.DeclarativeMappedTest):
+    @classmethod
+    def setup_classes(cls):
+        Base = cls.DeclarativeBasic
+
+        class Item(Base):
+            __tablename__ = "item"
+            __mapper_args__ = {"eager_defaults": True}
+
+            id = Column(Integer, primary_key=True, autoincrement=True)
+            created = Column(DateTime, server_default=func.now())
+
+    def test_insert_returning(self):
+        # This test demonstrates the use of the INSERT RETURNING
+        # clause with the ORM to return server-generated values from a
+        # transaction. The expire_on_commit=False option is necessary
+        # to make the objects valid after the transaction has
+        # completed. The eager_defaults option (set above) is
+        # necessary to handle fields other than the primary key (which
+        # is always loaded eagerly)
+
+        Item = self.classes.Item
+
+        def txn_body(session):
+            item = Item()
+            session.add(item)
+            return item
+
+        Session = sessionmaker(testing.db, expire_on_commit=False)
+        item = run_transaction(Session, txn_body)
+        assert item.id is not None
+        assert item.created is not None
