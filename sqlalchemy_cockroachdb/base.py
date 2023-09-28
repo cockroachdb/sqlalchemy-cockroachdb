@@ -2,6 +2,7 @@ import collections
 import re
 import threading
 from sqlalchemy import text
+from sqlalchemy import util
 from sqlalchemy.dialects.postgresql.base import PGDialect
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.dialects.postgresql import INET
@@ -357,6 +358,24 @@ class CockroachDBDialect(PGDialect):
                 fkeys.append(fkey_d)
         return fkeys
 
+    @util.memoized_property
+    def _fk_regex_pattern(self):
+        # optionally quoted token
+        qtoken = r'(?:"[^"]+"|[A-Za-z0-9_\S]+?)'
+
+        # https://www.postgresql.org/docs/current/static/sql-createtable.html
+        return re.compile(
+            r"FOREIGN KEY \((.*?)\) "
+            rf"REFERENCES (?:({qtoken})\.)?({qtoken})\(((?:{qtoken}(?: *, *)?)+)\)"  # noqa: E501
+            r"[\s]?(MATCH (FULL|PARTIAL|SIMPLE)+)?"
+            r"[\s]?(ON UPDATE "
+            r"(CASCADE|RESTRICT|NO ACTION|SET NULL|SET DEFAULT)+)?"
+            r"[\s]?(ON DELETE "
+            r"(CASCADE|RESTRICT|NO ACTION|SET NULL|SET DEFAULT)+)?"
+            r"[\s]?(DEFERRABLE|NOT DEFERRABLE)?"
+            r"[\s]?(INITIALLY (DEFERRED|IMMEDIATE)+)?"
+        )
+
     def get_foreign_keys(
         self, connection, table_name, schema=None, postgresql_ignore_search_path=False, **kw
     ):
@@ -390,16 +409,7 @@ class CockroachDBDialect(PGDialect):
           ORDER BY 1
         """
         # http://www.postgresql.org/docs/9.0/static/sql-createtable.html
-        FK_REGEX = re.compile(
-            r"FOREIGN KEY \((.*?)\) REFERENCES (?:(.*?)\.)?(.*?)[\s]?\((.*?)\)"
-            r"[\s]?(MATCH (FULL|PARTIAL|SIMPLE)+)?"
-            r"[\s]?(ON UPDATE "
-            r"(CASCADE|RESTRICT|NO ACTION|SET NULL|SET DEFAULT)+)?"
-            r"[\s]?(ON DELETE "
-            r"(CASCADE|RESTRICT|NO ACTION|SET NULL|SET DEFAULT)+)?"
-            r"[\s]?(DEFERRABLE|NOT DEFERRABLE)?"
-            r"[\s]?(INITIALLY (DEFERRED|IMMEDIATE)+)?"
-        )
+        FK_REGEX = self._fk_regex_pattern
 
         t = sql.text(FK_SQL).columns(conname=sqltypes.Unicode, condef=sqltypes.Unicode)
         c = connection.execute(t, {"table": table_oid})
