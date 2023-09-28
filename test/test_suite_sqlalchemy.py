@@ -371,7 +371,12 @@ class TrueDivTest(_TrueDivTest):
 
 
 class UnicodeSchemaTest(_UnicodeSchemaTest):
+    @skip("cockroachdb")  # noqa
     def test_reflect(self, connection):
-        # https://github.com/cockroachdb/cockroach/issues/71908
+        # TODO: unskip test once
+        #       https://github.com/cockroachdb/cockroach/issues/111171
+        #       is resolved. Also verify that
+        #       https://github.com/cockroachdb/cockroach/issues/71908
+        #       fixed issue with asyncpg
         if connection.dialect.driver != "asyncpg":
             super().test_reflect(connection)
