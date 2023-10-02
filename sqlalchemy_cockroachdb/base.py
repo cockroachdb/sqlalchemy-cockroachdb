@@ -361,7 +361,7 @@ class CockroachDBDialect(PGDialect):
     @util.memoized_property
     def _fk_regex_pattern(self):
         # optionally quoted token
-        qtoken = r'(?:"[^"]+"|[A-Za-z0-9_\S]+?)'
+        qtoken = r'(?:"[^"]+"|[\w]+?)'
 
         # https://www.postgresql.org/docs/current/static/sql-createtable.html
         return re.compile(
