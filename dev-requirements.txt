@@ -22,8 +22,6 @@ importlib-metadata==6.8.0
     # via
     #   keyring
     #   twine
-importlib-resources==6.0.0
-    # via keyring
 jaraco-classes==3.3.0
     # via keyring
 jeepney==0.8.0
@@ -78,9 +76,7 @@ tox==3.23.1
     # via -r dev-requirements.in
 twine==4.0.2
     # via -r dev-requirements.in
-typing-extensions==4.7.1
-    # via rich
-urllib3==2.0.4
+urllib3==2.0.6
     # via
     #   requests
     #   twine
@@ -89,6 +85,4 @@ virtualenv==20.24.2
 webencodings==0.5.1
     # via bleach
 zipp==3.16.2
-    # via
-    #   importlib-metadata
-    #   importlib-resources
+    # via importlib-metadata
