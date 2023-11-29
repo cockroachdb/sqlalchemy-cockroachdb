@@ -7,7 +7,7 @@ cffi==1.15.1
 charset-normalizer==3.2.0
     # via requests
 cryptography==41.0.6
-    # via secretstorage
+    # via secretstorage.
 distlib==0.3.7
     # via virtualenv
 docutils==0.20.1
