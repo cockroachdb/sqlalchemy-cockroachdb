@@ -4,6 +4,8 @@ Unreleased
 - Implement reflection for array types (#213)
 - Fix get_multi_columns() to support multiple table names in filter_array (#220)
 - Enhance foreign key reflection to accommodate quoting differences with PostgreSQL
+- Add psycopg (v3) support (#185)
+- Remove unconditional import of psycopg2 (#176)
 
 # Version 2.0.1
 April 14, 2023
