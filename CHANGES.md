@@ -1,6 +1,9 @@
 # Version 2.0.3
 Unreleased
 
+- Add support for READ COMMITTED transaction isolation
+  (see [README.read_committed.md](README.read_committed.md))
+
 
 # Version 2.0.2
 January 10, 2023

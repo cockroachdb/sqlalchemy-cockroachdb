@@ -42,7 +42,7 @@ jobs:
         crdb-version: [
           "cockroach:latest-v22.2",
           "cockroach:latest-v23.1",
-          "cockroach-unstable:v23.2.0-beta.2"
+          "cockroach:latest-v23.2"
         ]
         db-alias: [
           "psycopg2",
@@ -53,8 +53,8 @@ jobs:
       TOXENV: py39
       TOX_VERSION: 3.23.1
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.9' 
       - name: Start CockroachDB
@@ -73,8 +73,8 @@ jobs:
       TOXENV: py39
       TOX_VERSION: 3.23.1
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.9' 
       - name: Install testrunner
