@@ -181,7 +181,7 @@ class Requirements(SuiteRequirementsSQLA, SuiteRequirementsAlembic):
         )
 
     def get_isolation_levels(self, config):
-        return {"default": "SERIALIZABLE", "supported": ["SERIALIZABLE", "AUTOCOMMIT"]}
+        return {"default": "SERIALIZABLE", "supported": ["SERIALIZABLE", "AUTOCOMMIT", "READ COMMITTED"]}
 
     @property
     def autocommit(self):
