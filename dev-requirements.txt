@@ -6,7 +6,7 @@ cffi==1.15.1
     # via cryptography
 charset-normalizer==3.2.0
     # via requests
-cryptography==41.0.6
+cryptography==42.0.0
     # via secretstorage
 distlib==0.3.7
     # via virtualenv
@@ -19,9 +19,7 @@ filelock==3.12.2
 idna==3.4
     # via requests
 importlib-metadata==6.8.0
-    # via
-    #   keyring
-    #   twine
+    # via twine
 jaraco-classes==3.3.0
     # via keyring
 jeepney==0.8.0
