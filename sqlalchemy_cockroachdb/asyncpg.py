@@ -18,4 +18,4 @@ class CockroachDBDialect_asyncpg(PGDialect_asyncpg, CockroachDBDialect):
         pass
 
     def get_isolation_level_values(self, dbapi_conn):
-        return ("SERIALIZABLE", "AUTOCOMMIT")
+        return ("SERIALIZABLE", "AUTOCOMMIT", "READ COMMITTED")

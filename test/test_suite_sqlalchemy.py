@@ -277,10 +277,22 @@ class InsertBehaviorTest(_InsertBehaviorTest):
 
 
 class IsolationLevelTest(_IsolationLevelTest):
+    def test_all_levels(self):
+        if not config.db.dialect._is_v232plus:
+            # TODO: enable when READ COMMITTED no longer a preview feature, since
+            #       SET CLUSTER SETTING cannot be used inside a multi-statement transaction
+            super().test_all_levels()
+
     @skip("cockroachdb")
     def test_dialect_user_setting_is_restored(self):
         # IndexError: list index out of range
         pass
+
+    def test_non_default_isolation_level(self):
+        if not config.db.dialect._is_v232plus:
+            # TODO: enable when READ COMMITTED no longer a preview feature, since
+            #       SET CLUSTER SETTING cannot be used inside a multi-statement transaction
+            super().test_non_default_isolation_level()
 
 
 class LongNameBlowoutTest(_LongNameBlowoutTest):
