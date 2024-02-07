@@ -8,14 +8,11 @@ the statement
 SET CLUSTER SETTING sql.txn.read_committed_isolation.enabled = true;
 ```
 
-Unfortunately, SQLAlchemy's "autobegin"
-functionality prevents us from using an `@event.listens_for(Engine, "connect")`
-function as that will throw
+This statement changes a persisted setting in the CockroachDB cluster. It is meant
+to be executed one time by a database operator/administrator.
 
-> sqlalchemy.exc.InternalError: (psycopg2.InternalError) SET CLUSTER SETTING cannot be used inside a multi-statement transaction
-
-Instead, we need to define a custom `connect=` function that we can pass to 
-`create_engine()`:
+For testing purposes, this adapter offers a custom `connect=` function that we
+can pass to  `create_engine()`, which will configure this setting:
 
 ```python
 import psycopg2
