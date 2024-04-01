@@ -222,10 +222,14 @@ class ComponentReflectionTest(_ComponentReflectionTest):
 
     @skip("cockroachdb")
     def test_get_multi_indexes(self):
+        # we return results for extra tables that the test does not expect:
+        # geography_columns, geometry_columns, spatial_ref_sys
         pass
 
     @skip("cockroachdb")
     def test_get_multi_pk_constraint(self):
+        # we return results for extra tables that the test does not expect:
+        # geography_columns, geometry_columns, spatial_ref_sys
         pass
 
     @skip("cockroachdb")
@@ -236,6 +240,7 @@ class ComponentReflectionTest(_ComponentReflectionTest):
     @skip("cockroachdb")
     def test_get_view_names(self):
         # TODO: What has changed in the SQLA 2.0 tests that causes this to return an empty list?
+        #       FWIW, insp.get_view_names() does still work IRL
         pass
 
     @testing.combinations(True, False, argnames="use_schema")
@@ -321,7 +326,9 @@ class QuotedNameArgumentTest(_QuotedNameArgumentTest):
     @quote_fixtures
     def test_get_indexes(self, name):
         # could not decorrelate subquery
-        if config.db.driver != "asyncpg":
+        if not (
+            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
+        ):
             super().test_get_indexes(name, None)
 
 
