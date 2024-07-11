@@ -1,28 +1,28 @@
 alembic==1.13.2
     # via -r test-requirements.in
-asyncpg==0.28.0
+async-timeout==4.0.3
+    # via asyncpg
+asyncpg==0.29.0
     # via -r test-requirements.in
-attrs==23.1.0
+attrs==23.2.0
     # via pytest
 futures==3.0.5
     # via -r test-requirements.in
-greenlet==2.0.2
-    # via sqlalchemy
 iniconfig==2.0.0
     # via pytest
-mako==1.2.4
+mako==1.3.5
     # via alembic
-markupsafe==2.1.3
+markupsafe==2.1.5
     # via mako
 mock==5.1.0
     # via -r test-requirements.in
-more-itertools==10.0.0
+more-itertools==10.3.0
     # via -r test-requirements.in
-packaging==23.1
+packaging==24.1
     # via pytest
-pluggy==1.2.0
+pluggy==1.5.0
     # via pytest
-psycopg==3.1.12
+psycopg==3.2.1
     # via -r test-requirements.in
 psycopg2==2.9.9
     # via -r test-requirements.in
@@ -36,7 +36,7 @@ sqlalchemy==2.0.31
     #   alembic
 tomli==2.0.1
     # via pytest
-typing-extensions==4.7.1
+typing-extensions==4.12.2
     # via
     #   alembic
     #   psycopg
