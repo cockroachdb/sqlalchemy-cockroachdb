@@ -243,9 +243,10 @@ class ComponentReflectionTest(_ComponentReflectionTest):
             len(actual[(None, "comment_test")]),
             len(expected[(None, "comment_test")]),
         )
-        act = [x for x in actual[(None, "comment_test")] if x["name"] == "data"][0]
-        exp = [x for x in expected[(None, "comment_test")] if x["name"] == "data"][0]
-        eq_(act["comment"], exp["comment"])
+        if config.db.dialect.supports_comments:
+            act = [x for x in actual[(None, "comment_test")] if x["name"] == "data"][0]
+            exp = [x for x in expected[(None, "comment_test")] if x["name"] == "data"][0]
+            eq_(act["comment"], exp["comment"])
 
     @skip("cockroachdb")
     def test_get_multi_indexes(self):
