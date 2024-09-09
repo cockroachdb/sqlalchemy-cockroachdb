@@ -86,7 +86,7 @@ savepoint_state = _SavepointState()
 
 class CockroachDBDialect(PGDialect):
     name = "cockroachdb"
-    supports_comments = True
+    supports_comments = False
     supports_empty_insert = True
     supports_multivalues_insert = True
     supports_sequences = False
