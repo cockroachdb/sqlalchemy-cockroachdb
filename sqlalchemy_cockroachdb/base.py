@@ -195,7 +195,8 @@ class CockroachDBDialect(PGDialect):
             sql = (
                 "SELECT column_name, data_type, is_nullable::bool, column_default, "
                 "numeric_precision, numeric_scale, character_maximum_length, "
-                "NULL AS is_generated, NULL AS generation_expression, is_hidden::bool "
+                "NULL AS is_generated, NULL AS generation_expression, is_hidden::bool,"
+                "column_comment AS comment "
                 "FROM information_schema.columns "
                 "WHERE table_schema = :table_schema AND table_name = :table_name "
             )
@@ -211,7 +212,7 @@ class CockroachDBDialect(PGDialect):
                 "numeric_precision, numeric_scale, character_maximum_length, "
                 "CASE is_generated WHEN 'ALWAYS' THEN true WHEN 'NEVER' THEN false "
                 "ELSE is_generated::bool END AS is_generated, "
-                "generation_expression, is_hidden::bool "
+                "generation_expression, is_hidden::bool, column_comment AS comment "
                 "FROM information_schema.columns "
                 "WHERE table_schema = :table_schema AND table_name = :table_name "
             )
@@ -287,6 +288,7 @@ class CockroachDBDialect(PGDialect):
                 default=default,
                 autoincrement=autoincrement,
                 is_hidden=row.is_hidden,
+                comment=row.comment,
             )
             if computed is not None:
                 column_info["computed"] = computed
