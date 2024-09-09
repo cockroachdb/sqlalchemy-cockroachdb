@@ -212,7 +212,7 @@ class CockroachDBDialect(PGDialect):
                 "numeric_precision, numeric_scale, character_maximum_length, "
                 "CASE is_generated WHEN 'ALWAYS' THEN true WHEN 'NEVER' THEN false "
                 "ELSE is_generated::bool END AS is_generated, "
-                "generation_expression, is_hidden::bool, comment "
+                "generation_expression, is_hidden::bool, column_comment AS comment "
                 "FROM information_schema.columns "
                 "WHERE table_schema = :table_schema AND table_name = :table_name "
             )
