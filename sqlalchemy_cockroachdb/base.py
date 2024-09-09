@@ -196,7 +196,7 @@ class CockroachDBDialect(PGDialect):
                 "SELECT column_name, data_type, is_nullable::bool, column_default, "
                 "numeric_precision, numeric_scale, character_maximum_length, "
                 "NULL AS is_generated, NULL AS generation_expression, is_hidden::bool,"
-                "comment "
+                "column_comment AS comment "
                 "FROM information_schema.columns "
                 "WHERE table_schema = :table_schema AND table_name = :table_name "
             )
