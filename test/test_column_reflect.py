@@ -44,6 +44,7 @@ class ReflectHiddenColumnsTest(fixtures.TestBase):
                     "default": "unique_rowid()",
                     "autoincrement": True,
                     "is_hidden": False,
+                    "comment": None,
                 },
                 {
                     "name": "txt",
@@ -52,6 +53,7 @@ class ReflectHiddenColumnsTest(fixtures.TestBase):
                     "default": None,
                     "autoincrement": False,
                     "is_hidden": False,
+                    "comment": None,
                 },
             ],
         )
@@ -66,6 +68,7 @@ class ReflectHiddenColumnsTest(fixtures.TestBase):
                     "default": None,
                     "autoincrement": False,
                     "is_hidden": False,
+                    "comment": None,
                 },
             ],
         )
@@ -80,6 +83,7 @@ class ReflectHiddenColumnsTest(fixtures.TestBase):
                     "default": None,
                     "autoincrement": False,
                     "is_hidden": False,
+                    "comment": None,
                 },
                 {
                     "name": "rowid",
@@ -88,6 +92,7 @@ class ReflectHiddenColumnsTest(fixtures.TestBase):
                     "default": "unique_rowid()",
                     "autoincrement": True,
                     "is_hidden": True,
+                    "comment": None,
                 },
             ],
         )
