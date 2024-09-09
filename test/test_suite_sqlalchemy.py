@@ -4,14 +4,20 @@ from sqlalchemy.testing.suite import *  # noqa
 from sqlalchemy.testing.suite import (
     BizarroCharacterFKResolutionTest as _BizarroCharacterFKResolutionTest,
 )
-from sqlalchemy.testing.suite import ComponentReflectionTest as _ComponentReflectionTest
+from sqlalchemy.testing.suite import (
+    ComponentReflectionTest as _ComponentReflectionTest,
+)
 from sqlalchemy.testing.suite import HasIndexTest as _HasIndexTest
 from sqlalchemy.testing.suite import HasTableTest as _HasTableTest
 from sqlalchemy.testing.suite import InsertBehaviorTest as _InsertBehaviorTest
 from sqlalchemy.testing.suite import IsolationLevelTest as _IsolationLevelTest
-from sqlalchemy.testing.suite import LongNameBlowoutTest as _LongNameBlowoutTest
+from sqlalchemy.testing.suite import (
+    LongNameBlowoutTest as _LongNameBlowoutTest,
+)
 from sqlalchemy.testing.suite import NumericTest as _NumericTest
-from sqlalchemy.testing.suite import QuotedNameArgumentTest as _QuotedNameArgumentTest
+from sqlalchemy.testing.suite import (
+    QuotedNameArgumentTest as _QuotedNameArgumentTest,
+)
 from sqlalchemy.testing.suite import TrueDivTest as _TrueDivTest
 from sqlalchemy.testing.suite import UnicodeSchemaTest as _UnicodeSchemaTest
 
@@ -27,17 +33,13 @@ class BizarroCharacterFKResolutionTest(_BizarroCharacterFKResolutionTest):
         argnames="tablename",
     )
     def test_fk_ref(self, connection, metadata, use_composite, tablename, columnname):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
+        if not (config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus):
             super().test_fk_ref(connection, metadata, use_composite, tablename, columnname)
 
 
 class ComponentReflectionTest(_ComponentReflectionTest):
     def test_get_indexes(self, connection):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
+        if not (config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus):
             super().test_get_indexes(connection, None, None)
 
     @skip("cockroachdb")
@@ -49,176 +51,202 @@ class ComponentReflectionTest(_ComponentReflectionTest):
         insp = inspect(config.db)
         actual = insp.get_multi_columns()
         expected = {
+            (None, "users"): [
+                {
+                    "name": "user_id",
+                    "type": INTEGER(),
+                    "nullable": False,
+                    "default": "unique_rowid()",
+                    "autoincrement": True,
+                    "is_hidden": False,
+                    "comment": None,
+                },
+                {
+                    "name": "test1",
+                    "type": VARCHAR(length=5),
+                    "nullable": False,
+                    "default": None,
+                    "autoincrement": False,
+                    "is_hidden": False,
+                    "comment": None,
+                },
+                {
+                    "name": "test2",
+                    "type": FLOAT(),
+                    "nullable": False,
+                    "default": None,
+                    "autoincrement": False,
+                    "is_hidden": False,
+                    "comment": None,
+                },
+                {
+                    "name": "parent_user_id",
+                    "type": INTEGER(),
+                    "nullable": True,
+                    "default": None,
+                    "autoincrement": False,
+                    "is_hidden": False,
+                    "comment": None,
+                },
+            ],
             (None, "comment_test"): [
                 {
-                    "autoincrement": True,
-                    "default": "unique_rowid()",
-                    "is_hidden": False,
                     "name": "id",
-                    "nullable": False,
                     "type": INTEGER(),
+                    "nullable": False,
+                    "default": "unique_rowid()",
+                    "autoincrement": True,
+                    "is_hidden": False,
+                    "comment": "id comment",
                 },
                 {
-                    "autoincrement": False,
-                    "default": None,
-                    "is_hidden": False,
                     "name": "data",
-                    "nullable": True,
                     "type": VARCHAR(length=20),
+                    "nullable": True,
+                    "default": None,
+                    "autoincrement": False,
+                    "is_hidden": False,
+                    "comment": "data % comment",
                 },
                 {
-                    "autoincrement": False,
-                    "default": None,
-                    "is_hidden": False,
                     "name": "d2",
-                    "nullable": True,
                     "type": VARCHAR(length=20),
+                    "nullable": True,
+                    "default": None,
+                    "autoincrement": False,
+                    "is_hidden": False,
+                    "comment": "Comment types type speedily ' \" \\ '' Fun!",
                 },
                 {
-                    "autoincrement": False,
-                    "default": None,
-                    "is_hidden": False,
                     "name": "d3",
-                    "nullable": True,
                     "type": VARCHAR(length=42),
-                },
-            ],
-            (None, "dingalings"): [
-                {
-                    "autoincrement": True,
-                    "default": "unique_rowid()",
-                    "is_hidden": False,
-                    "name": "dingaling_id",
-                    "nullable": False,
-                    "type": INTEGER(),
-                },
-                {
-                    "autoincrement": False,
-                    "default": None,
-                    "is_hidden": False,
-                    "name": "address_id",
                     "nullable": True,
-                    "type": INTEGER(),
-                },
-                {
-                    "autoincrement": False,
                     "default": None,
-                    "is_hidden": False,
-                    "name": "id_user",
-                    "nullable": True,
-                    "type": INTEGER(),
-                },
-                {
                     "autoincrement": False,
-                    "default": None,
                     "is_hidden": False,
-                    "name": "data",
-                    "nullable": True,
-                    "type": VARCHAR(length=30),
-                },
-            ],
-            (None, "email_addresses"): [
-                {
-                    "autoincrement": True,
-                    "default": "unique_rowid()",
-                    "is_hidden": False,
-                    "name": "address_id",
-                    "nullable": False,
-                    "type": INTEGER(),
-                },
-                {
-                    "autoincrement": False,
-                    "default": None,
-                    "is_hidden": False,
-                    "name": "remote_user_id",
-                    "nullable": True,
-                    "type": INTEGER(),
-                },
-                {
-                    "autoincrement": False,
-                    "default": None,
-                    "is_hidden": False,
-                    "name": "email_address",
-                    "nullable": True,
-                    "type": VARCHAR(length=20),
+                    "comment": "Comment\nwith\rescapes",
                 },
             ],
             (None, "no_constraints"): [
                 {
-                    "autoincrement": False,
-                    "default": None,
-                    "is_hidden": False,
                     "name": "data",
-                    "nullable": True,
                     "type": VARCHAR(length=20),
+                    "nullable": True,
+                    "default": None,
+                    "autoincrement": False,
+                    "is_hidden": False,
+                    "comment": None,
                 }
             ],
             (None, "noncol_idx_test_nopk"): [
                 {
-                    "autoincrement": False,
-                    "default": None,
-                    "is_hidden": False,
                     "name": "q",
-                    "nullable": True,
                     "type": VARCHAR(length=5),
+                    "nullable": True,
+                    "default": None,
+                    "autoincrement": False,
+                    "is_hidden": False,
+                    "comment": None,
                 }
             ],
             (None, "noncol_idx_test_pk"): [
                 {
-                    "autoincrement": True,
-                    "default": "unique_rowid()",
-                    "is_hidden": False,
                     "name": "id",
-                    "nullable": False,
                     "type": INTEGER(),
+                    "nullable": False,
+                    "default": "unique_rowid()",
+                    "autoincrement": True,
+                    "is_hidden": False,
+                    "comment": None,
                 },
                 {
-                    "autoincrement": False,
-                    "default": None,
-                    "is_hidden": False,
                     "name": "q",
-                    "nullable": True,
                     "type": VARCHAR(length=5),
+                    "nullable": True,
+                    "default": None,
+                    "autoincrement": False,
+                    "is_hidden": False,
+                    "comment": None,
                 },
             ],
-            (None, "users"): [
+            (None, "email_addresses"): [
                 {
-                    "autoincrement": True,
+                    "name": "address_id",
+                    "type": INTEGER(),
+                    "nullable": False,
                     "default": "unique_rowid()",
+                    "autoincrement": True,
                     "is_hidden": False,
-                    "name": "user_id",
-                    "nullable": False,
+                    "comment": None,
+                },
+                {
+                    "name": "remote_user_id",
                     "type": INTEGER(),
-                },
-                {
-                    "autoincrement": False,
-                    "default": None,
-                    "is_hidden": False,
-                    "name": "test1",
-                    "nullable": False,
-                    "type": VARCHAR(length=5),
-                },
-                {
-                    "autoincrement": False,
-                    "default": None,
-                    "is_hidden": False,
-                    "name": "test2",
-                    "nullable": False,
-                    "type": FLOAT(),
-                },
-                {
-                    "autoincrement": False,
-                    "default": None,
-                    "is_hidden": False,
-                    "name": "parent_user_id",
                     "nullable": True,
+                    "default": None,
+                    "autoincrement": False,
+                    "is_hidden": False,
+                    "comment": None,
+                },
+                {
+                    "name": "email_address",
+                    "type": VARCHAR(length=20),
+                    "nullable": True,
+                    "default": None,
+                    "autoincrement": False,
+                    "is_hidden": False,
+                    "comment": None,
+                },
+            ],
+            (None, "dingalings"): [
+                {
+                    "name": "dingaling_id",
                     "type": INTEGER(),
+                    "nullable": False,
+                    "default": "unique_rowid()",
+                    "autoincrement": True,
+                    "is_hidden": False,
+                    "comment": None,
+                },
+                {
+                    "name": "address_id",
+                    "type": INTEGER(),
+                    "nullable": True,
+                    "default": None,
+                    "autoincrement": False,
+                    "is_hidden": False,
+                    "comment": None,
+                },
+                {
+                    "name": "id_user",
+                    "type": INTEGER(),
+                    "nullable": True,
+                    "default": None,
+                    "autoincrement": False,
+                    "is_hidden": False,
+                    "comment": None,
+                },
+                {
+                    "name": "data",
+                    "type": VARCHAR(length=30),
+                    "nullable": True,
+                    "default": None,
+                    "autoincrement": False,
+                    "is_hidden": False,
+                    "comment": None,
                 },
             ],
         }
         eq_(len(actual), len(expected))
         eq_(actual.keys(), expected.keys())
-        eq_(len(actual[(None, "comment_test")]), len(expected[(None, "comment_test")]))
+        eq_(
+            len(actual[(None, "comment_test")]),
+            len(expected[(None, "comment_test")]),
+        )
+        if config.db.dialect.supports_comments:
+            act = [x for x in actual[(None, "comment_test")] if x["name"] == "data"][0]
+            exp = [x for x in expected[(None, "comment_test")] if x["name"] == "data"][0]
+            eq_(act["comment"], exp["comment"])
 
     @skip("cockroachdb")
     def test_get_multi_indexes(self):
@@ -244,13 +272,9 @@ class ComponentReflectionTest(_ComponentReflectionTest):
         pass
 
     @testing.combinations(True, False, argnames="use_schema")
-    @testing.combinations(
-        (True, testing.requires.views), False, argnames="views"
-    )
+    @testing.combinations((True, testing.requires.views), False, argnames="views")
     def test_metadata(self, connection, use_schema, views):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
+        if not (config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus):
             super().test_metadata(connection, use_schema, views, [])
 
     @skip("cockroachdb")
@@ -310,9 +334,7 @@ class LongNameBlowoutTest(_LongNameBlowoutTest):
         argnames="type_",
     )
     def test_long_convention_name(self, type_, metadata, connection):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
+        if not (config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus):
             super().test_long_convention_name(type_, metadata, connection, None)
 
 
@@ -326,9 +348,7 @@ class QuotedNameArgumentTest(_QuotedNameArgumentTest):
     @quote_fixtures
     def test_get_indexes(self, name):
         # could not decorrelate subquery
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
+        if not (config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus):
             super().test_get_indexes(name, None)
 
 
@@ -358,7 +378,5 @@ class TrueDivTest(_TrueDivTest):
 
 class UnicodeSchemaTest(_UnicodeSchemaTest):
     def test_reflect(self, connection):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
+        if not (config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus):
             super().test_reflect(connection)
