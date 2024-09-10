@@ -40,9 +40,9 @@ jobs:
       fail-fast: false
       matrix:
         crdb-version: [
-          "cockroach:latest-v23.1",
           "cockroach:latest-v23.2",
-          "cockroach:latest-v24.1"
+          "cockroach:latest-v24.1",
+          "cockroach:latest-v24.2"
         ]
         db-alias: [
           "psycopg2",
