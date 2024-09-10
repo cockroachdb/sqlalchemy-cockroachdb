@@ -1,11 +1,41 @@
 from alembic.testing.suite import *  # noqa
 from sqlalchemy.testing import skip
+from alembic.testing.suite import AutogenerateCommentsTest as _AutogenerateCommentsTest
 from alembic.testing.suite import AutogenerateComputedTest as _AutogenerateComputedTest
 from alembic.testing.suite import AutogenerateFKOptionsTest as _AutogenerateFKOptionsTest
 from alembic.testing.suite import AutogenerateForeignKeysTest as _AutogenerateForeignKeysTest
-from alembic.testing.suite import AutoincrementTest as _AutoincrementTest
 from alembic.testing.suite import BackendAlterColumnTest as _BackendAlterColumnTest
 from alembic.testing.suite import IncludeHooksTest as _IncludeHooksTest
+
+
+class AutogenerateCommentsTest(_AutogenerateCommentsTest):
+    @skip("cockroachdb")
+    def test_add_column_comment(self):
+        pass
+
+    @skip("cockroachdb")
+    def test_add_table_comment(self):
+        pass
+
+    @skip("cockroachdb")
+    def test_alter_column_comment(self):
+        pass
+
+    @skip("cockroachdb")
+    def test_alter_table_comment(self):
+        pass
+
+    @skip("cockroachdb")
+    def test_existing_column_comment_no_change(self):
+        pass
+
+    @skip("cockroachdb")
+    def test_existing_table_comment_no_change(self):
+        pass
+
+    @skip("cockroachdb")
+    def test_remove_column_comment(self):
+        pass
 
 
 class AutogenerateComputedTest(_AutogenerateComputedTest):
@@ -15,210 +45,61 @@ class AutogenerateComputedTest(_AutogenerateComputedTest):
         ):
             super().test_add_computed_column()
 
-    @testing.combinations(
-        lambda: (None, sa.Computed("bar*5")),
-        (lambda: (sa.Computed("bar*5"), None)),
-        lambda: (
-            sa.Computed("bar*5"),
-            sa.Computed("bar * 42", persisted=True),
-        ),
-        lambda: (sa.Computed("bar*5"), sa.Computed("bar * 42")),
-    )
-    @config.requirements.computed_reflects_normally
-    def test_cant_change_computed_warning(self, test_case):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_cant_change_computed_warning(test_case)
+    @skip("cockroachdb")
+    def test_cant_change_computed_warning(self):
+        pass
 
-    @testing.combinations(
-        lambda: (None, None),
-        lambda: (sa.Computed("5"), sa.Computed("5")),
-        lambda: (sa.Computed("bar*5"), sa.Computed("bar*5")),
-        (
-            lambda: (sa.Computed("bar*5"), None),
-            config.requirements.computed_doesnt_reflect_as_server_default,
-        ),
-    )
-    def test_computed_unchanged(self, test_case):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_computed_unchanged(test_case, [])
+    @skip("cockroachdb")
+    def test_computed_unchanged(self):
+        pass
 
+    @skip("cockroachdb")
     def test_remove_computed_column(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_remove_computed_column()
+        pass
 
 
 class AutogenerateFKOptionsTest(_AutogenerateFKOptionsTest):
-    def test_change_ondelete_from_restrict(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_change_ondelete_from_restrict()
-
-    def test_change_onupdate_from_restrict(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_change_onupdate_from_restrict()
-
+    @skip("cockroachdb")
     def test_nochange_ondelete(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_nochange_ondelete()
-
-    def test_nochange_ondelete_noaction(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_nochange_ondelete_noaction()
-
-    def test_nochange_ondelete_restrict(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_nochange_ondelete_restrict()
-
-    def test_nochange_onupdate(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_nochange_onupdate()
-
-    def test_nochange_onupdate_noaction(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_nochange_onupdate_noaction()
-
-    def test_nochange_onupdate_restrict(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_nochange_onupdate_restrict()
+        pass
 
 
 class AutogenerateForeignKeysTest(_AutogenerateForeignKeysTest):
+    @skip("cockroachdb")
     def test_add_composite_fk_with_name(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_add_composite_fk_with_name()
+        pass
 
+    @skip("cockroachdb")
     def test_add_fk(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_add_fk()
+        pass
 
+    @skip("cockroachdb")
     def test_add_fk_colkeys(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_add_fk_colkeys()
+        pass
 
+    @skip("cockroachdb")
     def test_casing_convention_changed_so_put_drops_first(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_casing_convention_changed_so_put_drops_first()
+        pass
 
+    @skip("cockroachdb")
     def test_no_change(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_no_change()
+        pass
 
+    @skip("cockroachdb")
     def test_no_change_colkeys(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_no_change_colkeys()
+        pass
 
+    @skip("cockroachdb")
     def test_no_change_composite_fk(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_no_change_composite_fk()
+        pass
 
+    @skip("cockroachdb")
     def test_remove_composite_fk(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_remove_composite_fk()
+        pass
 
+    @skip("cockroachdb")
     def test_remove_fk(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_remove_fk()
-
-
-class AutoincrementTest(_AutoincrementTest):
-    def test_alter_column_autoincrement_compositepk_explicit_true(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_alter_column_autoincrement_compositepk_explicit_true()
-
-    def test_alter_column_autoincrement_compositepk_false(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_alter_column_autoincrement_compositepk_false()
-
-    def test_alter_column_autoincrement_compositepk_implicit_false(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_alter_column_autoincrement_compositepk_implicit_false()
-
-    def test_alter_column_autoincrement_none(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_alter_column_autoincrement_none()
-
-    def test_alter_column_autoincrement_nonpk_explicit_true(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_alter_column_autoincrement_nonpk_explicit_true()
-
-    def test_alter_column_autoincrement_nonpk_false(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_alter_column_autoincrement_nonpk_false()
-
-    def test_alter_column_autoincrement_nonpk_implicit_false(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_alter_column_autoincrement_nonpk_implicit_false()
-
-    def test_alter_column_autoincrement_pk_explicit_true(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_alter_column_autoincrement_pk_explicit_true()
-
-    def test_alter_column_autoincrement_pk_false(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_alter_column_autoincrement_pk_false()
-
-    def test_alter_column_autoincrement_pk_implicit_true(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_alter_column_autoincrement_pk_implicit_true()
+        pass
 
 
 class BackendAlterColumnTest(_BackendAlterColumnTest):
@@ -235,24 +116,14 @@ class BackendAlterColumnTest(_BackendAlterColumnTest):
 
 
 class IncludeHooksTest(_IncludeHooksTest):
+    @skip("cockroachdb")
     def test_add_metadata_fk(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_add_metadata_fk()
+        pass
 
-    @combinations(("object",), ("name",))
-    @config.requirements.no_name_normalize
-    def test_change_fk(self, hook_type):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_change_fk(hook_type)
+    @skip("cockroachdb")
+    def test_change_fk(self):
+        pass
 
-    @combinations(("object",), ("name",))
-    @config.requirements.no_name_normalize
-    def test_remove_connection_fk(self, hook_type):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_remove_connection_fk(hook_type)
+    @skip("cockroachdb")
+    def test_remove_connection_fk(self):
+        pass

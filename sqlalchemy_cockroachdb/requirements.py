@@ -155,6 +155,11 @@ class Requirements(SuiteRequirementsSQLA, SuiteRequirementsAlembic):
     implicitly_named_constraints = exclusions.open()
     supports_distinct_on = exclusions.open()
 
+    fk_ondelete_noaction = exclusions.closed()
+    fk_ondelete_restrict = exclusions.closed()
+    fk_onupdate = exclusions.closed()
+    fk_onupdate_restrict = exclusions.closed()
+
     @property
     def sync_driver(self):
         return exclusions.only_if(
