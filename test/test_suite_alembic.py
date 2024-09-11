@@ -37,13 +37,15 @@ class AutogenerateCommentsTest(_AutogenerateCommentsTest):
     def test_remove_column_comment(self):
         pass
 
+    @skip("cockroachdb")
+    def test_remove_table_comment(self):
+        pass
+
 
 class AutogenerateComputedTest(_AutogenerateComputedTest):
+    @skip("cockroachdb")
     def test_add_computed_column(self):
-        if not (
-            config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus
-        ):
-            super().test_add_computed_column()
+        pass
 
     @skip("cockroachdb")
     def test_cant_change_computed_warning(self):

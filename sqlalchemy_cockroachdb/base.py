@@ -569,6 +569,10 @@ else:
     def visit_column_type(*args, **kwargs):
         return alembic.ddl.postgresql.visit_column_type(*args, **kwargs)
 
+    @compiles(alembic.ddl.postgresql.ColumnComment, "cockroachdb")
+    def visit_column_comment(*args, **kwargs):
+        return alembic.ddl.postgresql.visit_column_comment(*args, **kwargs)
+
 
 # If sqlalchemy-migrate is installed, register there too.
 try:
