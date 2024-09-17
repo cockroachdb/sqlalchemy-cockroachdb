@@ -2,7 +2,7 @@ backports-tarfile==1.2.0
     # via jaraco-context
 certifi==2024.8.30
     # via requests
-cffi==1.17.0
+cffi==1.17.1
     # via cryptography
 charset-normalizer==3.3.2
     # via requests
@@ -12,13 +12,13 @@ distlib==0.3.8
     # via virtualenv
 docutils==0.21.2
     # via readme-renderer
-filelock==3.15.4
+filelock==3.16.0
     # via
     #   tox
     #   virtualenv
-idna==3.8
+idna==3.10
     # via requests
-importlib-metadata==8.4.0
+importlib-metadata==8.5.0
     # via
     #   keyring
     #   twine
@@ -38,7 +38,7 @@ markdown-it-py==3.0.0
     # via rich
 mdurl==0.1.2
     # via markdown-it-py
-more-itertools==10.4.0
+more-itertools==10.5.0
     # via
     #   jaraco-classes
     #   jaraco-functools
@@ -48,7 +48,7 @@ packaging==24.1
     # via tox
 pkginfo==1.10.0
     # via twine
-platformdirs==4.2.2
+platformdirs==4.3.3
     # via virtualenv
 pluggy==1.5.0
     # via tox
@@ -70,7 +70,7 @@ requests-toolbelt==1.0.0
     # via twine
 rfc3986==2.0.0
     # via twine
-rich==13.8.0
+rich==13.8.1
     # via twine
 secretstorage==3.3.3
     # via keyring
@@ -82,11 +82,11 @@ tox==3.23.1
     # via -r dev-requirements.in
 twine==5.1.1
     # via -r dev-requirements.in
-urllib3==2.2.2
+urllib3==2.2.3
     # via
     #   requests
     #   twine
-virtualenv==20.26.3
+virtualenv==20.26.4
     # via tox
-zipp==3.20.1
+zipp==3.20.2
     # via importlib-metadata
