@@ -47,6 +47,12 @@ class ComponentReflectionTest(_ComponentReflectionTest):
         # test not designed to handle ('desc', 'nulls_last')
         pass
 
+    @skip("cockroachdb")
+    def test_get_multi_check_constraints(self):
+        # we return results for extra tables that the test does not expect:
+        # geography_columns, geometry_columns, spatial_ref_sys
+        pass
+
     def test_get_multi_columns(self):
         insp = inspect(config.db)
         actual = insp.get_multi_columns()

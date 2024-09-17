@@ -62,6 +62,9 @@ jobs:
           docker pull cockroachdb/${{ matrix.crdb-version }}
           docker run --rm -d --name crdb -p 26257:26257 \
             cockroachdb/${{ matrix.crdb-version }} start-single-node --insecure
+          sleep 10
+          docker exec crdb cockroach sql --insecure --host=localhost:26257 \
+            -e 'CREATE SCHEMA test_schema; CREATE SCHEMA test_schema_2;'
       - name: Install testrunner
         run: pip install --user tox==${TOX_VERSION}
       - name: Test
