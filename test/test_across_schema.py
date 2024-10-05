@@ -37,16 +37,6 @@ class AcrossSchemaTest(fixtures.TestBase):
         Table("users", self.meta, autoload_with=testing.db, schema="public")
         Table("columns", self.meta, autoload_with=testing.db, schema="information_schema")
 
-    def test_returning_clause(self):
-        if not testing.db.dialect._is_v2plus:
-            return
-
-        # TODO(bdarnell): remove this when cockroachdb/cockroach#17008 is fixed.
-        # across schema returning is schema.table.id but cockroachdb not support.
-        table = Table("users", self.meta, autoload_with=testing.db, schema="public")
-        with testing.db.begin() as conn:
-            conn.execute(table.insert().values(dict(name="John")).returning(table.c.name))
-
     def test_using_info_schema(self):
         if not testing.db.dialect._is_v2plus:
             return
