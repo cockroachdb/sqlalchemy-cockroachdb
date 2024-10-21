@@ -340,6 +340,22 @@ class CockroachDBDialect(PGDialect):
             )
         return result
 
+    def get_multi_indexes(
+        self, connection, schema, filter_names, scope, kind, **kw
+    ):
+        result = super().get_multi_indexes(
+            connection, schema, filter_names, scope, kind, **kw
+        )
+        if schema is None:
+            result = dict(result)
+            for k in [
+                (None, "spatial_ref_sys"),
+                (None, "geometry_columns"),
+                (None, "geography_columns"),
+            ]:
+                result.pop(k, None)
+        return result
+
     def get_foreign_keys_v1(self, conn, table_name, schema=None, **kw):
         fkeys = []
         FK_REGEX = re.compile(r"(?P<referred_table>.+)?\.\[(?P<referred_columns>.+)?]")
@@ -506,6 +522,20 @@ class CockroachDBDialect(PGDialect):
             res["name"] = pk["name"]
         return res
 
+    def get_multi_pk_constraint(self, connection, schema, filter_names, scope, kind, **kw):
+        result = super().get_multi_pk_constraint(
+            connection, schema, filter_names, scope, kind, **kw
+        )
+        if schema is None:
+            result = dict(result)
+            for k in [
+                (None, "spatial_ref_sys"),
+                (None, "geometry_columns"),
+                (None, "geography_columns"),
+            ]:
+                result.pop(k, None)
+        return result
+
     def get_unique_constraints(self, conn, table_name, schema=None, **kw):
         if self._is_v21plus:
             return super().get_unique_constraints(conn, table_name, schema, **kw)
@@ -524,13 +554,21 @@ class CockroachDBDialect(PGDialect):
                 res.append(index)
         return res
 
-    def get_check_constraints(self, conn, table_name, schema=None, **kw):
-        if self._is_v21plus:
-            return super().get_check_constraints(conn, table_name, schema, **kw)
-        # TODO(bdarnell): The postgres dialect implementation depends on
-        # pg_table_is_visible, which is supported in cockroachdb 1.1
-        # but not in 1.0. Figure out a versioning strategy.
-        return []
+    def get_multi_check_constraints(
+        self, connection, schema, filter_names, scope, kind, **kw
+    ):
+        result = super().get_multi_check_constraints(
+            connection, schema, filter_names, scope, kind, **kw
+        )
+        if schema is None:
+            result = dict(result)
+            for k in [
+                (None, "spatial_ref_sys"),
+                (None, "geometry_columns"),
+                (None, "geography_columns"),
+            ]:
+                result.pop(k, None)
+        return result
 
     def do_savepoint(self, connection, name):
         # Savepoint logic customized to work with run_transaction().

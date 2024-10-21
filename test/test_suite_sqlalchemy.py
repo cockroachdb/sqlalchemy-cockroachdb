@@ -47,12 +47,6 @@ class ComponentReflectionTest(_ComponentReflectionTest):
         # test not designed to handle ('desc', 'nulls_last')
         pass
 
-    @skip("cockroachdb")
-    def test_get_multi_check_constraints(self):
-        # we return results for extra tables that the test does not expect:
-        # geography_columns, geometry_columns, spatial_ref_sys
-        pass
-
     def test_get_multi_columns(self):
         insp = inspect(config.db)
         actual = insp.get_multi_columns()
@@ -254,17 +248,129 @@ class ComponentReflectionTest(_ComponentReflectionTest):
             exp = [x for x in expected[(None, "comment_test")] if x["name"] == "data"][0]
             eq_(act["comment"], exp["comment"])
 
-    @skip("cockroachdb")
     def test_get_multi_indexes(self):
-        # we return results for extra tables that the test does not expect:
-        # geography_columns, geometry_columns, spatial_ref_sys
-        pass
+        insp = inspect(config.db)
+        result = insp.get_multi_indexes()
+        eq_(
+            result,
+            {
+                (None, "comment_test"): [],
+                (None, "dingalings"): [
+                    {
+                        "column_names": ["data"],
+                        "column_sorting": {"data": ("nulls_first",)},
+                        "dialect_options": {"postgresql_using": "prefix"},
+                        "duplicates_constraint": "dingalings_data_key",
+                        "name": "dingalings_data_key",
+                        "unique": True,
+                    },
+                    {
+                        "column_names": ["address_id", "dingaling_id"],
+                        "column_sorting": {
+                            "address_id": ("nulls_first",),
+                            "dingaling_id": ("nulls_first",),
+                        },
+                        "dialect_options": {"postgresql_using": "prefix"},
+                        "duplicates_constraint": "zz_dingalings_multiple",
+                        "name": "zz_dingalings_multiple",
+                        "unique": True,
+                    },
+                ],
+                (None, "email_addresses"): [
+                    {
+                        "column_names": ["email_address"],
+                        "column_sorting": {"email_address": ("nulls_first",)},
+                        "dialect_options": {"postgresql_using": "prefix"},
+                        "name": "ix_email_addresses_email_address",
+                        "unique": False,
+                    }
+                ],
+                (None, "no_constraints"): [],
+                (None, "noncol_idx_test_nopk"): [
+                    {
+                        "column_names": ["q"],
+                        "column_sorting": {"q": ("desc", "nulls_last")},
+                        "dialect_options": {"postgresql_using": "prefix"},
+                        "name": "noncol_idx_nopk",
+                        "unique": False,
+                    }
+                ],
+                (None, "noncol_idx_test_pk"): [
+                    {
+                        "column_names": ["q"],
+                        "column_sorting": {"q": ("desc", "nulls_last")},
+                        "dialect_options": {"postgresql_using": "prefix"},
+                        "name": "noncol_idx_pk",
+                        "unique": False,
+                    }
+                ],
+                (None, "users"): [
+                    {
+                        "column_names": ["user_id", "test2", "test1"],
+                        "column_sorting": {
+                            "test1": ("nulls_first",),
+                            "test2": ("nulls_first",),
+                            "user_id": ("nulls_first",),
+                        },
+                        "dialect_options": {"postgresql_using": "prefix"},
+                        "name": "users_all_idx",
+                        "unique": False,
+                    },
+                    {
+                        "column_names": ["test1", "test2"],
+                        "column_sorting": {"test1": ("nulls_first",), "test2": ("nulls_first",)},
+                        "dialect_options": {"postgresql_using": "prefix"},
+                        "duplicates_constraint": "users_t_idx",
+                        "name": "users_t_idx",
+                        "unique": True,
+                    },
+                ],
+            },
+        )
 
-    @skip("cockroachdb")
     def test_get_multi_pk_constraint(self):
-        # we return results for extra tables that the test does not expect:
-        # geography_columns, geometry_columns, spatial_ref_sys
-        pass
+        insp = inspect(config.db)
+        result = insp.get_multi_pk_constraint()
+        eq_(
+            result,
+            {
+                (None, "comment_test"): {
+                    "comment": None,
+                    "constrained_columns": ["id"],
+                    "name": "comment_test_pkey",
+                },
+                (None, "dingalings"): {
+                    "comment": None,
+                    "constrained_columns": ["dingaling_id"],
+                    "name": "dingalings_pkey",
+                },
+                (None, "email_addresses"): {
+                    "comment": "ea pk comment",
+                    "constrained_columns": ["address_id"],
+                    "name": "email_ad_pk",
+                },
+                (None, "no_constraints"): {
+                    "comment": None,
+                    "constrained_columns": ["rowid"],
+                    "name": "no_constraints_pkey",
+                },
+                (None, "noncol_idx_test_nopk"): {
+                    "comment": None,
+                    "constrained_columns": ["rowid"],
+                    "name": "noncol_idx_test_nopk_pkey",
+                },
+                (None, "noncol_idx_test_pk"): {
+                    "comment": None,
+                    "constrained_columns": ["id"],
+                    "name": "noncol_idx_test_pk_pkey",
+                },
+                (None, "users"): {
+                    "comment": None,
+                    "constrained_columns": ["user_id"],
+                    "name": "users_pkey",
+                },
+            },
+        )
 
     @skip("cockroachdb")
     def test_get_pk_constraint(self):
