@@ -4,7 +4,7 @@ Unreleased
 - Add support for READ COMMITTED transaction isolation
   (see [README.read_committed.md](README.read_committed.md))
 - Add column comment to get_columns method (#253), thanks to @dotan-mor
-- Fix autogenerate with ON UPDATE / DELETE (#258), thanks to @idumitrescu-dn
+- Fix autogenerate with ON UPDATE / DELETE (#258, #262), thanks to @idumitrescu-dn
 - Improve support for table/column comments (via SQLA 2.0.36)
 
 
