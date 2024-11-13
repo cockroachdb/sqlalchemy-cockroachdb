@@ -40,9 +40,9 @@ jobs:
       fail-fast: false
       matrix:
         crdb-version: [
-          "cockroach:latest-v23.2",
           "cockroach:latest-v24.1",
-          "cockroach:latest-v24.2"
+          "cockroach:latest-v24.2",
+          "cockroach:latest-v24.3"
         ]
         db-alias: [
           "psycopg2",
@@ -84,4 +84,3 @@ jobs:
         run: pip install --user tox==${TOX_VERSION}
       - name: Lint
         run: ${HOME}/.local/bin/tox -e lint
-

@@ -9,6 +9,7 @@ from sqlalchemy.testing.suite import (
 )
 from sqlalchemy.testing.suite import HasIndexTest as _HasIndexTest
 from sqlalchemy.testing.suite import HasTableTest as _HasTableTest
+from sqlalchemy.testing.suite import IntegerTest as _IntegerTest
 from sqlalchemy.testing.suite import InsertBehaviorTest as _InsertBehaviorTest
 from sqlalchemy.testing.suite import IsolationLevelTest as _IsolationLevelTest
 from sqlalchemy.testing.suite import (
@@ -417,23 +418,18 @@ class InsertBehaviorTest(_InsertBehaviorTest):
         pass
 
 
-class IsolationLevelTest(_IsolationLevelTest):
-    def test_all_levels(self):
-        if not config.db.dialect._is_v232plus:
-            # TODO: enable when READ COMMITTED no longer a preview feature, since
-            #       SET CLUSTER SETTING cannot be used inside a multi-statement transaction
-            super().test_all_levels()
+class IntegerTest(_IntegerTest):
+    @_IntegerTest._huge_ints()
+    def test_huge_int(self, integer_round_trip, intvalue):
+        if config.db.dialect.driver != "asyncpg":
+            super().test_huge_int(integer_round_trip, intvalue)
 
+
+class IsolationLevelTest(_IsolationLevelTest):
     @skip("cockroachdb")
     def test_dialect_user_setting_is_restored(self):
         # IndexError: list index out of range
         pass
-
-    def test_non_default_isolation_level(self):
-        if not config.db.dialect._is_v232plus:
-            # TODO: enable when READ COMMITTED no longer a preview feature, since
-            #       SET CLUSTER SETTING cannot be used inside a multi-statement transaction
-            super().test_non_default_isolation_level()
 
 
 class LongNameBlowoutTest(_LongNameBlowoutTest):
@@ -450,6 +446,18 @@ class LongNameBlowoutTest(_LongNameBlowoutTest):
             super().test_long_convention_name(type_, metadata, connection, None)
 
 
+class NumericTest(_NumericTest):
+    def test_numeric_as_float(self, do_numeric_test):
+        # psycopg.errors.InvalidParameterValue: unsupported binary operator: <decimal> + <float>
+        if config.db.dialect.driver != "psycopg":
+            super().test_numeric_as_float(do_numeric_test)
+
+    def test_numeric_null_as_float(self, do_numeric_test):
+        # psycopg.errors.InvalidParameterValue: unsupported binary operator: <decimal> + <float>
+        if config.db.dialect.driver != "psycopg":
+            super().test_numeric_null_as_float(do_numeric_test)
+
+
 class QuotedNameArgumentTest(_QuotedNameArgumentTest):
     def quote_fixtures(fn):
         return testing.combinations(
@@ -462,18 +470,6 @@ class QuotedNameArgumentTest(_QuotedNameArgumentTest):
         # could not decorrelate subquery
         if not (config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus):
             super().test_get_indexes(name, None)
-
-
-class NumericTest(_NumericTest):
-    def test_numeric_as_float(self, do_numeric_test):
-        # psycopg.errors.InvalidParameterValue: unsupported binary operator: <decimal> + <float>
-        if config.db.dialect.driver != "psycopg":
-            super().test_numeric_as_float(do_numeric_test)
-
-    def test_numeric_null_as_float(self, do_numeric_test):
-        # psycopg.errors.InvalidParameterValue: unsupported binary operator: <decimal> + <float>
-        if config.db.dialect.driver != "psycopg":
-            super().test_numeric_null_as_float(do_numeric_test)
 
 
 class TrueDivTest(_TrueDivTest):
