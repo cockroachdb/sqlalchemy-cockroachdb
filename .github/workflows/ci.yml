@@ -42,7 +42,8 @@ jobs:
         crdb-version: [
           "cockroach:latest-v24.1",
           "cockroach:latest-v24.2",
-          "cockroach:latest-v24.3"
+          "cockroach:latest-v24.3",
+          "cockroach:latest-v25.1"
         ]
         db-alias: [
           "psycopg2",
