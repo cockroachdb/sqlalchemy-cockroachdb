@@ -2,9 +2,6 @@ from sqlalchemy import FLOAT, INTEGER, VARCHAR
 from sqlalchemy.testing import skip
 from sqlalchemy.testing.suite import *  # noqa
 from sqlalchemy.testing.suite import (
-    BizarroCharacterFKResolutionTest as _BizarroCharacterFKResolutionTest,
-)
-from sqlalchemy.testing.suite import (
     ComponentReflectionTest as _ComponentReflectionTest,
 )
 from sqlalchemy.testing.suite import HasIndexTest as _HasIndexTest
@@ -21,21 +18,6 @@ from sqlalchemy.testing.suite import (
 )
 from sqlalchemy.testing.suite import TrueDivTest as _TrueDivTest
 from sqlalchemy.testing.suite import UnicodeSchemaTest as _UnicodeSchemaTest
-
-
-class BizarroCharacterFKResolutionTest(_BizarroCharacterFKResolutionTest):
-    @testing.combinations(("id",), ("(3)",), ("col%p",), ("[brack]",), argnames="columnname")
-    @testing.variation("use_composite", [True, False])
-    @testing.combinations(
-        ("plain",),
-        ("(2)",),
-        ("per % cent",),
-        ("[brackets]",),
-        argnames="tablename",
-    )
-    def test_fk_ref(self, connection, metadata, use_composite, tablename, columnname):
-        if not (config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus):
-            super().test_fk_ref(connection, metadata, use_composite, tablename, columnname)
 
 
 class ComponentReflectionTest(_ComponentReflectionTest):

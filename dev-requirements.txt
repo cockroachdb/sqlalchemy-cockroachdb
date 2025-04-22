@@ -1,16 +1,18 @@
+backports-tarfile==1.2.0
+    # via jaraco-context
 certifi==2025.1.31
     # via requests
 cffi==1.17.1
     # via cryptography
 charset-normalizer==3.4.1
     # via requests
-cryptography==44.0.1
+cryptography==44.0.2
     # via secretstorage
 distlib==0.3.9
     # via virtualenv
 docutils==0.21.2
     # via readme-renderer
-filelock==3.17.0
+filelock==3.18.0
     # via
     #   tox
     #   virtualenv
@@ -18,13 +20,17 @@ id==1.5.0
     # via twine
 idna==3.10
     # via requests
+importlib-metadata==8.6.1
+    # via
+    #   keyring
+    #   twine
 jaraco-classes==3.4.0
     # via keyring
 jaraco-context==6.0.1
     # via keyring
 jaraco-functools==4.1.0
     # via keyring
-jeepney==0.8.0
+jeepney==0.9.0
     # via
     #   keyring
     #   secretstorage
@@ -38,13 +44,13 @@ more-itertools==10.6.0
     # via
     #   jaraco-classes
     #   jaraco-functools
-nh3==0.2.20
+nh3==0.2.21
     # via readme-renderer
 packaging==24.2
     # via
     #   tox
     #   twine
-platformdirs==4.3.6
+platformdirs==4.3.7
     # via virtualenv
 pluggy==1.5.0
     # via tox
@@ -67,7 +73,7 @@ requests-toolbelt==1.0.0
     # via twine
 rfc3986==2.0.0
     # via twine
-rich==13.9.4
+rich==14.0.0
     # via twine
 secretstorage==3.3.3
     # via keyring
@@ -79,9 +85,13 @@ tox==3.23.1
     # via -r dev-requirements.in
 twine==6.1.0
     # via -r dev-requirements.in
+typing-extensions==4.13.1
+    # via rich
 urllib3==2.3.0
     # via
     #   requests
     #   twine
-virtualenv==20.29.1
+virtualenv==20.30.0
     # via tox
+zipp==3.21.0
+    # via importlib-metadata
