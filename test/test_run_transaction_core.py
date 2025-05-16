@@ -3,7 +3,7 @@ from sqlalchemy import Table, Column, MetaData, select, testing, text
 from sqlalchemy.testing import fixtures
 from sqlalchemy.types import Integer
 import threading
-from sqlalchemy.orm import sessionmaker, scoped_session, relationship
+from sqlalchemy.orm import sessionmaker, scoped_session
 
 
 from sqlalchemy_cockroachdb import run_transaction
@@ -140,7 +140,6 @@ class RunTransactionCoreTest(BaseRunTransactionTest):
             rs = run_transaction(conn, txn_body)
             assert rs[0] == (1, 100)
 
-
     def test_run_transaction_retry_with_nested(self):
         def txn_body(conn):
             rs = conn.execute(text("select acct, balance from account where acct = 1"))
@@ -151,25 +150,22 @@ class RunTransactionCoreTest(BaseRunTransactionTest):
             rs = run_transaction(conn, txn_body, use_cockroach_restart=False)
             assert rs[0] == (1, 100)
 
-
     def test_run_chained_transaction(self):
         def txn_body(conn):
             # first transaction inserts
-            conn.execute(
-                account_table.insert(), [dict(acct=99, balance=100)]
-            )
+            conn.execute(account_table.insert(), [dict(acct=99, balance=100)])
             conn.execute(text("select crdb_internal.force_retry('1s')"))
 
             def _get_val(s):
                 rs = s.execute(text("select acct, balance from account where acct = 99"))
                 return [r for r in rs]
 
-            # chain the get into a separate nested transaction, so that the value 
+            # chain the get into a separate nested transaction, so that the value
             # in the previous nested transaction is flushed and available
-            return ChainTransaction([lambda s : _get_val(s), lambda s : _get_val(s)])
+            return ChainTransaction([lambda s: _get_val(s), lambda s: _get_val(s)])
 
         with testing.db.connect() as conn:
             rs = run_transaction(conn, txn_body, use_cockroach_restart=False)
             assert len(rs.results) == 2
-            assert rs.results[0][0] == (99,100)
-            assert rs.results[1][0] == (99,100)
+            assert rs.results[0][0] == (99, 100)
+            assert rs.results[1][0] == (99, 100)

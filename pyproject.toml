@@ -9,13 +9,16 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
-    "sqlalchemy (>=2.0.41,<3.0.0)"
+    "sqlalchemy (>=2.0.40,<3.0.0)"
 ]
 
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
 
 [tool.poetry.group.dev.dependencies]
 alembic = "1.15.2"

@@ -98,11 +98,13 @@ def retry_exponential_backoff(retry_count: int, max_backoff: int = 0) -> None:
     :return: None
     """
 
-    sleep_secs = uniform(0, min(max_backoff, 0.1 * (2 ** retry_count)))
+    sleep_secs = uniform(0, min(max_backoff, 0.1 * (2**retry_count)))
     sleep(sleep_secs)
 
 
-def run_in_nested_transaction(conn, callback, max_retries, max_backoff, inject_error=False, **kwargs):
+def run_in_nested_transaction(
+    conn, callback, max_retries, max_backoff, inject_error=False, **kwargs
+):
     if isinstance(conn, sqlalchemy.orm.Session):
         dbapi_name = conn.bind.driver
     else:
@@ -124,11 +126,13 @@ def run_in_nested_transaction(conn, callback, max_retries, max_backoff, inject_e
             if dbapi_name == "psycopg2":
                 import psycopg2
                 import psycopg2.errorcodes
+
                 if isinstance(e.orig, psycopg2.OperationalError):
                     if e.orig.pgcode == psycopg2.errorcodes.SERIALIZATION_FAILURE:
                         do_retry = True
             else:
                 import psycopg
+
                 if isinstance(e.orig, psycopg.errors.SerializationFailure):
                     do_retry = True
             if do_retry:
@@ -149,5 +153,7 @@ def _txn_retry_loop(conn, callback, max_retries, max_backoff, **kwargs):
         result = run_in_nested_transaction(conn, callback, max_retries, max_backoff, **kwargs)
         if isinstance(result, ChainTransaction):
             for transaction in result.transactions:
-                 result.add_result(run_in_nested_transaction(conn, transaction, max_retries, max_backoff, **kwargs))
+                result.add_result(
+                    run_in_nested_transaction(conn, transaction, max_retries, max_backoff, **kwargs)
+                )
         return result
