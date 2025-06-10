@@ -1,5 +1,5 @@
 # Version 2.0.3
-Unreleased
+June 10, 2025
 
 - Add support for READ COMMITTED transaction isolation
   (see [README.read_committed.md](README.read_committed.md))
@@ -9,7 +9,7 @@ Unreleased
 - Add nested transaction support (#267), thanks to @mfmarche
 
 # Version 2.0.2
-January 10, 2023
+January 10, 2024
 
 - Implement reflection for array types (#213)
 - Fix get_multi_columns() to support multiple table names in filter_array (#220)
