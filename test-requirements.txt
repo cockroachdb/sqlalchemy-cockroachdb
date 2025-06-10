@@ -8,7 +8,7 @@ attrs==25.3.0
     # via pytest
 futures==3.0.5
     # via -r test-requirements.in
-greenlet==3.2.2
+greenlet==3.2.3
     # via sqlalchemy
 iniconfig==2.1.0
     # via pytest
@@ -40,7 +40,7 @@ tomli==2.2.1
     # via
     #   alembic
     #   pytest
-typing-extensions==4.13.2
+typing-extensions==4.14.0
     # via
     #   alembic
     #   psycopg
