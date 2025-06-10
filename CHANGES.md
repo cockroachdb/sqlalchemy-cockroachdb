@@ -6,7 +6,7 @@ Unreleased
 - Add column comment to get_columns method (#253), thanks to @dotan-mor
 - Fix autogenerate with ON UPDATE / DELETE (#258, #262), thanks to @idumitrescu-dn
 - Improve support for table/column comments (via SQLA 2.0.36)
-
+- Add nested transaction support (#267), thanks to @mfmarche
 
 # Version 2.0.2
 January 10, 2023
