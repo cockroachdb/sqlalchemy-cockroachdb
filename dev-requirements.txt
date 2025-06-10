@@ -64,7 +64,7 @@ pygments==2.19.1
     #   rich
 readme-renderer==44.0
     # via twine
-requests==2.32.3
+requests==2.32.4
     # via
     #   id
     #   requests-toolbelt
