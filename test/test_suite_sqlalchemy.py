@@ -4,6 +4,9 @@ from sqlalchemy.testing.suite import *  # noqa
 from sqlalchemy.testing.suite import (
     ComponentReflectionTest as _ComponentReflectionTest,
 )
+from sqlalchemy.testing.suite import (
+    ComponentReflectionTestExtra as _ComponentReflectionTestExtra,
+)
 from sqlalchemy.testing.suite import HasIndexTest as _HasIndexTest
 from sqlalchemy.testing.suite import HasTableTest as _HasTableTest
 from sqlalchemy.testing.suite import IntegerTest as _IntegerTest
@@ -18,6 +21,7 @@ from sqlalchemy.testing.suite import (
 )
 from sqlalchemy.testing.suite import TrueDivTest as _TrueDivTest
 from sqlalchemy.testing.suite import UnicodeSchemaTest as _UnicodeSchemaTest
+import sqlalchemy.types as sql_types
 
 
 class ComponentReflectionTest(_ComponentReflectionTest):
@@ -242,7 +246,12 @@ class ComponentReflectionTest(_ComponentReflectionTest):
                     {
                         "column_names": ["data"],
                         "column_sorting": {"data": ("nulls_first",)},
-                        "dialect_options": {"postgresql_using": "prefix"},
+                        "dialect_options": {
+                            "postgresql_ops": {
+                                "data": None,
+                            },
+                            "postgresql_using": "prefix",
+                        },
                         "duplicates_constraint": "dingalings_data_key",
                         "name": "dingalings_data_key",
                         "unique": True,
@@ -253,7 +262,13 @@ class ComponentReflectionTest(_ComponentReflectionTest):
                             "address_id": ("nulls_first",),
                             "dingaling_id": ("nulls_first",),
                         },
-                        "dialect_options": {"postgresql_using": "prefix"},
+                        "dialect_options": {
+                            "postgresql_ops": {
+                                "address_id": None,
+                                "dingaling_id": None,
+                            },
+                            "postgresql_using": "prefix",
+                        },
                         "duplicates_constraint": "zz_dingalings_multiple",
                         "name": "zz_dingalings_multiple",
                         "unique": True,
@@ -263,7 +278,12 @@ class ComponentReflectionTest(_ComponentReflectionTest):
                     {
                         "column_names": ["email_address"],
                         "column_sorting": {"email_address": ("nulls_first",)},
-                        "dialect_options": {"postgresql_using": "prefix"},
+                        "dialect_options": {
+                            "postgresql_ops": {
+                                "email_address": None,
+                            },
+                            "postgresql_using": "prefix",
+                        },
                         "name": "ix_email_addresses_email_address",
                         "unique": False,
                     }
@@ -273,7 +293,12 @@ class ComponentReflectionTest(_ComponentReflectionTest):
                     {
                         "column_names": ["q"],
                         "column_sorting": {"q": ("desc", "nulls_last")},
-                        "dialect_options": {"postgresql_using": "prefix"},
+                        "dialect_options": {
+                            "postgresql_ops": {
+                                "q": None,
+                            },
+                            "postgresql_using": "prefix",
+                        },
                         "name": "noncol_idx_nopk",
                         "unique": False,
                     }
@@ -282,7 +307,12 @@ class ComponentReflectionTest(_ComponentReflectionTest):
                     {
                         "column_names": ["q"],
                         "column_sorting": {"q": ("desc", "nulls_last")},
-                        "dialect_options": {"postgresql_using": "prefix"},
+                        "dialect_options": {
+                            "postgresql_ops": {
+                                "q": None,
+                            },
+                            "postgresql_using": "prefix",
+                        },
                         "name": "noncol_idx_pk",
                         "unique": False,
                     }
@@ -295,14 +325,27 @@ class ComponentReflectionTest(_ComponentReflectionTest):
                             "test2": ("nulls_first",),
                             "user_id": ("nulls_first",),
                         },
-                        "dialect_options": {"postgresql_using": "prefix"},
+                        "dialect_options": {
+                            "postgresql_ops": {
+                                "test1": None,
+                                "test2": None,
+                                "user_id": None,
+                            },
+                            "postgresql_using": "prefix",
+                        },
                         "name": "users_all_idx",
                         "unique": False,
                     },
                     {
                         "column_names": ["test1", "test2"],
                         "column_sorting": {"test1": ("nulls_first",), "test2": ("nulls_first",)},
-                        "dialect_options": {"postgresql_using": "prefix"},
+                        "dialect_options": {
+                            "postgresql_ops": {
+                                "test1": None,
+                                "test2": None,
+                            },
+                            "postgresql_using": "prefix",
+                        },
                         "duplicates_constraint": "users_t_idx",
                         "name": "users_t_idx",
                         "unique": True,
@@ -376,6 +419,19 @@ class ComponentReflectionTest(_ComponentReflectionTest):
     def test_not_existing_table(self):
         # TODO: Why "AssertionError: Callable did not raise an exception"?
         pass
+
+
+class ComponentReflectionTestExtra(_ComponentReflectionTestExtra):
+    @testing.combinations(
+        sql_types.String,
+        sql_types.VARCHAR,
+        # sql_types.CHAR,  # we return VARCHAR(length=52)
+        (sql_types.NVARCHAR, testing.requires.nvarchar_types),
+        (sql_types.NCHAR, testing.requires.nvarchar_types),
+        argnames="type_",
+    )
+    def test_string_length_reflection(self, connection, metadata, type_):
+        super().test_string_length_reflection(connection, metadata, type_, [])
 
 
 class HasIndexTest(_HasIndexTest):
