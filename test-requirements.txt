@@ -1,14 +1,14 @@
-alembic==1.16.1
+alembic==1.16.4
     # via -r test-requirements.in
 async-timeout==5.0.1
     # via asyncpg
 asyncpg==0.30.0
     # via -r test-requirements.in
-attrs==25.3.0
+exceptiongroup==1.3.0
     # via pytest
 futures==3.0.5
     # via -r test-requirements.in
-greenlet==3.2.3
+greenlet==3.2.4
     # via sqlalchemy
 iniconfig==2.1.0
     # via pytest
@@ -28,11 +28,11 @@ psycopg==3.2.9
     # via -r test-requirements.in
 psycopg2==2.9.10
     # via -r test-requirements.in
-py==1.11.0
+pygments==2.19.2
     # via pytest
-pytest==7.1.3
+pytest==8.4.1
     # via -r test-requirements.in
-sqlalchemy==2.0.41
+sqlalchemy==2.0.43
     # via
     #   -r test-requirements.in
     #   alembic
@@ -40,8 +40,9 @@ tomli==2.2.1
     # via
     #   alembic
     #   pytest
-typing-extensions==4.14.0
+typing-extensions==4.14.1
     # via
     #   alembic
+    #   exceptiongroup
     #   psycopg
     #   sqlalchemy
