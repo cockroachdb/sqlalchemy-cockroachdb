@@ -136,11 +136,17 @@ class TestTypeReflection(fixtures.TestBase):
     def test_interval(self):
         self._test("interval", sqltypes.Interval)
 
-    def test_varchar(self):
+    def test_char(self):
         types = [
             "char",
-            "char varying",
             "character",
+        ]
+        for t in types:
+            self._test(t, sqltypes.CHAR)
+
+    def test_varchar(self):
+        types = [
+            "char varying",
             "character varying",
             "string",
             "text",

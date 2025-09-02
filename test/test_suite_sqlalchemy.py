@@ -4,9 +4,6 @@ from sqlalchemy.testing.suite import *  # noqa
 from sqlalchemy.testing.suite import (
     ComponentReflectionTest as _ComponentReflectionTest,
 )
-from sqlalchemy.testing.suite import (
-    ComponentReflectionTestExtra as _ComponentReflectionTestExtra,
-)
 from sqlalchemy.testing.suite import HasIndexTest as _HasIndexTest
 from sqlalchemy.testing.suite import HasTableTest as _HasTableTest
 from sqlalchemy.testing.suite import IntegerTest as _IntegerTest
@@ -21,7 +18,6 @@ from sqlalchemy.testing.suite import (
 )
 from sqlalchemy.testing.suite import TrueDivTest as _TrueDivTest
 from sqlalchemy.testing.suite import UnicodeSchemaTest as _UnicodeSchemaTest
-import sqlalchemy.types as sql_types
 
 
 class ComponentReflectionTest(_ComponentReflectionTest):
@@ -419,19 +415,6 @@ class ComponentReflectionTest(_ComponentReflectionTest):
     def test_not_existing_table(self):
         # TODO: Why "AssertionError: Callable did not raise an exception"?
         pass
-
-
-class ComponentReflectionTestExtra(_ComponentReflectionTestExtra):
-    @testing.combinations(
-        sql_types.String,
-        sql_types.VARCHAR,
-        # sql_types.CHAR,  # we return VARCHAR(length=52)
-        (sql_types.NVARCHAR, testing.requires.nvarchar_types),
-        (sql_types.NCHAR, testing.requires.nvarchar_types),
-        argnames="type_",
-    )
-    def test_string_length_reflection(self, connection, metadata, type_):
-        super().test_string_length_reflection(connection, metadata, type_, [])
 
 
 class HasIndexTest(_HasIndexTest):

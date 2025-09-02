@@ -1,4 +1,4 @@
-alembic==1.16.4
+alembic==1.16.5
     # via -r test-requirements.in
 async-timeout==5.0.1
     # via asyncpg
@@ -40,7 +40,7 @@ tomli==2.2.1
     # via
     #   alembic
     #   pytest
-typing-extensions==4.14.1
+typing-extensions==4.15.0
     # via
     #   alembic
     #   exceptiongroup

@@ -49,9 +49,9 @@ _type_map = {
     "timestamp with time zone": sqltypes.TIMESTAMP,
     "timestamp without time zone": sqltypes.TIMESTAMP,
     "interval": sqltypes.Interval,
-    "char": sqltypes.VARCHAR,
+    "char": sqltypes.CHAR,
     "char varying": sqltypes.VARCHAR,
-    "character": sqltypes.VARCHAR,
+    "character": sqltypes.CHAR,
     "character varying": sqltypes.VARCHAR,
     "string": sqltypes.VARCHAR,
     "text": sqltypes.VARCHAR,
@@ -244,7 +244,7 @@ class CockroachDBDialect(PGDialect):
                         precision=row.numeric_precision,
                         scale=row.numeric_scale,
                     )
-                elif type_class is sqltypes.VARCHAR:
+                elif type_class is sqltypes.VARCHAR or type_class is sqltypes.CHAR:
                     typ = type_class(length=row.character_maximum_length)
                 else:
                     typ = type_class
