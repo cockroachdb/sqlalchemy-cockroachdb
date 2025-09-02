@@ -1,6 +1,8 @@
 # Version 2.0.4
 Unreleased
 
+- Fix reflection of CHAR columns (#275)
+
 
 # Version 2.0.3
 June 10, 2025

@@ -6,7 +6,7 @@ cffi==1.17.1
     # via cryptography
 charset-normalizer==3.4.3
     # via requests
-cryptography==45.0.6
+cryptography==45.0.7
     # via secretstorage
 distlib==0.4.0
     # via virtualenv
@@ -50,7 +50,7 @@ packaging==25.0
     # via
     #   tox
     #   twine
-platformdirs==4.3.8
+platformdirs==4.4.0
     # via virtualenv
 pluggy==1.6.0
     # via tox
@@ -85,7 +85,7 @@ tox==3.23.1
     # via -r dev-requirements.in
 twine==6.1.0
     # via -r dev-requirements.in
-typing-extensions==4.14.1
+typing-extensions==4.15.0
     # via virtualenv
 urllib3==2.5.0
     # via
