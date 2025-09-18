@@ -28,7 +28,7 @@ For more details on working with asyncpg, see
 
 ### psycopg
 
-For psycopg version 3 support (⚠️ experimental 🏗), you'll need to install
+For psycopg version 3 support, you'll need to install
 
 * [psycopg](https://pypi.org/project/psycopg/)
 
@@ -85,7 +85,7 @@ from sqlalchemy import create_engine
 engine = create_engine('cockroachdb+psycopg://root@localhost:26257/defaultdb')
 ```
 
-To connect using psycopg for async operation (⚠️ experimental 🏗), see
+To connect using psycopg for async operation, see
 [README.psycopg.md](README.psycopg.md)
 
 

@@ -141,6 +141,7 @@ class CockroachDBDialect(PGDialect):
         self._is_v251plus = self._is_v243plus and (" v24.3." not in sversion)
         self._is_v252plus = self._is_v251plus and (" v25.1." not in sversion)
         self._is_v253plus = self._is_v252plus and (" v25.2." not in sversion)
+        self._is_v254plus = self._is_v253plus and (" v25.3." not in sversion)
         self._has_native_json = self._is_v2plus
         self._has_native_jsonb = self._is_v2plus
         self._supports_savepoints = self._is_v201plus

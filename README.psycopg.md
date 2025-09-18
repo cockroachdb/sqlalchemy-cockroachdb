@@ -17,7 +17,7 @@ from sqlalchemy import create_engine
 engine = create_engine('cockroachdb+psycopg://root@localhost:26257/defaultdb')
 ```
 
-### async operation (⚠️ experimental 🏗)
+### async operation
 
 The "classic" approach
 
