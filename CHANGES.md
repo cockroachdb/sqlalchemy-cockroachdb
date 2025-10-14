@@ -2,6 +2,7 @@
 Unreleased
 
 - Fix reflection of CHAR columns (#275)
+- Fix reflection of TIMESTAMPTZ columns (#276), thanks to @nvachhar
 
 
 # Version 2.0.3
