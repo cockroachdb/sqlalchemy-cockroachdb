@@ -7,6 +7,7 @@ from sqlalchemy.dialects.postgresql.base import PGDialect
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.dialects.postgresql import INET
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.compiler import compiles
 from sqlalchemy.util import warn
 import sqlalchemy.sql as sql
@@ -60,7 +61,7 @@ _type_map = {
     "bytea": sqltypes.BLOB,
     "bytes": sqltypes.BLOB,
     "json": sqltypes.JSON,
-    "jsonb": sqltypes.JSON,
+    "jsonb": JSONB,
     "uuid": UUID,
     "inet": INET,
 }
