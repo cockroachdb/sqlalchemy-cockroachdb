@@ -3,6 +3,7 @@ Unreleased
 
 - Fix reflection of CHAR columns (#275)
 - Fix reflection of TIMESTAMPTZ columns (#276), thanks to @nvachhar
+- Fix reflection of JSONB columns (#277)
 
 
 # Version 2.0.3
