@@ -58,7 +58,7 @@ class BaseRunTransactionTest(fixtures.DeclarativeMappedTest):
                     # If this is the first iteration, wait for the other txn to also read.
                     with cv:
                         wait_count[0] -= 1
-                        cv.notifyAll()
+                        cv.notify_all()
                         while wait_count[0] > 0:
                             cv.wait()
 
@@ -111,6 +111,8 @@ class RunTransactionSessionTest(BaseRunTransactionTest):
     def test_run_transaction_retry(self):
         def txn_body(sess):
             rs = sess.execute(text("select acct, balance from account where acct = 1"))
+            if sess.bind.dialect._is_v261plus:
+                sess.execute(text("SET allow_unsafe_internals = true"))
             sess.execute(text("select crdb_internal.force_retry('1s')"))
             return [r for r in rs]
 

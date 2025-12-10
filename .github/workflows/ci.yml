@@ -24,27 +24,26 @@ jobs:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     name: Test Results
-    needs: [test-py39]
+    needs: [test-py310]
     steps:
       - run: |
-          result="${{ needs.test-py39.result }}"
+          result="${{ needs.test-py310.result }}"
           if [[ $result == "success" || $result == "skipped" ]]; then
             exit 0
           else
             exit 1
           fi
 
-  test-py39:
+  test-py310:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         crdb-version: [
-          "cockroach:latest-v24.1",
           "cockroach:latest-v24.3",
           "cockroach:latest-v25.2",
-          "cockroach:latest-v25.3",
-          "cockroach:latest-v25.4"
+          "cockroach:latest-v25.4",
+          "cockroach:latest-v26.1"
         ]
         db-alias: [
           "psycopg2",
@@ -52,13 +51,13 @@ jobs:
           "psycopg"
         ]
     env:
-      TOXENV: py39
-      TOX_VERSION: 3.23.1
+      TOXENV: py310
+      TOX_VERSION: 4.34.1
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.9' 
+          python-version: '3.10'
       - name: Start CockroachDB
         run: |
           docker pull cockroachdb/${{ matrix.crdb-version }}
@@ -75,13 +74,13 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     env:
-      TOXENV: py39
-      TOX_VERSION: 3.23.1
+      TOXENV: py310
+      TOX_VERSION: 4.34.1
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.9' 
+          python-version: '3.10'
       - name: Install testrunner
         run: pip install --user tox==${TOX_VERSION}
       - name: Lint
