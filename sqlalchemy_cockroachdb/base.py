@@ -522,6 +522,29 @@ class CockroachDBDialect(PGDialect):
                 res.append(index)
         return res
 
+    def get_table_comment(self, connection, table_name, schema=None, **kw):
+        table_oid = self.get_table_oid(
+            connection, table_name, schema, info_cache=kw.get("info_cache")
+        )
+
+        COMMENT_SQL = """
+            SELECT
+                pgd.description as table_comment
+            FROM
+                pg_catalog.pg_description pgd
+                join pg_cartalog.pg_type pt on pt.oid = pgd.classoid
+            WHERE
+                pgd.objsubid = 0 AND
+                pgd.objoid = :table_oid AND
+                pt.typname = 'pg_class'
+        """
+
+        c = connection.execute(
+            sql.text(COMMENT_SQL), dict(table_oid=table_oid)
+        )
+        return {"text": c.scalar()}
+
+
     def get_check_constraints(self, conn, table_name, schema=None, **kw):
         if self._is_v21plus:
             return super().get_check_constraints(conn, table_name, schema, **kw)
