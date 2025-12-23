@@ -1,5 +1,8 @@
 # Version 1.4.5
-Unreleased
+Released December 23, 2025
+
+- Add column comment to get_columns method. (#252)
+- Add get_table_comment method to retrieve table comments. (#281)
 
 # Version 1.4.4
 Released September 9, 2022
