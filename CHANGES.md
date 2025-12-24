@@ -1,5 +1,7 @@
 # Version 1.4.6
-Unreleased
+Released December 24, 2025
+
+- Fixed query for the get_table_comment method. (#284)
 
 # Version 1.4.5
 Released December 23, 2025
