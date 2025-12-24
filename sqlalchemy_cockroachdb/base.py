@@ -532,7 +532,7 @@ class CockroachDBDialect(PGDialect):
                 pgd.description as table_comment
             FROM
                 pg_catalog.pg_description pgd
-                join pg_cartalog.pg_type pt on pt.oid = pgd.classoid
+                join pg_catalog.pg_type pt on pt.oid = pgd.classoid
             WHERE
                 pgd.objsubid = 0 AND
                 pgd.objoid = :table_oid AND
