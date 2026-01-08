@@ -79,7 +79,7 @@ tox==3.23.1
     # via -r dev-requirements.in
 twine==6.2.0
     # via -r dev-requirements.in
-urllib3==2.6.0
+urllib3==2.6.3
     # via
     #   requests
     #   twine
