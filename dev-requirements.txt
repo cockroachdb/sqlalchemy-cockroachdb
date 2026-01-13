@@ -83,5 +83,5 @@ urllib3==2.6.3
     # via
     #   requests
     #   twine
-virtualenv==20.35.4
+virtualenv==20.36.1
     # via tox
