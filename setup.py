@@ -23,10 +23,11 @@ setup(
         "License :: OSI Approved :: Apache Software License",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3 :: Only",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
     ],
     keywords="SQLAlchemy CockroachDB",
     project_urls={
@@ -36,7 +37,7 @@ setup(
     },
     packages=find_packages(include=["sqlalchemy_cockroachdb"]),
     include_package_data=True,
-    install_requires=["SQLAlchemy"],
+    install_requires=["SQLAlchemy>=2.0.47,<2.1"],
     zip_safe=False,
     entry_points={
         "sqlalchemy.dialects": [

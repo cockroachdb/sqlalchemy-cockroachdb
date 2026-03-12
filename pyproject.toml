@@ -6,4 +6,5 @@ addopts = "--tb native -v -r sfxX --maxfail=250 -p warnings -p logging --strict-
 markers = [
     "backend: tests that should run on all backends; typically dialect-sensitive",
     "mypy: mypy integration / plugin tests",
+    "sparse_driver_backend: tests that should run on just one kind of driver for each kind of db",
 ]

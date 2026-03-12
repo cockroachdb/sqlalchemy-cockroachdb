@@ -12,4 +12,4 @@ more-itertools
 psycopg
 psycopg2
 pytest
-sqlalchemy>=2.0.0
+sqlalchemy>=2.0.47,<2.1

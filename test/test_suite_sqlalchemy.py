@@ -17,7 +17,6 @@ from sqlalchemy.testing.suite import (
     QuotedNameArgumentTest as _QuotedNameArgumentTest,
 )
 from sqlalchemy.testing.suite import TrueDivTest as _TrueDivTest
-from sqlalchemy.testing.suite import UnicodeSchemaTest as _UnicodeSchemaTest
 
 
 class ComponentReflectionTest(_ComponentReflectionTest):
@@ -503,9 +502,3 @@ class TrueDivTest(_TrueDivTest):
     def test_floordiv_integer_bound(self):
         # we return SELECT 15 / 10 as Decimal('1.5'), not Integer
         pass
-
-
-class UnicodeSchemaTest(_UnicodeSchemaTest):
-    def test_reflect(self, connection):
-        if not (config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus):
-            super().test_reflect(connection)

@@ -66,7 +66,7 @@ class BaseRunTransactionTest(fixtures.TestBase):
                     # If this is the first iteration, wait for the other txn to also read.
                     with cv:
                         wait_count[0] -= 1
-                        cv.notifyAll()
+                        cv.notify_all()
                         while wait_count[0] > 0:
                             cv.wait()
 
@@ -133,6 +133,8 @@ class RunTransactionCoreTest(BaseRunTransactionTest):
     def test_run_transaction_retry(self):
         def txn_body(conn):
             rs = conn.execute(text("select acct, balance from account where acct = 1"))
+            if conn.dialect._is_v261plus:
+                conn.execute(text("SET allow_unsafe_internals = true"))
             conn.execute(text("select crdb_internal.force_retry('1s')"))
             return [r for r in rs]
 
@@ -143,6 +145,8 @@ class RunTransactionCoreTest(BaseRunTransactionTest):
     def test_run_transaction_retry_with_nested(self):
         def txn_body(conn):
             rs = conn.execute(text("select acct, balance from account where acct = 1"))
+            if conn.dialect._is_v261plus:
+                conn.execute(text("SET allow_unsafe_internals = true"))
             conn.execute(text("select crdb_internal.force_retry('1s')"))
             return [r for r in rs]
 
@@ -154,6 +158,8 @@ class RunTransactionCoreTest(BaseRunTransactionTest):
         def txn_body(conn):
             # first transaction inserts
             conn.execute(account_table.insert(), [dict(acct=99, balance=100)])
+            if conn.dialect._is_v261plus:
+                conn.execute(text("SET allow_unsafe_internals = true"))
             conn.execute(text("select crdb_internal.force_retry('1s')"))
 
             def _get_val(s):

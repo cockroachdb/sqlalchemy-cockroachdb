@@ -2,7 +2,6 @@ import collections
 import re
 import threading
 from sqlalchemy import text
-from sqlalchemy import util
 from sqlalchemy.dialects.postgresql.base import PGDialect
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.dialects.postgresql import INET
@@ -10,7 +9,6 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.compiler import compiles
 from sqlalchemy.util import warn
-import sqlalchemy.sql as sql
 
 import sqlalchemy.types as sqltypes
 
@@ -142,6 +140,7 @@ class CockroachDBDialect(PGDialect):
         self._is_v252plus = self._is_v251plus and (" v25.1." not in sversion)
         self._is_v253plus = self._is_v252plus and (" v25.2." not in sversion)
         self._is_v254plus = self._is_v253plus and (" v25.3." not in sversion)
+        self._is_v261plus = self._is_v254plus and (" v25.4." not in sversion)
         self._has_native_json = self._is_v2plus
         self._has_native_jsonb = self._is_v2plus
         self._supports_savepoints = self._is_v201plus
@@ -363,150 +362,6 @@ class CockroachDBDialect(PGDialect):
             ]:
                 result.pop(k, None)
         return result
-
-    def get_foreign_keys_v1(self, conn, table_name, schema=None, **kw):
-        fkeys = []
-        FK_REGEX = re.compile(r"(?P<referred_table>.+)?\.\[(?P<referred_columns>.+)?]")
-
-        for row in conn.execute(
-            text(f'SHOW CONSTRAINTS FROM "{schema or self.default_schema_name}"."{table_name}"')
-        ):
-            if row.Type.startswith("FOREIGN KEY"):
-                m = re.search(FK_REGEX, row.Details)
-
-                name = row.Name
-                constrained_columns = row["Column(s)"].split(", ")
-                referred_table = m.group("referred_table")
-                referred_columns = m.group("referred_columns").split()
-                referred_schema = schema
-                fkey_d = {
-                    "name": name,
-                    "constrained_columns": constrained_columns,
-                    "referred_table": referred_table,
-                    "referred_columns": referred_columns,
-                    "referred_schema": referred_schema,
-                }
-                fkeys.append(fkey_d)
-        return fkeys
-
-    @util.memoized_property
-    def _fk_regex_pattern(self):
-        # optionally quoted token
-        qtoken = r'(?:"[^"]+"|[\w]+?)'
-
-        # https://www.postgresql.org/docs/current/static/sql-createtable.html
-        return re.compile(
-            r"FOREIGN KEY \((.*?)\) "
-            rf"REFERENCES (?:({qtoken})\.)?({qtoken})\(((?:{qtoken}(?: *, *)?)+)\)"  # noqa: E501
-            r"[\s]?(MATCH (FULL|PARTIAL|SIMPLE)+)?"
-            r"[\s]?(ON DELETE "
-            r"(CASCADE|RESTRICT|NO ACTION|SET NULL|SET DEFAULT)+)?"
-            r"[\s]?(ON UPDATE "
-            r"(CASCADE|RESTRICT|NO ACTION|SET NULL|SET DEFAULT)+)?"
-            r"[\s]?(DEFERRABLE|NOT DEFERRABLE)?"
-            r"[\s]?(INITIALLY (DEFERRED|IMMEDIATE)+)?"
-        )
-
-    def get_foreign_keys(
-        self, connection, table_name, schema=None, postgresql_ignore_search_path=False, **kw
-    ):
-        if not self._is_v2plus:
-            # v1.1 or earlier.
-            return self.get_foreign_keys_v1(connection, table_name, schema, **kw)
-
-        # v2.0 or later.
-        # This method is the same as the one in SQLAlchemy's pg dialect, with
-        # a tweak to the FK regular expressions to tolerate whitespace between
-        # the table name and the column list.
-        # See also: https://github.com/cockroachdb/cockroach/issues/27123
-
-        preparer = self.identifier_preparer
-        table_oid = self.get_table_oid(
-            connection, table_name, schema, info_cache=kw.get("info_cache")
-        )
-
-        FK_SQL = """
-          SELECT r.conname,
-                pg_catalog.pg_get_constraintdef(r.oid, true) as condef,
-                n.nspname as conschema
-          FROM  pg_catalog.pg_constraint r,
-                pg_namespace n,
-                pg_class c
-
-          WHERE r.conrelid = :table AND
-                r.contype = 'f' AND
-                c.oid = confrelid AND
-                n.oid = c.relnamespace
-          ORDER BY 1
-        """
-        # http://www.postgresql.org/docs/9.0/static/sql-createtable.html
-        FK_REGEX = self._fk_regex_pattern
-
-        t = sql.text(FK_SQL).columns(conname=sqltypes.Unicode, condef=sqltypes.Unicode)
-        c = connection.execute(t, {"table": table_oid})
-        fkeys = []
-        for conname, condef, conschema in c.fetchall():
-            m = re.search(FK_REGEX, condef).groups()
-
-            (
-                constrained_columns,
-                referred_schema,
-                referred_table,
-                referred_columns,
-                _,
-                match,
-                _,
-                ondelete,
-                _,
-                onupdate,
-                deferrable,
-                _,
-                initially,
-            ) = m
-
-            if deferrable is not None:
-                deferrable = True if deferrable == "DEFERRABLE" else False
-            constrained_columns = [
-                preparer._unquote_identifier(x) for x in re.split(r"\s*,\s*", constrained_columns)
-            ]
-
-            if postgresql_ignore_search_path:
-                # when ignoring search path, we use the actual schema
-                # provided it isn't the "default" schema
-                if conschema != self.default_schema_name:
-                    referred_schema = conschema
-                else:
-                    referred_schema = schema
-            elif referred_schema:
-                # referred_schema is the schema that we regexp'ed from
-                # pg_get_constraintdef().  If the schema is in the search
-                # path, pg_get_constraintdef() will give us None.
-                referred_schema = preparer._unquote_identifier(referred_schema)
-            elif schema is not None and schema == conschema:
-                # If the actual schema matches the schema of the table
-                # we're reflecting, then we will use that.
-                referred_schema = schema
-
-            referred_table = preparer._unquote_identifier(referred_table)
-            referred_columns = [
-                preparer._unquote_identifier(x) for x in re.split(r"\s*,\s", referred_columns)
-            ]
-            fkey_d = {
-                "name": conname,
-                "constrained_columns": constrained_columns,
-                "referred_schema": referred_schema,
-                "referred_table": referred_table,
-                "referred_columns": referred_columns,
-                "options": {
-                    "onupdate": onupdate,
-                    "ondelete": ondelete,
-                    "deferrable": deferrable,
-                    "initially": initially,
-                    "match": match,
-                },
-            }
-            fkeys.append(fkey_d)
-        return fkeys
 
     def get_pk_constraint(self, conn, table_name, schema=None, **kw):
         if self._is_v21plus:
