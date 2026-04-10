@@ -5,6 +5,7 @@ Unreleased
 - Fix reflection of TIMESTAMPTZ columns (#276), thanks to @nvachhar
 - Fix reflection of JSONB columns (#277)
 - Fix compatibility issues with Alembic 1.18 (via SQLA 2.0.47)
+- Fix get_columns() to include identity column info (#297)
 - Update minimum Python version to 3.10
 
 
