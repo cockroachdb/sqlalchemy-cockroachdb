@@ -6,6 +6,11 @@ Unreleased
 - Fix reflection of JSONB columns (#277)
 - Fix compatibility issues with Alembic 1.18 (via SQLA 2.0.47)
 - Update minimum Python version to 3.10
+- Compile MySQL-style `func.timestampdiff(unit, start, end)` to a
+  PostgreSQL-style `EXTRACT(EPOCH FROM ...)` expression on the cockroachdb
+  dialect, casting the result to NUMERIC to avoid `float / decimal`
+  arithmetic errors. Enables cross-dialect ORMs (e.g. Apache Airflow) that
+  fall back to `timestampdiff` for non-PostgreSQL backends.
 
 
 # Version 2.0.3
