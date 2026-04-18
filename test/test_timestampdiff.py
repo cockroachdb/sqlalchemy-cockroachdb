@@ -4,6 +4,7 @@ from sqlalchemy import Integer
 from sqlalchemy import MetaData
 from sqlalchemy import Table
 from sqlalchemy import TIMESTAMP
+from sqlalchemy import literal
 from sqlalchemy import select
 from sqlalchemy import text
 from sqlalchemy.dialects.postgresql import dialect as postgresql_dialect
@@ -25,8 +26,9 @@ def _events_table():
     )
 
 
-def _compile(stmt, dialect):
-    return str(stmt.compile(dialect=dialect, compile_kwargs={"literal_binds": True}))
+def _compile(stmt, dialect, literal_binds=True):
+    kwargs = {"literal_binds": True} if literal_binds else {}
+    return str(stmt.compile(dialect=dialect, compile_kwargs=kwargs))
 
 
 class TimestampdiffCompilerTest(fixtures.TestBase):
@@ -89,3 +91,34 @@ class TimestampdiffCompilerTest(fixtures.TestBase):
         sql = _compile(select(expr), postgresql_dialect())
         assert "EXTRACT" not in sql
         assert "timestampdiff" in sql.lower()
+
+    def test_plain_string_unit_accepted(self):
+        """Plain Python string unit must resolve to a real unit, not a bound placeholder.
+
+        Compiles WITHOUT literal_binds to mirror how Airflow's ORM actually executes
+        statements — BindParameters render as ``$1`` / ``%(...)s`` unless we extract
+        the value at compile time.
+        """
+        expr = func.timestampdiff("MICROSECOND", self.events.c.start_date, self.events.c.end_date)
+        sql = _compile(select(expr), self.dialect, literal_binds=False)
+        assert "EXTRACT(EPOCH FROM" in sql
+        assert "* 1000000" in sql
+        assert "%(" not in sql
+        assert "$1" not in sql
+
+    def test_literal_unit_accepted(self):
+        """``literal('SECOND')`` should resolve via BindParameter value, not a placeholder."""
+        expr = func.timestampdiff(
+            literal("SECOND"), self.events.c.start_date, self.events.c.end_date
+        )
+        sql = _compile(select(expr), self.dialect, literal_binds=False)
+        assert "EXTRACT(EPOCH FROM" in sql
+        assert "AS NUMERIC" in sql
+        assert "%(" not in sql
+        assert "$1" not in sql
+
+    def test_non_string_bind_value_rejected_clearly(self):
+        """A BindParameter whose value isn't a string must produce a clear error."""
+        expr = func.timestampdiff(123, self.events.c.start_date, self.events.c.end_date)
+        with pytest.raises(ValueError, match="must be a string"):
+            _compile(select(expr), self.dialect, literal_binds=False)

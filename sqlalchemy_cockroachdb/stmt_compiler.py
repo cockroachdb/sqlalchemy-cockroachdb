@@ -1,6 +1,7 @@
 from sqlalchemy.dialects.postgresql.base import PGCompiler
 from sqlalchemy.dialects.postgresql.base import PGIdentifierPreparer
 from sqlalchemy.ext.compiler import compiles
+from sqlalchemy.sql.elements import BindParameter
 from sqlalchemy.sql.functions import GenericFunction
 
 # This is extracted from CockroachDB's `sql.y`. Add keywords here if *NEW* reserved keywords
@@ -129,6 +130,27 @@ _TIMESTAMPDIFF_UNIT_FACTOR = {
 }
 
 
+def _resolve_timestampdiff_unit(unit_arg, compiler, **kwargs):
+    """Extract the unit token from a ``timestampdiff()`` first argument.
+
+    The unit must be known at compile time so it can be turned into a SQL
+    arithmetic factor. Plain Python strings (``func.timestampdiff("SECOND", ...)``)
+    and ``literal("SECOND")`` reach the compiler as :class:`BindParameter`; if we
+    delegated to ``compiler.process`` those would render as parameter
+    placeholders (``$1`` / ``%(...)s``), so we extract ``.value`` directly.
+    Other constructs such as ``text("SECOND")`` and ``literal_column("SECOND")``
+    render as literal SQL tokens and go through the normal path.
+    """
+    if isinstance(unit_arg, BindParameter):
+        raw = unit_arg.value
+        if not isinstance(raw, str):
+            raise ValueError(
+                "timestampdiff() unit must be a string; " f"got {type(raw).__name__} ({raw!r})"
+            )
+        return raw.strip().upper()
+    return compiler.process(unit_arg, **kwargs).strip().strip("'\"").upper()
+
+
 @compiles(timestampdiff, "cockroachdb")
 def _compile_timestampdiff_cockroachdb(element, compiler, **kwargs):
     """Compile ``timestampdiff(unit, start, end)`` for the cockroachdb dialect.
@@ -141,11 +163,13 @@ def _compile_timestampdiff_cockroachdb(element, compiler, **kwargs):
     args = list(element.clauses)
     if len(args) != 3:
         raise ValueError(f"timestampdiff() expects 3 arguments (unit, start, end); got {len(args)}")
-    unit_token = compiler.process(args[0], **kwargs).strip().strip("'\"").upper()
+    unit_token = _resolve_timestampdiff_unit(args[0], compiler, **kwargs)
     if unit_token not in _TIMESTAMPDIFF_UNIT_FACTOR:
         raise ValueError(
             f"Unsupported timestampdiff() unit for cockroachdb dialect: {unit_token!r}. "
-            f"Supported units: {sorted(_TIMESTAMPDIFF_UNIT_FACTOR)}"
+            f"Supported units: {sorted(_TIMESTAMPDIFF_UNIT_FACTOR)}. "
+            "Pass the unit as a plain string, sqlalchemy.literal(unit), "
+            "or sqlalchemy.text(unit)."
         )
     start_expr = compiler.process(args[1], **kwargs)
     end_expr = compiler.process(args[2], **kwargs)
