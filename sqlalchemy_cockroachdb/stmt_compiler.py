@@ -127,7 +127,16 @@ _TIMESTAMPDIFF_UNIT_FACTOR = {
     "MINUTE": " / 60",
     "HOUR": " / 3600",
     "DAY": " / 86400",
+    "WEEK": " / 604800",
 }
+
+# Calendar-aware units are intentionally not implemented. MySQL's
+# ``TIMESTAMPDIFF(MONTH, ...)`` walks the calendar so that ``Feb 28 -> Mar 1``
+# is one month while ``Mar 1 -> Mar 30`` is zero months. That logic cannot be
+# derived from epoch arithmetic; a faithful implementation would need
+# ``EXTRACT(YEAR FROM AGE(end, start))`` plus month math. Listing them here
+# lets us emit a specific error rather than the generic "unsupported unit" one.
+_TIMESTAMPDIFF_CALENDAR_AWARE_UNITS = frozenset({"MONTH", "QUARTER", "YEAR"})
 
 
 def _resolve_timestampdiff_unit(unit_arg, compiler, **kwargs):
@@ -155,15 +164,39 @@ def _resolve_timestampdiff_unit(unit_arg, compiler, **kwargs):
 def _compile_timestampdiff_cockroachdb(element, compiler, **kwargs):
     """Compile ``timestampdiff(unit, start, end)`` for the cockroachdb dialect.
 
-    The result is cast to ``NUMERIC`` so callers may safely combine it with
-    integer or numeric divisors. CockroachDB rejects ``float / decimal``
-    arithmetic that PostgreSQL accepts, and ``EXTRACT(EPOCH FROM ...)``
-    returns a float on CockroachDB.
+    Output shape::
+
+        TRUNC(CAST(EXTRACT(EPOCH FROM (end - start)) AS NUMERIC) <factor>)
+
+    The ``TRUNC()`` wrap matches MySQL's ``TIMESTAMPDIFF`` semantics: the
+    result is the integer count of complete units between the two timestamps,
+    truncated toward zero. Without it, a 90-second diff at ``MINUTE`` would
+    return ``1.5`` on cockroachdb where MySQL returns ``1``.
+
+    The cast to ``NUMERIC`` (rather than to ``BIGINT``) is intentional. It
+    keeps the value integer-truncated like MySQL while still allowing
+    downstream divisors -- e.g. Apache Airflow's
+    ``timestampdiff(MICROSECOND, ...) / 1_000_000`` pattern -- to do
+    floating-point division on cockroachdb. Returning ``BIGINT`` would force
+    integer division on the divisor and silently lose sub-second precision.
+
+    Calendar-aware units (``MONTH``, ``QUARTER``, ``YEAR``) are intentionally
+    rejected with a specific error; see ``_TIMESTAMPDIFF_CALENDAR_AWARE_UNITS``
+    for the rationale.
     """
     args = list(element.clauses)
     if len(args) != 3:
         raise ValueError(f"timestampdiff() expects 3 arguments (unit, start, end); got {len(args)}")
     unit_token = _resolve_timestampdiff_unit(args[0], compiler, **kwargs)
+    if unit_token in _TIMESTAMPDIFF_CALENDAR_AWARE_UNITS:
+        raise ValueError(
+            f"timestampdiff() unit {unit_token!r} is not supported on the cockroachdb "
+            "dialect. Calendar-aware units (MONTH, QUARTER, YEAR) require calendar "
+            "walking (e.g. Feb 28 -> Mar 1 is 1 month) that cannot be derived from "
+            "epoch arithmetic alone, and are intentionally omitted. "
+            "If you need them, please open an issue at "
+            "https://github.com/cockroachdb/sqlalchemy-cockroachdb/issues."
+        )
     if unit_token not in _TIMESTAMPDIFF_UNIT_FACTOR:
         raise ValueError(
             f"Unsupported timestampdiff() unit for cockroachdb dialect: {unit_token!r}. "
@@ -175,4 +208,4 @@ def _compile_timestampdiff_cockroachdb(element, compiler, **kwargs):
     end_expr = compiler.process(args[2], **kwargs)
     epoch_diff = f"CAST(EXTRACT(EPOCH FROM ({end_expr} - {start_expr})) AS NUMERIC)"
     factor = _TIMESTAMPDIFF_UNIT_FACTOR[unit_token]
-    return f"({epoch_diff}{factor})" if factor else epoch_diff
+    return f"TRUNC({epoch_diff}{factor})"

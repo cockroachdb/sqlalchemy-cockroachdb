@@ -47,6 +47,7 @@ class TimestampdiffCompilerTest(fixtures.TestBase):
             ("MINUTE", "/ 60"),
             ("HOUR", "/ 3600"),
             ("DAY", "/ 86400"),
+            ("WEEK", "/ 604800"),
         ],
     )
     def test_compiles_with_arithmetic_suffix(self, unit, expected_suffix):
@@ -55,15 +56,35 @@ class TimestampdiffCompilerTest(fixtures.TestBase):
         assert "EXTRACT(EPOCH FROM" in sql
         assert "AS NUMERIC" in sql
         assert expected_suffix in sql
+        assert "TRUNC(" in sql
 
     def test_seconds_has_no_arithmetic_suffix(self):
+        """SECOND has no factor token but is still wrapped in TRUNC for MySQL parity."""
         expr = func.timestampdiff(text("SECOND"), self.events.c.start_date, self.events.c.end_date)
         sql = _compile(select(expr), self.dialect)
         assert "EXTRACT(EPOCH FROM" in sql
         assert "AS NUMERIC" in sql
+        assert "TRUNC(" in sql
         after_cast = sql.split("AS NUMERIC", 1)[1]
         assert " * " not in after_cast
         assert " / " not in after_cast
+
+    def test_truncates_to_match_mysql_semantics(self):
+        """Regression for #301 review: MySQL TIMESTAMPDIFF returns BIGINT (truncated
+        toward zero), so a 90-second diff at MINUTE returns 1, not 1.5. The cockroachdb
+        compilation must wrap the arithmetic in TRUNC() so the *value* matches MySQL,
+        even though we deliberately keep the NUMERIC return type for downstream
+        divisor compatibility (see compiler docstring).
+        """
+        expr = func.timestampdiff(text("MINUTE"), self.events.c.start_date, self.events.c.end_date)
+        sql = _compile(select(expr), self.dialect)
+        # TRUNC must wrap the divided expression, not just the EPOCH cast.
+        assert "TRUNC(" in sql
+        trunc_idx = sql.index("TRUNC(")
+        factor_idx = sql.index("/ 60")
+        assert trunc_idx < factor_idx, f"TRUNC should wrap the division; got SQL: {sql!r}"
+        # The closing paren of TRUNC must come after the factor: "/ 60)" must appear.
+        assert "/ 60)" in sql
 
     def test_lowercase_unit_accepted(self):
         expr = func.timestampdiff(
@@ -72,12 +93,23 @@ class TimestampdiffCompilerTest(fixtures.TestBase):
         sql = _compile(select(expr), self.dialect)
         assert "EXTRACT(EPOCH FROM" in sql
         assert "* 1000000" in sql
+        assert "TRUNC(" in sql
 
     def test_unknown_unit_rejected(self):
         expr = func.timestampdiff(
             text("FORTNIGHT"), self.events.c.start_date, self.events.c.end_date
         )
         with pytest.raises(ValueError, match="Unsupported timestampdiff"):
+            _compile(select(expr), self.dialect)
+
+    @pytest.mark.parametrize("unit", ["MONTH", "QUARTER", "YEAR", "month", "Year"])
+    def test_calendar_aware_units_rejected_with_explanation(self, unit):
+        """MONTH/QUARTER/YEAR must be rejected with a specific error explaining
+        why they're intentionally omitted (calendar-walking vs epoch arithmetic),
+        not the generic 'unsupported unit' error.
+        """
+        expr = func.timestampdiff(text(unit), self.events.c.start_date, self.events.c.end_date)
+        with pytest.raises(ValueError, match="Calendar-aware units"):
             _compile(select(expr), self.dialect)
 
     def test_wrong_arity_rejected(self):
@@ -103,6 +135,7 @@ class TimestampdiffCompilerTest(fixtures.TestBase):
         sql = _compile(select(expr), self.dialect, literal_binds=False)
         assert "EXTRACT(EPOCH FROM" in sql
         assert "* 1000000" in sql
+        assert "TRUNC(" in sql
         assert "%(" not in sql
         assert "$1" not in sql
 
@@ -114,6 +147,7 @@ class TimestampdiffCompilerTest(fixtures.TestBase):
         sql = _compile(select(expr), self.dialect, literal_binds=False)
         assert "EXTRACT(EPOCH FROM" in sql
         assert "AS NUMERIC" in sql
+        assert "TRUNC(" in sql
         assert "%(" not in sql
         assert "$1" not in sql
 
