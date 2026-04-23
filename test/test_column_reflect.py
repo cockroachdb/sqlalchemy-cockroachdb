@@ -1,4 +1,14 @@
-from sqlalchemy import MetaData, Table, Column, Integer, String, testing, inspect
+from sqlalchemy import (
+    MetaData,
+    Table,
+    Column,
+    Integer,
+    String,
+    testing,
+    inspect,
+    BigInteger,
+    Identity,
+)
 from sqlalchemy.testing import fixtures, eq_
 
 meta = MetaData()
@@ -13,6 +23,13 @@ with_pk = Table(
 without_pk = Table(
     "without_pk",
     meta,
+    Column("txt", String),
+)
+
+with_identity = Table(
+    "with_identity",
+    meta,
+    Column("id", BigInteger, Identity(), primary_key=True),
     Column("txt", String),
 )
 
@@ -93,6 +110,40 @@ class ReflectHiddenColumnsTest(fixtures.TestBase):
                     "autoincrement": True,
                     "is_hidden": True,
                     "comment": None,
+                },
+            ],
+        )
+
+    def test_reflect_identity(self):
+        eq_(
+            self._get_col_info("with_identity"),
+            [
+                {
+                    "autoincrement": True,
+                    "comment": None,
+                    "default": "nextval('public.with_identity_id_seq'::REGCLASS)",
+                    "identity": {
+                        "always": False,
+                        "cache": 1,
+                        "cycle": False,
+                        "increment": 1,
+                        "maxvalue": 9223372036854775807,
+                        "minvalue": 1,
+                        "start": 1,
+                    },
+                    "is_hidden": False,
+                    "name": "id",
+                    "nullable": False,
+                    "type": "INTEGER",
+                },
+                {
+                    "autoincrement": False,
+                    "comment": None,
+                    "default": None,
+                    "is_hidden": False,
+                    "name": "txt",
+                    "nullable": True,
+                    "type": "VARCHAR",
                 },
             ],
         )

@@ -54,8 +54,8 @@ jobs:
       TOXENV: py310
       TOX_VERSION: 4.34.1
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.10'
       - name: Start CockroachDB
@@ -77,8 +77,8 @@ jobs:
       TOXENV: py310
       TOX_VERSION: 4.34.1
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.10'
       - name: Install testrunner

@@ -1,12 +1,14 @@
-cachetools==7.0.1
+backports-tarfile==1.2.0
+    # via jaraco-context
+cachetools==7.0.6
     # via tox
-certifi==2026.1.4
+certifi==2026.4.22
     # via requests
 cffi==2.0.0
     # via cryptography
-chardet==6.0.0.post1
+chardet==7.4.3
     # via tox
-charset-normalizer==3.4.4
+charset-normalizer==3.4.7
     # via requests
 colorama==0.4.6
     # via tox
@@ -16,17 +18,20 @@ distlib==0.4.0
     # via virtualenv
 docutils==0.22.4
     # via readme-renderer
-filelock==3.24.3
+filelock==3.29.0
     # via
+    #   python-discovery
     #   tox
     #   virtualenv
 id==1.6.1
     # via twine
-idna==3.11
+idna==3.13
     # via requests
+importlib-metadata==9.0.0
+    # via keyring
 jaraco-classes==3.4.0
     # via keyring
-jaraco-context==6.1.0
+jaraco-context==6.1.2
     # via keyring
 jaraco-functools==4.4.0
     # via keyring
@@ -40,19 +45,20 @@ markdown-it-py==4.0.0
     # via rich
 mdurl==0.1.2
     # via markdown-it-py
-more-itertools==10.8.0
+more-itertools==11.0.2
     # via
     #   jaraco-classes
     #   jaraco-functools
-nh3==0.3.3
+nh3==0.3.4
     # via readme-renderer
-packaging==26.0
+packaging==26.1
     # via
     #   pyproject-api
     #   tox
     #   twine
-platformdirs==4.9.2
+platformdirs==4.9.6
     # via
+    #   python-discovery
     #   tox
     #   virtualenv
 pluggy==1.6.0
@@ -65,9 +71,11 @@ pygments==2.20.0
     #   rich
 pyproject-api==1.10.0
     # via tox
+python-discovery==1.2.2
+    # via virtualenv
 readme-renderer==44.0
     # via twine
-requests==2.33.0
+requests==2.33.1
     # via
     #   requests-toolbelt
     #   twine
@@ -75,18 +83,29 @@ requests-toolbelt==1.0.0
     # via twine
 rfc3986==2.0.0
     # via twine
-rich==14.3.3
+rich==15.0.0
     # via twine
 secretstorage==3.5.0
     # via keyring
+tomli==2.4.1
+    # via
+    #   pyproject-api
+    #   tox
 tox==4.34.1
     # via -r dev-requirements.in
 twine==6.2.0
     # via -r dev-requirements.in
+typing-extensions==4.15.0
+    # via
+    #   cryptography
+    #   tox
+    #   virtualenv
 urllib3==2.6.3
     # via
     #   id
     #   requests
     #   twine
-virtualenv==20.39.0
+virtualenv==21.2.4
     # via tox
+zipp==3.23.1
+    # via importlib-metadata

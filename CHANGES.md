@@ -1,6 +1,7 @@
 # Version 2.0.5
 Unreleased
 
+- Fix get_columns() to include identity column info (#297)
 
 # Version 2.0.4
 April 23, 2026

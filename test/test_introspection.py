@@ -1,5 +1,3 @@
-import contextlib
-
 from sqlalchemy import (
     Table,
     Column,
@@ -14,6 +12,7 @@ from sqlalchemy.types import Integer, String, Boolean
 import sqlalchemy.types as sqltypes
 from sqlalchemy.testing import fixtures
 from sqlalchemy.dialects.postgresql import INET
+from sqlalchemy.dialects.postgresql import INTERVAL
 from sqlalchemy.dialects.postgresql import UUID
 
 meta = MetaData()
@@ -100,24 +99,42 @@ class TestTypeReflection(fixtures.TestBase):
         self._test("timestamp[]", sqltypes.ARRAY, sqltypes.TIMESTAMP)
         self._test("varchar(10)[]", sqltypes.ARRAY, sqltypes.VARCHAR)
 
+    def test_blob(self):
+        for t in ["blob", "bytea", "bytes"]:
+            self._test(t, sqltypes.BLOB)
+
     def test_boolean(self):
         for t in ["bool", "boolean"]:
             self._test(t, sqltypes.BOOLEAN)
 
-    def test_int(self):
-        for t in ["bigint", "int", "int2", "int4", "int64", "int8", "integer", "smallint"]:
-            self._test(t, sqltypes.INT)
+    def test_char(self):
+        for t in ["char", "character"]:
+            self._test(t, sqltypes.CHAR)
 
-    def test_float(self):
-        for t in ["double precision", "float", "float4", "float8", "real"]:
-            self._test(t, sqltypes.FLOAT)
+    def test_date(self):
+        self._test("date", sqltypes.DATE)
 
     def test_decimal(self):
         for t in ["dec", "decimal", "numeric"]:
             self._test(t, sqltypes.DECIMAL)
 
-    def test_date(self):
-        self._test("date", sqltypes.DATE)
+    def test_float(self):
+        for t in ["double precision", "float", "float4", "float8", "real"]:
+            self._test(t, sqltypes.FLOAT)
+
+    def test_inet(self):
+        self._test("inet", INET)
+
+    def test_int(self):
+        for t in ["bigint", "int", "int2", "int4", "int64", "int8", "integer", "smallint"]:
+            self._test(t, sqltypes.INT)
+
+    def test_interval(self):
+        self._test("interval", INTERVAL)
+
+    def test_json(self):
+        for t in ["json", "jsonb"]:
+            self._test(t, sqltypes.JSON)
 
     def test_time(self):
         for t in ["time", "time without time zone"]:
@@ -133,16 +150,8 @@ class TestTypeReflection(fixtures.TestBase):
         for t in types:
             self._test(t, sqltypes.TIMESTAMP)
 
-    def test_interval(self):
-        self._test("interval", sqltypes.Interval)
-
-    def test_char(self):
-        types = [
-            "char",
-            "character",
-        ]
-        for t in types:
-            self._test(t, sqltypes.CHAR)
+    def test_uuid(self):
+        self._test("uuid", UUID)
 
     def test_varchar(self):
         types = [
@@ -154,46 +163,3 @@ class TestTypeReflection(fixtures.TestBase):
         ]
         for t in types:
             self._test(t, sqltypes.VARCHAR)
-
-    def test_blob(self):
-        for t in ["blob", "bytea", "bytes"]:
-            self._test(t, sqltypes.BLOB)
-
-    def test_json(self):
-        for t in ["json", "jsonb"]:
-            self._test(t, sqltypes.JSON)
-
-    def test_uuid(self):
-        self._test("uuid", UUID)
-
-    def test_inet(self):
-        self._test("inet", INET)
-
-
-class UnknownTypeTest(fixtures.TestBase):
-    __requires__ = ("sync_driver",)
-
-    def setup_method(self):
-        with testing.db.begin() as conn:
-            conn.execute(text("CREATE TABLE t2 (c bool)"))
-
-    def teardown_method(self):
-        with testing.db.begin() as conn:
-            conn.execute(text("DROP TABLE t2"))
-
-    @testing.expect_warnings("Did not recognize type 'boolean'")
-    def test_unknown_type(self):
-        @contextlib.contextmanager
-        def make_bool_unknown():
-            import sqlalchemy_cockroachdb
-
-            t = sqlalchemy_cockroachdb.base._type_map.pop("bool")
-            sqlalchemy_cockroachdb.base._type_map.pop("boolean")
-            yield
-            sqlalchemy_cockroachdb.base._type_map["bool"] = t
-            sqlalchemy_cockroachdb.base._type_map["boolean"] = t
-
-        with make_bool_unknown():
-            meta2 = MetaData()
-            t = Table("t2", meta2, autoload_with=testing.db)
-        assert t.c["c"].type == sqltypes.NULLTYPE
