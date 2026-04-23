@@ -1,6 +1,7 @@
 # Version 2.0.5
 Unreleased
 
+- Fix get_columns() to include identity column info (#297)
 
 # Version 2.0.4
 April 23, 2026
@@ -9,7 +10,6 @@ April 23, 2026
 - Fix reflection of TIMESTAMPTZ columns (#276), thanks to @nvachhar
 - Fix reflection of JSONB columns (#277)
 - Fix compatibility issues with Alembic 1.18 (via SQLA 2.0.47)
-- Fix get_columns() to include identity column info (#297)
 - Update minimum Python version to 3.10
 - Compile MySQL-style `func.timestampdiff(unit, start, end)` to a
   PostgreSQL-style `EXTRACT(EPOCH FROM ...)` expression on the cockroachdb

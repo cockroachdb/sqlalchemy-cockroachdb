@@ -20,13 +20,13 @@ mock==5.2.0
     # via -r test-requirements.in
 more-itertools==11.0.2
     # via -r test-requirements.in
-packaging==26.0
+packaging==26.1
     # via pytest
 pluggy==1.6.0
     # via pytest
 psycopg==3.3.3
     # via -r test-requirements.in
-psycopg2==2.9.11
+psycopg2==2.9.12
     # via -r test-requirements.in
 pygments==2.20.0
     # via pytest
