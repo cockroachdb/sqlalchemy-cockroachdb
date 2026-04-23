@@ -1,5 +1,9 @@
-# Version 2.0.4
+# Version 2.0.5
 Unreleased
+
+
+# Version 2.0.4
+April 23, 2026
 
 - Fix reflection of CHAR columns (#275)
 - Fix reflection of TIMESTAMPTZ columns (#276), thanks to @nvachhar
@@ -7,6 +11,19 @@ Unreleased
 - Fix compatibility issues with Alembic 1.18 (via SQLA 2.0.47)
 - Fix get_columns() to include identity column info (#297)
 - Update minimum Python version to 3.10
+- Compile MySQL-style `func.timestampdiff(unit, start, end)` to a
+  PostgreSQL-style `EXTRACT(EPOCH FROM ...)` expression on the cockroachdb
+  dialect. The arithmetic result is wrapped in `TRUNC()` so the value matches
+  MySQL's integer-truncation-toward-zero semantics (a 90-second diff at
+  `MINUTE` returns 1, not 1.5), and is cast to NUMERIC so callers may safely
+  combine it with integer or numeric divisors -- avoiding the `float / decimal`
+  arithmetic errors CockroachDB rejects but PostgreSQL accepts. Supported
+  units: MICROSECOND, MILLISECOND, SECOND, MINUTE, HOUR, DAY, WEEK.
+  Calendar-aware units (MONTH, QUARTER, YEAR) are explicitly rejected with a
+  specific error message because they require calendar walking that cannot be
+  derived from epoch arithmetic alone. Enables cross-dialect ORMs (e.g.
+  Apache Airflow) that fall back to `timestampdiff` for non-PostgreSQL
+  backends.
 
 
 # Version 2.0.3
