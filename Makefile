@@ -1,3 +1,4 @@
+COMPOSE=docker-compose -f docker-compose.yml
 ENV_BASE=~/envs
 ENV=${ENV_BASE}/sqlalchemy-cockroachdb
 TOX=${ENV}/bin/tox
@@ -38,3 +39,15 @@ clean:
 .PHONY: detox
 detox: clean
 	rm -rf .tox
+
+.PHONY: db-up
+db-up:
+	${COMPOSE} up -d
+
+.PHONY: db-down
+db-down:
+	${COMPOSE} down
+
+.PHONY: db-recreate
+db-recreate:
+	${COMPOSE} exec cockroach-0 ./cockroach sql --insecure -e 'drop database defaultdb; create database defaultdb;'
