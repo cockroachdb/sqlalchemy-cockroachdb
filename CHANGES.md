@@ -2,8 +2,9 @@
 Unreleased
 
 - Re-work get_multi_columns() to 
-  - include identity column info (#297)
-  - avoid parse error when reflecting ENUMs (#303)
+  - include identity column info (#297), and
+  - avoid parse error when reflecting ENUMs (#303).  
+  (CRDB 26.3+ required for full compatibility.)
 
 # Version 2.0.4
 April 23, 2026
