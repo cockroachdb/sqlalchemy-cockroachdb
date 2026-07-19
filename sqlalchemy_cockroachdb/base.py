@@ -1,6 +1,6 @@
 import collections
 import threading
-from sqlalchemy import text
+from sqlalchemy import text, Table, MetaData, Column, String, Boolean, select, tuple_
 from sqlalchemy import ARRAY
 from sqlalchemy import BIGINT
 from sqlalchemy import BLOB
@@ -47,6 +47,12 @@ class CockroachDBDialect(PGDialect):
     statement_compiler = CockroachCompiler
     preparer = CockroachIdentifierPreparer
     ddl_compiler = CockroachDDLCompiler
+
+    multi_entries_to_ignore = [
+        (None, "geography_columns"),
+        (None, "geometry_columns"),
+        (None, "spatial_ref_sys"),
+    ]
 
     # Override connect so we can take disable_cockroachdb_telemetry as a connect_arg to sqlalchemy.
     # The option is not used any more, but removing it is a backwards-incompatible change.
@@ -137,35 +143,50 @@ class CockroachDBDialect(PGDialect):
             connection, schema, filter_names, scope, kind, **kw
         )
         to_return = []
-        if multi_columns:
-            current = connection.execute(
-                text("select current_database() as db, current_schema() as schema")
-            ).one()
-            for table, columns in multi_columns:
-                if table not in [
-                    (None, "geography_columns"),
-                    (None, "geometry_columns"),
-                    (None, "spatial_ref_sys"),
-                ]:
-                    table_columns = (
-                        connection.execute(
-                            text(
-                                "select column_name, is_hidden::bool "
-                                "from information_schema.columns "
-                                "where table_catalog = :tc "
-                                "and table_schema = :ts and table_name = :tn"
-                            ),
-                            dict(tc=current.db, ts=table[0] or current.schema, tn=table[1]),
-                        )
-                        .mappings()
-                        .all()
+        current = connection.execute(
+            text("select current_database() as db, current_schema() as schema")
+        ).one()
+        to_get = [
+            (item[0][0] or current.schema, item[0][1])
+            for item in multi_columns
+            if item[0]
+            not in self.multi_entries_to_ignore
+        ]
+        if to_get:
+            info_schema_columns = Table(
+                "columns",
+                MetaData(),
+                Column("table_catalog", String),
+                Column("table_schema", String),
+                Column("table_name", String),
+                Column("column_name", String),
+                Column("is_hidden", Boolean),
+                schema="information_schema",
+            )
+            qry = (
+                select(info_schema_columns)
+                .where(info_schema_columns.c.table_catalog == current.db)
+                .where(
+                    (
+                        tuple_(
+                            info_schema_columns.c.table_schema, info_schema_columns.c.table_name
+                        ).in_(to_get)
                     )
-                    is_hidden = {x["column_name"]: x["is_hidden"] for x in table_columns}
+                )
+            )
+            result = connection.execute(qry).all()
+            is_hidden = {
+                (row.table_schema, row.table_name, row.column_name): (row.is_hidden == "YES")
+                for row in result
+            }
+            for table, columns in multi_columns:
+                if table not in self.multi_entries_to_ignore:
                     for col in columns[:]:
-                        if is_hidden[col["name"]] and not _include_hidden:
+                        key = (table[0] or current.schema, table[1], col["name"])
+                        if is_hidden[key] and not _include_hidden:
                             columns.remove(col)
                         else:
-                            col["is_hidden"] = is_hidden[col["name"]]
+                            col["is_hidden"] = is_hidden[key]
                             if col["default"] == "unique_rowid()":
                                 col["autoincrement"] = True
                             if isinstance(col["type"], BIGINT):
@@ -271,11 +292,7 @@ class CockroachDBDialect(PGDialect):
         result = super().get_multi_indexes(connection, schema, filter_names, scope, kind, **kw)
         if schema is None:
             result = dict(result)
-            for k in [
-                (None, "spatial_ref_sys"),
-                (None, "geometry_columns"),
-                (None, "geography_columns"),
-            ]:
+            for k in self.multi_entries_to_ignore:
                 result.pop(k, None)
         return result
 
@@ -307,11 +324,7 @@ class CockroachDBDialect(PGDialect):
         )
         if schema is None:
             result = dict(result)
-            for k in [
-                (None, "spatial_ref_sys"),
-                (None, "geometry_columns"),
-                (None, "geography_columns"),
-            ]:
+            for k in self.multi_entries_to_ignore:
                 result.pop(k, None)
         return result
 
@@ -339,11 +352,7 @@ class CockroachDBDialect(PGDialect):
         )
         if schema is None:
             result = dict(result)
-            for k in [
-                (None, "spatial_ref_sys"),
-                (None, "geometry_columns"),
-                (None, "geography_columns"),
-            ]:
+            for k in self.multi_entries_to_ignore:
                 result.pop(k, None)
         return result
 

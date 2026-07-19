@@ -18,7 +18,7 @@ distlib==0.4.3
     # via virtualenv
 docutils==0.23
     # via readme-renderer
-filelock==3.29.7
+filelock==3.31.0
     # via
     #   python-discovery
     #   tox
@@ -56,7 +56,7 @@ packaging==26.2
     #   pyproject-api
     #   tox
     #   twine
-platformdirs==4.10.0
+platformdirs==4.10.1
     # via
     #   python-discovery
     #   tox
