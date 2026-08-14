@@ -14,3 +14,8 @@ class CockroachDDLCompiler(PGDDLCompiler):
         return "AS (%s) STORED" % self.sql_compiler.process(
             generated.sqltext, include_table=False, literal_binds=True
         )
+
+    def _format_policy_role(self, role):
+        if role == "CURRENT_ROLE":
+            raise exc.CompileError("CockroachDB row security does not support CURRENT_ROLE")
+        return super()._format_policy_role(role)
