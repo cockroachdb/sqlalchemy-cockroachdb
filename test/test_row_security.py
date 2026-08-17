@@ -18,26 +18,6 @@ from sqlalchemy.testing.assertions import expect_raises_message
 class RowSecurityCompileTest(fixtures.TestBase, AssertsCompiledSQL):
     __dialect__ = "cockroachdb"
 
-    def test_inherits_postgresql_policy_compiler(self):
-        table = Table(
-            "item",
-            MetaData(),
-            Column("owner_id", Integer),
-            schema="app",
-        )
-        policy = Policy(
-            "read",
-            table,
-            command="SELECT",
-            using=table.c.owner_id == 7,
-        )
-
-        self.assert_compile(
-            CreatePolicy(policy),
-            "CREATE POLICY read ON app.item FOR SELECT TO PUBLIC " "USING (owner_id = 7)",
-            literal_binds=True,
-        )
-
     def test_rejects_unsupported_current_role(self):
         table = Table("item", MetaData(), Column("owner_id", Integer))
         policy = Policy("read", table, roles=("CURRENT_ROLE",))

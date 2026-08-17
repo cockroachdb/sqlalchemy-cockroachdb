@@ -8,8 +8,6 @@ exceptiongroup==1.3.1
     # via pytest
 futures==3.0.5
     # via -r test-requirements.in
-greenlet==3.5.0
-    # via sqlalchemy
 iniconfig==2.3.0
     # via pytest
 mako==1.3.12
@@ -32,7 +30,7 @@ pygments==2.20.0
     # via pytest
 pytest==9.0.3
     # via -r test-requirements.in
-sqlalchemy==2.0.49
+sqlalchemy @ git+https://github.com/Pedrexus/sqlalchemy.git@1bbe0d64d6017b346a5e6f7bf784ba7a3294662f
     # via
     #   -r test-requirements.in
     #   alembic

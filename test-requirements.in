@@ -12,4 +12,4 @@ more-itertools
 psycopg
 psycopg2
 pytest
-sqlalchemy>=2.1.0b4,<2.2
+sqlalchemy @ git+https://github.com/Pedrexus/sqlalchemy.git@1bbe0d64d6017b346a5e6f7bf784ba7a3294662f

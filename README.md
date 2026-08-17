@@ -89,19 +89,6 @@ To connect using psycopg for async operation, see
 [README.psycopg.md](README.psycopg.md)
 
 
-## Row level security
-
-SQLAlchemy 2.1 policy DDL and reflection work through the dialect's PostgreSQL
-inheritance and CockroachDB's `pg_catalog` compatibility. Row level security
-requires CockroachDB 25.2 or newer.
-
-Policy declaration, DDL execution, and inspection therefore use the same
-SQLAlchemy API on PostgreSQL and CockroachDB. Database behavior still differs.
-CockroachDB does not support subqueries in policy expressions, and applications
-should review its documented `ON CONFLICT DO NOTHING` policy behavior before
-using that statement for security-sensitive inserts. CockroachDB also does not
-accept PostgreSQL's `CURRENT_ROLE` policy target.
-
 ## Changelog
 
 See [CHANGES.md](CHANGES.md)
