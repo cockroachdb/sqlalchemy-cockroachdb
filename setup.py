@@ -37,7 +37,7 @@ setup(
     },
     packages=find_packages(include=["sqlalchemy_cockroachdb"]),
     include_package_data=True,
-    install_requires=["SQLAlchemy>=2.0.47,<2.1"],
+    install_requires=["SQLAlchemy>=2.1.0b3,<2.2"],
     zip_safe=False,
     entry_points={
         "sqlalchemy.dialects": [

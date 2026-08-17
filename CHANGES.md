@@ -1,6 +1,7 @@
 # Version 2.0.5
 Unreleased
 
+- Add SQLAlchemy 2.1 row security DDL and reflection support.
 
 # Version 2.0.4
 April 23, 2026

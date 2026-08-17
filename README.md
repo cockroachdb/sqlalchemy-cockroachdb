@@ -48,7 +48,7 @@ Use `pip` to install the latest release of this dialect.
 pip install sqlalchemy-cockroachdb
 ```
 
-NOTE: This version of the dialect requires SQLAlchemy 2.0.x. To work with
+NOTE: This version of the dialect requires SQLAlchemy 2.1.x. To work with
 earlier versions of SQLAlchemy you'll need to install an earlier version of this
 dialect.
 
