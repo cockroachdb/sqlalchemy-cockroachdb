@@ -4,11 +4,6 @@ The connection URL is of the form:
 
     cockroachdb+asyncpg://root@localhost:26257/defaultdb
 
-There is a customized version of the FastAPI SQL database tutorial for
-`cockroachdb+asyncpg` available at
-
-https://github.com/gordthompson/fastapi-tutorial-cockroachdb-async
-
 ### Testing
 
 Assuming that you have an entry in test.cfg that looks something like
