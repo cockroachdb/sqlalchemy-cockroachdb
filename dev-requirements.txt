@@ -1,31 +1,31 @@
 backports-tarfile==1.2.0
     # via jaraco-context
-cachetools==7.1.4
+cachetools==7.1.7
     # via tox
-certifi==2026.6.17
+certifi==2026.7.22
     # via requests
-cffi==2.1.0
+cffi==2.1.1
     # via cryptography
-chardet==7.4.3
+chardet==7.6.0
     # via tox
-charset-normalizer==3.4.9
+charset-normalizer==3.5.1
     # via requests
 colorama==0.4.6
     # via tox
-cryptography==49.0.0
+cryptography==50.0.0
     # via secretstorage
 distlib==0.4.3
     # via virtualenv
 docutils==0.23
     # via readme-renderer
-filelock==3.31.0
+filelock==3.32.3
     # via
     #   python-discovery
     #   tox
     #   virtualenv
 id==1.6.1
     # via twine
-idna==3.18
+idna==3.19
     # via requests
 importlib-metadata==9.0.0
     # via keyring
@@ -51,27 +51,26 @@ more-itertools==11.1.0
     #   jaraco-functools
 nh3==0.3.6
     # via readme-renderer
-packaging==26.2
+packaging==26.3
     # via
     #   pyproject-api
     #   tox
     #   twine
-platformdirs==4.10.1
+platformdirs==4.11.3
     # via
-    #   python-discovery
     #   tox
     #   virtualenv
 pluggy==1.6.0
     # via tox
 pycparser==3.0
     # via cffi
-pygments==2.20.0
+pygments==2.21.0
     # via
     #   readme-renderer
     #   rich
-pyproject-api==1.10.1
+pyproject-api==1.11.0
     # via tox
-python-discovery==1.4.4
+python-discovery==1.5.2
     # via virtualenv
 readme-renderer==45.0
     # via twine
@@ -93,7 +92,7 @@ tomli==2.4.1
     #   tox
 tox==4.34.1
     # via -r dev-requirements.in
-twine==6.2.0
+twine==7.0.0
     # via -r dev-requirements.in
 typing-extensions==4.16.0
     # via
@@ -105,7 +104,7 @@ urllib3==2.7.0
     #   id
     #   requests
     #   twine
-virtualenv==21.6.1
+virtualenv==21.7.4
     # via tox
 zipp==4.1.0
     # via importlib-metadata

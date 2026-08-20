@@ -42,10 +42,10 @@ For more details on working with psycopg, see
  
 ## Install and usage
 
-Use `pip` to install the latest release of this dialect.
+Use `pip` to install the latest release for this version of the dialect.
 
 ```
-pip install sqlalchemy-cockroachdb
+pip install "sqlalchemy-cockroachdb~=2.0"
 ```
 
 NOTE: This version of the dialect requires SQLAlchemy 2.0.x. To work with
