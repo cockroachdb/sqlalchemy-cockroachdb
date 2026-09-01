@@ -1,4 +1,3 @@
-from sqlalchemy import FLOAT, INTEGER, VARCHAR
 from sqlalchemy.testing import skip
 from sqlalchemy.testing.suite import *  # noqa
 from sqlalchemy.testing.suite import (
@@ -29,207 +28,6 @@ class ComponentReflectionTest(_ComponentReflectionTest):
         # test not designed to handle ('desc', 'nulls_last')
         pass
 
-    def test_get_multi_columns(self):
-        insp = inspect(config.db)
-        actual = insp.get_multi_columns()
-        expected = {
-            (None, "users"): [
-                {
-                    "name": "user_id",
-                    "type": INTEGER(),
-                    "nullable": False,
-                    "default": "unique_rowid()",
-                    "autoincrement": True,
-                    "is_hidden": False,
-                    "comment": None,
-                },
-                {
-                    "name": "test1",
-                    "type": VARCHAR(length=5),
-                    "nullable": False,
-                    "default": None,
-                    "autoincrement": False,
-                    "is_hidden": False,
-                    "comment": None,
-                },
-                {
-                    "name": "test2",
-                    "type": FLOAT(),
-                    "nullable": False,
-                    "default": None,
-                    "autoincrement": False,
-                    "is_hidden": False,
-                    "comment": None,
-                },
-                {
-                    "name": "parent_user_id",
-                    "type": INTEGER(),
-                    "nullable": True,
-                    "default": None,
-                    "autoincrement": False,
-                    "is_hidden": False,
-                    "comment": None,
-                },
-            ],
-            (None, "comment_test"): [
-                {
-                    "name": "id",
-                    "type": INTEGER(),
-                    "nullable": False,
-                    "default": "unique_rowid()",
-                    "autoincrement": True,
-                    "is_hidden": False,
-                    "comment": "id comment",
-                },
-                {
-                    "name": "data",
-                    "type": VARCHAR(length=20),
-                    "nullable": True,
-                    "default": None,
-                    "autoincrement": False,
-                    "is_hidden": False,
-                    "comment": "data % comment",
-                },
-                {
-                    "name": "d2",
-                    "type": VARCHAR(length=20),
-                    "nullable": True,
-                    "default": None,
-                    "autoincrement": False,
-                    "is_hidden": False,
-                    "comment": "Comment types type speedily ' \" \\ '' Fun!",
-                },
-                {
-                    "name": "d3",
-                    "type": VARCHAR(length=42),
-                    "nullable": True,
-                    "default": None,
-                    "autoincrement": False,
-                    "is_hidden": False,
-                    "comment": "Comment\nwith\rescapes",
-                },
-            ],
-            (None, "no_constraints"): [
-                {
-                    "name": "data",
-                    "type": VARCHAR(length=20),
-                    "nullable": True,
-                    "default": None,
-                    "autoincrement": False,
-                    "is_hidden": False,
-                    "comment": None,
-                }
-            ],
-            (None, "noncol_idx_test_nopk"): [
-                {
-                    "name": "q",
-                    "type": VARCHAR(length=5),
-                    "nullable": True,
-                    "default": None,
-                    "autoincrement": False,
-                    "is_hidden": False,
-                    "comment": None,
-                }
-            ],
-            (None, "noncol_idx_test_pk"): [
-                {
-                    "name": "id",
-                    "type": INTEGER(),
-                    "nullable": False,
-                    "default": "unique_rowid()",
-                    "autoincrement": True,
-                    "is_hidden": False,
-                    "comment": None,
-                },
-                {
-                    "name": "q",
-                    "type": VARCHAR(length=5),
-                    "nullable": True,
-                    "default": None,
-                    "autoincrement": False,
-                    "is_hidden": False,
-                    "comment": None,
-                },
-            ],
-            (None, "email_addresses"): [
-                {
-                    "name": "address_id",
-                    "type": INTEGER(),
-                    "nullable": False,
-                    "default": "unique_rowid()",
-                    "autoincrement": True,
-                    "is_hidden": False,
-                    "comment": None,
-                },
-                {
-                    "name": "remote_user_id",
-                    "type": INTEGER(),
-                    "nullable": True,
-                    "default": None,
-                    "autoincrement": False,
-                    "is_hidden": False,
-                    "comment": None,
-                },
-                {
-                    "name": "email_address",
-                    "type": VARCHAR(length=20),
-                    "nullable": True,
-                    "default": None,
-                    "autoincrement": False,
-                    "is_hidden": False,
-                    "comment": None,
-                },
-            ],
-            (None, "dingalings"): [
-                {
-                    "name": "dingaling_id",
-                    "type": INTEGER(),
-                    "nullable": False,
-                    "default": "unique_rowid()",
-                    "autoincrement": True,
-                    "is_hidden": False,
-                    "comment": None,
-                },
-                {
-                    "name": "address_id",
-                    "type": INTEGER(),
-                    "nullable": True,
-                    "default": None,
-                    "autoincrement": False,
-                    "is_hidden": False,
-                    "comment": None,
-                },
-                {
-                    "name": "id_user",
-                    "type": INTEGER(),
-                    "nullable": True,
-                    "default": None,
-                    "autoincrement": False,
-                    "is_hidden": False,
-                    "comment": None,
-                },
-                {
-                    "name": "data",
-                    "type": VARCHAR(length=30),
-                    "nullable": True,
-                    "default": None,
-                    "autoincrement": False,
-                    "is_hidden": False,
-                    "comment": None,
-                },
-            ],
-        }
-        eq_(len(actual), len(expected))
-        eq_(actual.keys(), expected.keys())
-        eq_(
-            len(actual[(None, "comment_test")]),
-            len(expected[(None, "comment_test")]),
-        )
-        if config.db.dialect.supports_comments:
-            act = [x for x in actual[(None, "comment_test")] if x["name"] == "data"][0]
-            exp = [x for x in expected[(None, "comment_test")] if x["name"] == "data"][0]
-            eq_(act["comment"], exp["comment"])
-
     def test_get_multi_indexes(self):
         insp = inspect(config.db)
         result = insp.get_multi_indexes()
@@ -242,12 +40,12 @@ class ComponentReflectionTest(_ComponentReflectionTest):
                         "column_names": ["data"],
                         "column_sorting": {"data": ("nulls_first",)},
                         "dialect_options": {
-                            "postgresql_ops": {
-                                "data": None,
-                            },
+                            "postgresql_include": [],
+                            "postgresql_ops": {"data": None},
                             "postgresql_using": "prefix",
                         },
                         "duplicates_constraint": "dingalings_data_key",
+                        "include_columns": [],
                         "name": "dingalings_data_key",
                         "unique": True,
                     },
@@ -258,13 +56,12 @@ class ComponentReflectionTest(_ComponentReflectionTest):
                             "dingaling_id": ("nulls_first",),
                         },
                         "dialect_options": {
-                            "postgresql_ops": {
-                                "address_id": None,
-                                "dingaling_id": None,
-                            },
+                            "postgresql_include": [],
+                            "postgresql_ops": {"address_id": None, "dingaling_id": None},
                             "postgresql_using": "prefix",
                         },
                         "duplicates_constraint": "zz_dingalings_multiple",
+                        "include_columns": [],
                         "name": "zz_dingalings_multiple",
                         "unique": True,
                     },
@@ -274,11 +71,11 @@ class ComponentReflectionTest(_ComponentReflectionTest):
                         "column_names": ["email_address"],
                         "column_sorting": {"email_address": ("nulls_first",)},
                         "dialect_options": {
-                            "postgresql_ops": {
-                                "email_address": None,
-                            },
+                            "postgresql_include": [],
+                            "postgresql_ops": {"email_address": None},
                             "postgresql_using": "prefix",
                         },
+                        "include_columns": [],
                         "name": "ix_email_addresses_email_address",
                         "unique": False,
                     }
@@ -289,11 +86,11 @@ class ComponentReflectionTest(_ComponentReflectionTest):
                         "column_names": ["q"],
                         "column_sorting": {"q": ("desc", "nulls_last")},
                         "dialect_options": {
-                            "postgresql_ops": {
-                                "q": None,
-                            },
+                            "postgresql_include": [],
+                            "postgresql_ops": {"q": None},
                             "postgresql_using": "prefix",
                         },
+                        "include_columns": [],
                         "name": "noncol_idx_nopk",
                         "unique": False,
                     }
@@ -303,11 +100,11 @@ class ComponentReflectionTest(_ComponentReflectionTest):
                         "column_names": ["q"],
                         "column_sorting": {"q": ("desc", "nulls_last")},
                         "dialect_options": {
-                            "postgresql_ops": {
-                                "q": None,
-                            },
+                            "postgresql_include": [],
+                            "postgresql_ops": {"q": None},
                             "postgresql_using": "prefix",
                         },
+                        "include_columns": [],
                         "name": "noncol_idx_pk",
                         "unique": False,
                     }
@@ -321,13 +118,11 @@ class ComponentReflectionTest(_ComponentReflectionTest):
                             "user_id": ("nulls_first",),
                         },
                         "dialect_options": {
-                            "postgresql_ops": {
-                                "test1": None,
-                                "test2": None,
-                                "user_id": None,
-                            },
+                            "postgresql_include": [],
+                            "postgresql_ops": {"test1": None, "test2": None, "user_id": None},
                             "postgresql_using": "prefix",
                         },
+                        "include_columns": [],
                         "name": "users_all_idx",
                         "unique": False,
                     },
@@ -335,13 +130,12 @@ class ComponentReflectionTest(_ComponentReflectionTest):
                         "column_names": ["test1", "test2"],
                         "column_sorting": {"test1": ("nulls_first",), "test2": ("nulls_first",)},
                         "dialect_options": {
-                            "postgresql_ops": {
-                                "test1": None,
-                                "test2": None,
-                            },
+                            "postgresql_include": [],
+                            "postgresql_ops": {"test1": None, "test2": None},
                             "postgresql_using": "prefix",
                         },
                         "duplicates_constraint": "users_t_idx",
+                        "include_columns": [],
                         "name": "users_t_idx",
                         "unique": True,
                     },
@@ -358,36 +152,43 @@ class ComponentReflectionTest(_ComponentReflectionTest):
                 (None, "comment_test"): {
                     "comment": None,
                     "constrained_columns": ["id"],
+                    "dialect_options": {"postgresql_include": []},
                     "name": "comment_test_pkey",
                 },
                 (None, "dingalings"): {
                     "comment": None,
                     "constrained_columns": ["dingaling_id"],
+                    "dialect_options": {"postgresql_include": []},
                     "name": "dingalings_pkey",
                 },
                 (None, "email_addresses"): {
                     "comment": "ea pk comment",
                     "constrained_columns": ["address_id"],
+                    "dialect_options": {"postgresql_include": []},
                     "name": "email_ad_pk",
                 },
                 (None, "no_constraints"): {
                     "comment": None,
                     "constrained_columns": ["rowid"],
+                    "dialect_options": {"postgresql_include": []},
                     "name": "no_constraints_pkey",
                 },
                 (None, "noncol_idx_test_nopk"): {
                     "comment": None,
                     "constrained_columns": ["rowid"],
+                    "dialect_options": {"postgresql_include": []},
                     "name": "noncol_idx_test_nopk_pkey",
                 },
                 (None, "noncol_idx_test_pk"): {
                     "comment": None,
                     "constrained_columns": ["id"],
+                    "dialect_options": {"postgresql_include": []},
                     "name": "noncol_idx_test_pk_pkey",
                 },
                 (None, "users"): {
                     "comment": None,
                     "constrained_columns": ["user_id"],
+                    "dialect_options": {"postgresql_include": []},
                     "name": "users_pkey",
                 },
             },
