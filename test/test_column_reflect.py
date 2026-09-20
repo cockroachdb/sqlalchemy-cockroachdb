@@ -56,9 +56,6 @@ with_computed_stored = Table(
     Column("id2", Integer, Computed("id + 1", persisted=True)),
 )
 
-# Note: CockroachDB computed columns do not support 'virtual' persistence;
-#       set the 'persisted' flag to None or True for CockroachDB support.
-
 
 class ReflectSpecialColumnsTest(fixtures.TestBase):
     __requires__ = ("sync_driver",)
@@ -247,6 +244,8 @@ class ReflectSpecialColumnsTest(fixtures.TestBase):
             )
 
     def test_reflect_computed_stored(self):
+        # Note: There is no corresponding test_reflect_computed_virtual() test because
+        #       CockroachDB computed columns do not support 'virtual' persistence.
         eq_(
             self._get_col_info("with_computed_stored"),
             [

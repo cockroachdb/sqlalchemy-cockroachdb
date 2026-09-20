@@ -20,7 +20,7 @@ packaging==26.3
     # via pytest
 pluggy==1.6.0
     # via pytest
-psycopg==3.3.5
+psycopg==3.3.6
     # via -r test-requirements.in
 psycopg2==2.9.13
     # via -r test-requirements.in

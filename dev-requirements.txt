@@ -1,6 +1,6 @@
 backports-tarfile==1.2.0
     # via jaraco-context
-cachetools==7.1.8
+cachetools==7.2.0
     # via tox
 certifi==2026.7.22
     # via requests
@@ -18,14 +18,14 @@ distlib==0.4.3
     # via virtualenv
 docutils==0.23
     # via readme-renderer
-filelock==3.32.6
+filelock==3.32.7
     # via
     #   python-discovery
     #   tox
     #   virtualenv
 id==1.6.1
     # via twine
-idna==3.19
+idna==3.20
     # via requests
 importlib-metadata==9.0.1
     # via keyring
@@ -56,7 +56,7 @@ packaging==26.3
     #   pyproject-api
     #   tox
     #   twine
-platformdirs==4.11.8
+platformdirs==4.11.11
     # via
     #   tox
     #   virtualenv
@@ -68,9 +68,9 @@ pygments==2.21.0
     # via
     #   readme-renderer
     #   rich
-pyproject-api==1.11.0
+pyproject-api==1.11.2
     # via tox
-python-discovery==1.6.0
+python-discovery==1.6.1
     # via virtualenv
 readme-renderer==46.0
     # via twine
@@ -95,7 +95,7 @@ urllib3==2.8.0
     #   id
     #   requests
     #   twine
-virtualenv==21.7.9
+virtualenv==21.9.0
     # via tox
 zipp==4.1.0
     # via importlib-metadata

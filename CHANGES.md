@@ -60,3 +60,6 @@ Released February 21, 2023
   version of the dialect requires SQLAlchemy 2.0, so to work with earlier versions of
   SQLAlchemy use `pip install sqlalchemy-cockroachdb<2.0.0`
 - Stopped sending telemetry data during startup.
+
+(For changes to earlier versions of this dialect, see CHANGES.md in the branch for
+that version.)

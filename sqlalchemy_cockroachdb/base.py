@@ -1,6 +1,6 @@
 import collections
 import threading
-from sqlalchemy import text, Table, MetaData, Column, String, Boolean, select, tuple_
+from sqlalchemy import text, Table, MetaData, Column, String, select, and_
 from sqlalchemy import ARRAY
 from sqlalchemy import BIGINT
 from sqlalchemy import BLOB
@@ -14,7 +14,8 @@ from sqlalchemy import SMALLINT
 from sqlalchemy import TEXT
 from sqlalchemy import VARCHAR
 from sqlalchemy.dialects.postgresql.base import PGDialect
-from sqlalchemy.dialects.postgresql import BYTEA
+from sqlalchemy.dialects.postgresql import BYTEA, pg_catalog
+from sqlalchemy.dialects.postgresql.pg_catalog import pg_namespace
 from sqlalchemy.ext.compiler import compiles
 
 from .stmt_compiler import CockroachCompiler, CockroachIdentifierPreparer
@@ -48,11 +49,13 @@ class CockroachDBDialect(PGDialect):
     preparer = CockroachIdentifierPreparer
     ddl_compiler = CockroachDDLCompiler
 
-    multi_entries_to_ignore = [
-        (None, "geography_columns"),
-        (None, "geometry_columns"),
-        (None, "spatial_ref_sys"),
-    ]
+    multi_entries_to_ignore = frozenset(
+        [
+            (None, "geography_columns"),
+            (None, "geometry_columns"),
+            (None, "spatial_ref_sys"),
+        ]
+    )
 
     # Override connect so we can take disable_cockroachdb_telemetry as a connect_arg to sqlalchemy.
     # The option is not used any more, but removing it is a backwards-incompatible change.
@@ -142,98 +145,99 @@ class CockroachDBDialect(PGDialect):
         multi_columns = super().get_multi_columns(
             connection, schema, filter_names, scope, kind, **kw
         )
+        info_schema_columns = Table(
+            "columns",
+            MetaData(),
+            Column("table_schema", String),
+            Column("table_name", String),
+            Column("column_name", String),
+            Column("is_hidden", String),
+            schema="information_schema",
+        )
+        pg_class = pg_catalog.pg_class
         to_return = []
-        current = connection.execute(
-            text("select current_database() as db, current_schema() as schema")
-        ).one()
-        to_get = [
-            (item[0][0] or current.schema, item[0][1])
-            for item in multi_columns
-            if item[0]
-            not in self.multi_entries_to_ignore
-        ]
-        if to_get:
-            info_schema_columns = Table(
-                "columns",
-                MetaData(),
-                Column("table_catalog", String),
-                Column("table_schema", String),
-                Column("table_name", String),
-                Column("column_name", String),
-                Column("is_hidden", Boolean),
-                schema="information_schema",
-            )
-            qry = (
-                select(info_schema_columns)
-                .where(info_schema_columns.c.table_catalog == current.db)
-                .where(
-                    (
-                        tuple_(
-                            info_schema_columns.c.table_schema, info_schema_columns.c.table_name
-                        ).in_(to_get)
+        for table, columns in multi_columns:
+            if table not in self.multi_entries_to_ignore:
+                if table[0] is None:
+                    tblname_escaped = '"' + table[1].replace("'", "''").replace('"', '""') + '"'
+                    qry = (
+                        select(
+                            info_schema_columns.c.column_name,
+                            info_schema_columns.c.is_hidden,
+                        )
+                        .select_from(
+                            pg_class.join(
+                                pg_namespace, pg_class.c.relnamespace == pg_namespace.c.oid
+                            ).join(
+                                info_schema_columns,
+                                and_(
+                                    pg_namespace.c.nspname == info_schema_columns.c.table_schema,
+                                    pg_class.c.relname == info_schema_columns.c.table_name,
+                                ),
+                            )
+                        )
+                        .where(pg_class.c.oid == text(f"'{tblname_escaped}'::regclass"))
                     )
-                )
-            )
-            result = connection.execute(qry).all()
-            is_hidden = {
-                (row.table_schema, row.table_name, row.column_name): (row.is_hidden == "YES")
-                for row in result
-            }
-            for table, columns in multi_columns:
-                if table not in self.multi_entries_to_ignore:
-                    for col in columns[:]:
-                        key = (table[0] or current.schema, table[1], col["name"])
-                        if is_hidden[key] and not _include_hidden:
-                            columns.remove(col)
-                        else:
-                            col["is_hidden"] = is_hidden[key]
-                            if col["default"] == "unique_rowid()":
-                                col["autoincrement"] = True
-                            if isinstance(col["type"], BIGINT):
-                                col["type"] = INTEGER()
-                            elif isinstance(col["type"], ARRAY) and isinstance(
-                                col["type"].item_type, BIGINT
-                            ):
-                                col["type"].item_type = INTEGER()
-                            elif isinstance(col["type"], BYTEA):
-                                col["type"] = BLOB()
-                            elif isinstance(col["type"], ARRAY) and isinstance(
-                                col["type"].item_type, BYTEA
-                            ):
-                                col["type"].item_type = BLOB()
-                            elif isinstance(col["type"], DOUBLE_PRECISION):
-                                col["type"] = FLOAT()
-                            elif isinstance(col["type"], ARRAY) and isinstance(
-                                col["type"].item_type, DOUBLE_PRECISION
-                            ):
-                                col["type"].item_type = FLOAT()
-                            elif isinstance(col["type"], NUMERIC):
-                                col["type"] = DECIMAL(col["type"].precision, col["type"].scale)
-                            elif isinstance(col["type"], ARRAY) and isinstance(
-                                col["type"].item_type, NUMERIC
-                            ):
-                                col["type"].item_type = DECIMAL(
-                                    col["type"].item_type.precision, col["type"].item_type.scale
+                else:
+                    qry = select(
+                        info_schema_columns.c.column_name,
+                        info_schema_columns.c.is_hidden,
+                    ).where(
+                        and_(
+                            info_schema_columns.c.table_schema == table[0],
+                            info_schema_columns.c.table_name == table[1],
+                        )
+                    )
+                result = connection.execute(qry).all()
+                is_hidden = {row.column_name: (row.is_hidden == "YES") for row in result}
+
+                for col in columns[:]:
+                    key = col["name"]
+                    if is_hidden[key] and not _include_hidden:
+                        columns.remove(col)
+                    else:
+                        col["is_hidden"] = is_hidden[key]
+                        if col["default"] == "unique_rowid()":
+                            col["autoincrement"] = True
+
+                        # type mapping
+                        if isinstance(col["type"], BYTEA):
+                            col["type"] = BLOB()
+                        elif isinstance(col["type"], ARRAY) and isinstance(
+                            col["type"].item_type, BYTEA
+                        ):
+                            col["type"] = ARRAY(BLOB())
+                        elif isinstance(col["type"], NUMERIC):
+                            col["type"] = DECIMAL(col["type"].precision, col["type"].scale)
+                        elif isinstance(col["type"], ARRAY) and isinstance(
+                            col["type"].item_type, NUMERIC
+                        ):
+                            col["type"] = ARRAY(
+                                (
+                                    DECIMAL(
+                                        col["type"].item_type.precision, col["type"].item_type.scale
+                                    )
                                 )
-                            elif isinstance(col["type"], REAL):
-                                col["type"] = FLOAT()
-                            elif isinstance(col["type"], ARRAY) and isinstance(
-                                col["type"].item_type, REAL
-                            ):
-                                col["type"].item_type = FLOAT()
-                            elif isinstance(col["type"], SMALLINT):
-                                col["type"] = INTEGER()
-                            elif isinstance(col["type"], ARRAY) and isinstance(
-                                col["type"].item_type, SMALLINT
-                            ):
-                                col["type"].item_type = INTEGER()
-                            elif isinstance(col["type"], TEXT):
-                                col["type"] = VARCHAR()
-                            elif isinstance(col["type"], ARRAY) and isinstance(
-                                col["type"].item_type, TEXT
-                            ):
-                                col["type"].item_type = VARCHAR()
-                    to_return.append((table, columns))
+                            )
+                        elif isinstance(col["type"], (DOUBLE_PRECISION, REAL)):
+                            col["type"] = FLOAT()
+                        elif isinstance(col["type"], ARRAY) and isinstance(
+                            col["type"].item_type, (DOUBLE_PRECISION, REAL)
+                        ):
+                            col["type"] = ARRAY(FLOAT())
+                        elif isinstance(col["type"], (BIGINT, SMALLINT)):
+                            col["type"] = INTEGER()
+                        elif isinstance(col["type"], ARRAY) and isinstance(
+                            col["type"].item_type, (BIGINT, SMALLINT)
+                        ):
+                            col["type"] = ARRAY(INTEGER())
+                        elif isinstance(col["type"], TEXT):
+                            col["type"] = VARCHAR()
+                        elif isinstance(col["type"], ARRAY) and isinstance(
+                            col["type"].item_type, TEXT
+                        ):
+                            col["type"] = ARRAY(VARCHAR())
+                to_return.append((table, columns))
         return to_return
 
     def get_indexes(self, conn, table_name, schema=None, **kw):
