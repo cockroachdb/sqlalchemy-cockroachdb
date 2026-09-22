@@ -18,7 +18,7 @@ distlib==0.4.3
     # via virtualenv
 docutils==0.23
     # via readme-renderer
-filelock==3.32.7
+filelock==4.0.1
     # via
     #   python-discovery
     #   tox
@@ -56,7 +56,7 @@ packaging==26.3
     #   pyproject-api
     #   tox
     #   twine
-platformdirs==4.11.11
+platformdirs==4.11.12
     # via
     #   tox
     #   virtualenv
@@ -95,7 +95,7 @@ urllib3==2.8.0
     #   id
     #   requests
     #   twine
-virtualenv==21.9.0
+virtualenv==21.10.0
     # via tox
 zipp==4.1.0
     # via importlib-metadata

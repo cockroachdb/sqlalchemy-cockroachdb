@@ -155,28 +155,25 @@ class CockroachDBDialect(PGDialect):
             schema="information_schema",
         )
         pg_class = pg_catalog.pg_class
+        query_for_schema_none = select(
+            info_schema_columns.c.column_name,
+            info_schema_columns.c.is_hidden,
+        ).select_from(
+            pg_class.join(pg_namespace, pg_class.c.relnamespace == pg_namespace.c.oid).join(
+                info_schema_columns,
+                and_(
+                    pg_namespace.c.nspname == info_schema_columns.c.table_schema,
+                    pg_class.c.relname == info_schema_columns.c.table_name,
+                ),
+            )
+        )
         to_return = []
         for table, columns in multi_columns:
             if table not in self.multi_entries_to_ignore:
                 if table[0] is None:
                     tblname_escaped = '"' + table[1].replace("'", "''").replace('"', '""') + '"'
-                    qry = (
-                        select(
-                            info_schema_columns.c.column_name,
-                            info_schema_columns.c.is_hidden,
-                        )
-                        .select_from(
-                            pg_class.join(
-                                pg_namespace, pg_class.c.relnamespace == pg_namespace.c.oid
-                            ).join(
-                                info_schema_columns,
-                                and_(
-                                    pg_namespace.c.nspname == info_schema_columns.c.table_schema,
-                                    pg_class.c.relname == info_schema_columns.c.table_name,
-                                ),
-                            )
-                        )
-                        .where(pg_class.c.oid == text(f"'{tblname_escaped}'::regclass"))
+                    qry = query_for_schema_none.where(
+                        pg_class.c.oid == text(f"'{tblname_escaped}'::regclass")
                     )
                 else:
                     qry = select(
