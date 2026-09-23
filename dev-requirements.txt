@@ -95,7 +95,7 @@ urllib3==2.8.0
     #   id
     #   requests
     #   twine
-virtualenv==21.10.0
+virtualenv==21.11.1
     # via tox
 zipp==4.1.0
     # via importlib-metadata

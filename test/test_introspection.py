@@ -92,11 +92,14 @@ class TestTypeReflection(fixtures.TestBase):
 
     def test_array(self):
         self._test("boolean[]", sqltypes.ARRAY, sqltypes.BOOLEAN)
+        self._test("bytes[]", sqltypes.ARRAY, sqltypes.BLOB)
         self._test("date[]", sqltypes.ARRAY, sqltypes.DATE)
         self._test("decimal[]", sqltypes.ARRAY, sqltypes.DECIMAL)
         self._test("float[]", sqltypes.ARRAY, sqltypes.FLOAT)
         self._test("int[]", sqltypes.ARRAY, sqltypes.INTEGER)
+        self._test("smallint[]", sqltypes.ARRAY, sqltypes.INTEGER)
         self._test("timestamp[]", sqltypes.ARRAY, sqltypes.TIMESTAMP)
+        self._test("text[]", sqltypes.ARRAY, sqltypes.VARCHAR)
         self._test("varchar(10)[]", sqltypes.ARRAY, sqltypes.VARCHAR)
 
     def test_blob(self):

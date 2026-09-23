@@ -1,6 +1,6 @@
 import collections
 import threading
-from sqlalchemy import text, Table, MetaData, Column, String, select, and_
+from sqlalchemy import text, Table, MetaData, Column, String, select, and_, tuple_
 from sqlalchemy import ARRAY
 from sqlalchemy import BIGINT
 from sqlalchemy import BLOB
@@ -155,41 +155,63 @@ class CockroachDBDialect(PGDialect):
             schema="information_schema",
         )
         pg_class = pg_catalog.pg_class
-        query_for_schema_none = select(
-            info_schema_columns.c.column_name,
-            info_schema_columns.c.is_hidden,
-        ).select_from(
-            pg_class.join(pg_namespace, pg_class.c.relnamespace == pg_namespace.c.oid).join(
-                info_schema_columns,
-                and_(
-                    pg_namespace.c.nspname == info_schema_columns.c.table_schema,
-                    pg_class.c.relname == info_schema_columns.c.table_name,
-                ),
+
+        # explicit schema: ("schema_name", "table_name")
+        to_get = [(item[0][0], item[0][1]) for item in multi_columns if item[0][0] is not None]
+        if to_get:
+            qry = select(
+                info_schema_columns.c.table_name,
+                info_schema_columns.c.column_name,
+                info_schema_columns.c.is_hidden,
+            ).where(
+                (
+                    tuple_(
+                        info_schema_columns.c.table_schema, info_schema_columns.c.table_name
+                    ).in_(to_get)
+                )
             )
+            result = connection.execute(qry)
+            is_hidden = {
+                (row.table_name, row.column_name): (row.is_hidden == "YES") for row in result
+            }
+        else:
+            is_hidden = dict()
+
+        # no schema specified: (None, "table_name")
+        visible_names = [
+            t[1] for t, _ in multi_columns if t[0] is None and t not in self.multi_entries_to_ignore
+        ]
+        qry = (
+            select(
+                pg_class.c.relname.label("table_name"),
+                info_schema_columns.c.column_name,
+                info_schema_columns.c.is_hidden,
+            )
+            .select_from(
+                pg_class.join(pg_namespace, pg_class.c.relnamespace == pg_namespace.c.oid).join(
+                    info_schema_columns,
+                    and_(
+                        pg_namespace.c.nspname == info_schema_columns.c.table_schema,
+                        pg_class.c.relname == info_schema_columns.c.table_name,
+                    ),
+                )
+            )
+            .where(pg_class.c.relname.in_(visible_names))
+            .where(pg_catalog.pg_table_is_visible(pg_class.c.oid))
+            .where(pg_namespace.c.nspname != "pg_catalog")
+            .where(pg_namespace.c.nspname != "crdb_internal")
+            .where(pg_namespace.c.nspname != "information_schema")
         )
+        result = connection.execute(qry)
+        is_hidden.update(
+            {(row.table_name, row.column_name): (row.is_hidden == "YES") for row in result}
+        )
+
         to_return = []
         for table, columns in multi_columns:
             if table not in self.multi_entries_to_ignore:
-                if table[0] is None:
-                    tblname_escaped = '"' + table[1].replace("'", "''").replace('"', '""') + '"'
-                    qry = query_for_schema_none.where(
-                        pg_class.c.oid == text(f"'{tblname_escaped}'::regclass")
-                    )
-                else:
-                    qry = select(
-                        info_schema_columns.c.column_name,
-                        info_schema_columns.c.is_hidden,
-                    ).where(
-                        and_(
-                            info_schema_columns.c.table_schema == table[0],
-                            info_schema_columns.c.table_name == table[1],
-                        )
-                    )
-                result = connection.execute(qry).all()
-                is_hidden = {row.column_name: (row.is_hidden == "YES") for row in result}
-
                 for col in columns[:]:
-                    key = col["name"]
+                    key = (table[1], col["name"])
                     if is_hidden[key] and not _include_hidden:
                         columns.remove(col)
                     else:

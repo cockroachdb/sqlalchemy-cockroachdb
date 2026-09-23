@@ -10,7 +10,7 @@ from sqlalchemy import (
     Identity,
     Computed,
 )
-from sqlalchemy.testing import fixtures, eq_, config
+from sqlalchemy.testing import fixtures, eq_
 
 meta = MetaData()
 
@@ -175,73 +175,73 @@ class ReflectSpecialColumnsTest(fixtures.TestBase):
         with testing.db.begin() as conn:
             conn.exec_driver_sql("drop table tmp")
 
+    @testing.skip_if(lambda c: not c.db.dialect._is_v263plus, "requires CRDB 26.3+")
     def test_reflect_identity(self):
-        if config.db.dialect._is_v263plus:
-            eq_(
-                self._get_col_info("with_identity"),
-                [
-                    {
-                        "autoincrement": True,
-                        "comment": None,
-                        "default": None,
-                        "identity": {
-                            "always": False,
-                            "cache": 1,
-                            "cycle": False,
-                            "increment": 1,
-                            "maxvalue": 9223372036854775807,
-                            "minvalue": 1,
-                            "start": 1,
-                        },
-                        "is_hidden": False,
-                        "name": "id",
-                        "nullable": False,
-                        "type": "INTEGER",
+        eq_(
+            self._get_col_info("with_identity"),
+            [
+                {
+                    "autoincrement": True,
+                    "comment": None,
+                    "default": None,
+                    "identity": {
+                        "always": False,
+                        "cache": 1,
+                        "cycle": False,
+                        "increment": 1,
+                        "maxvalue": 9223372036854775807,
+                        "minvalue": 1,
+                        "start": 1,
                     },
-                    {
-                        "autoincrement": False,
-                        "comment": None,
-                        "default": None,
-                        "is_hidden": False,
-                        "name": "txt",
-                        "nullable": True,
-                        "type": "VARCHAR",
-                    },
-                ],
-            )
+                    "is_hidden": False,
+                    "name": "id",
+                    "nullable": False,
+                    "type": "INTEGER",
+                },
+                {
+                    "autoincrement": False,
+                    "comment": None,
+                    "default": None,
+                    "is_hidden": False,
+                    "name": "txt",
+                    "nullable": True,
+                    "type": "VARCHAR",
+                },
+            ],
+        )
 
-            eq_(
-                self._get_col_info("with_identity_always"),
-                [
-                    {
-                        "autoincrement": True,
-                        "comment": None,
-                        "default": None,
-                        "identity": {
-                            "always": True,
-                            "cache": 1,
-                            "cycle": False,
-                            "increment": 1,
-                            "maxvalue": 9223372036854775807,
-                            "minvalue": 1,
-                            "start": 1,
-                        },
-                        "is_hidden": False,
-                        "name": "id",
-                        "nullable": False,
-                        "type": "INTEGER",
+        eq_(
+            self._get_col_info("with_identity_always"),
+            [
+                {
+                    "autoincrement": True,
+                    "comment": None,
+                    "default": None,
+                    "identity": {
+                        "always": True,
+                        "cache": 1,
+                        "cycle": False,
+                        "increment": 1,
+                        "maxvalue": 9223372036854775807,
+                        "minvalue": 1,
+                        "start": 1,
                     },
-                    {
-                        "autoincrement": False,
-                        "comment": None,
-                        "default": None,
-                        "is_hidden": False,
-                        "name": "txt",
-                        "nullable": True,
-                        "type": "VARCHAR",
-                    },
-                ],
-            )
+                    "is_hidden": False,
+                    "name": "id",
+                    "nullable": False,
+                    "type": "INTEGER",
+                },
+                {
+                    "autoincrement": False,
+                    "comment": None,
+                    "default": None,
+                    "is_hidden": False,
+                    "name": "txt",
+                    "nullable": True,
+                    "type": "VARCHAR",
+                },
+            ],
+        )
 
     def test_reflect_computed_stored(self):
         # Note: There is no corresponding test_reflect_computed_virtual() test because
@@ -271,29 +271,46 @@ class ReflectSpecialColumnsTest(fixtures.TestBase):
             ],
         )
 
+    @testing.skip_if(lambda c: not c.db.dialect._is_v263plus, "requires CRDB 26.3+")
     def test_reflect_other_schema(self):
         # verify https://github.com/cockroachdb/cockroach/issues/170049
-        if config.db.dialect._is_v263plus:
+        eq_(
+            self._get_col_info("with_pk_other_schema", schema="test_schema"),
+            [
+                {
+                    "autoincrement": True,
+                    "comment": None,
+                    "default": "unique_rowid()",
+                    "is_hidden": False,
+                    "name": "id",
+                    "nullable": False,
+                    "type": "INTEGER",
+                },
+                {
+                    "autoincrement": False,
+                    "comment": None,
+                    "default": None,
+                    "is_hidden": False,
+                    "name": "txt",
+                    "nullable": True,
+                    "type": "VARCHAR",
+                },
+            ],
+        )
+
+    def test_non_standard_search_path(self):
+        with testing.db.begin() as conn:
+            conn.exec_driver_sql("SET LOCAL search_path TO test_schema, public")
+            insp = inspect(conn)
+            col_info = insp.get_multi_columns()
             eq_(
-                self._get_col_info("with_pk_other_schema", schema="test_schema"),
+                list(col_info.keys()),
                 [
-                    {
-                        "autoincrement": True,
-                        "comment": None,
-                        "default": "unique_rowid()",
-                        "is_hidden": False,
-                        "name": "id",
-                        "nullable": False,
-                        "type": "INTEGER",
-                    },
-                    {
-                        "autoincrement": False,
-                        "comment": None,
-                        "default": None,
-                        "is_hidden": False,
-                        "name": "txt",
-                        "nullable": True,
-                        "type": "VARCHAR",
-                    },
+                    (None, "with_computed_stored"),
+                    (None, "with_identity"),
+                    (None, "with_identity_always"),
+                    (None, "with_pk"),
+                    (None, "with_pk_other_schema"),
+                    (None, "without_pk"),
                 ],
             )
