@@ -5,6 +5,9 @@ Unreleased
   - include identity column info (#297), and
   - avoid parse error when reflecting ENUMs (#303).  
   (CRDB 26.3+ required for full compatibility.)
+- `get_table_names()` now returns base tables only; views were also listed
+  and are reported by `get_view_names()`. `has_table()` still returns True for
+  views, as in SQLAlchemy 2.0.
 
 # Version 2.0.4
 April 23, 2026

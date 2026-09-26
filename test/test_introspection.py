@@ -7,6 +7,7 @@ from sqlalchemy import (
     UniqueConstraint,
     CheckConstraint,
     text,
+    inspect,
 )
 from sqlalchemy.types import Integer, String, Boolean
 import sqlalchemy.types as sqltypes
@@ -166,3 +167,30 @@ class TestTypeReflection(fixtures.TestBase):
         ]
         for t in types:
             self._test(t, sqltypes.VARCHAR)
+
+
+class TableNamesTest(fixtures.TestBase):
+    __requires__ = ("sync_driver",)
+
+    def setup_method(self):
+        with testing.db.begin() as conn:
+            conn.execute(text("CREATE TABLE names_base (id INT PRIMARY KEY)"))
+            conn.execute(text("CREATE VIEW names_view AS SELECT id FROM names_base"))
+
+    def teardown_method(self, method):
+        with testing.db.begin() as conn:
+            conn.execute(text("DROP VIEW IF EXISTS names_view"))
+            conn.execute(text("DROP TABLE IF EXISTS names_base"))
+
+    def test_get_table_names_excludes_views(self):
+        insp = inspect(testing.db)
+        table_names = insp.get_table_names()
+        assert "names_base" in table_names
+        assert "names_view" not in table_names
+        assert "names_view" in insp.get_view_names()
+
+    def test_has_table_includes_views(self):
+        insp = inspect(testing.db)
+        assert insp.has_table("names_base")
+        assert insp.has_table("names_view")
+        assert not insp.has_table("names_absent")

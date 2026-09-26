@@ -127,18 +127,25 @@ class CockroachDBDialect(PGDialect):
             # v1.1 or earlier.
             return [row.Table for row in conn.execute(text("SHOW TABLES"))]
 
-        # v2.0+ have a good information schema. Use it.
+        # v2.0+ have a good information schema. Use it. Only base tables are
+        # returned; views are reported by get_view_names().
+        return self._information_schema_relations(conn, schema, base_tables_only=True)
+
+    def _information_schema_relations(self, conn, schema, base_tables_only):
+        query = "SELECT table_name FROM information_schema.tables WHERE table_schema=:schema"
+        if base_tables_only:
+            query += " AND table_type = 'BASE TABLE'"
         return [
             row.table_name
-            for row in conn.execute(
-                text("SELECT table_name FROM information_schema.tables WHERE table_schema=:schema"),
-                {"schema": schema or self.default_schema_name},
-            )
+            for row in conn.execute(text(query), {"schema": schema or self.default_schema_name})
         ]
 
     def has_table(self, conn, table, schema=None, info_cache=None):
         # Upstream implementation needs pg_table_is_visible().
-        return any(t == table for t in self.get_table_names(conn, schema=schema))
+        # As in SQLAlchemy 2.0, has_table() is also true for views.
+        if not self._is_v2plus:
+            return any(t == table for t in self.get_table_names(conn, schema=schema))
+        return table in self._information_schema_relations(conn, schema, base_tables_only=False)
 
     def get_multi_columns(self, connection, schema, filter_names, scope, kind, **kw):
         _include_hidden = kw.get("include_hidden", False)
