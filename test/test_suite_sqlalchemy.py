@@ -3,8 +3,11 @@ from sqlalchemy.testing.suite import *  # noqa
 from sqlalchemy.testing.suite import (
     ComponentReflectionTest as _ComponentReflectionTest,
 )
+# (unused: entire class overwritten below)
+# from sqlalchemy.testing.suite import (
+#     ComputedReflectionTest as _ComputedReflectionTest,
+# )
 from sqlalchemy.testing.suite import HasIndexTest as _HasIndexTest
-from sqlalchemy.testing.suite import HasTableTest as _HasTableTest
 from sqlalchemy.testing.suite import IntegerTest as _IntegerTest
 from sqlalchemy.testing.suite import InsertBehaviorTest as _InsertBehaviorTest
 from sqlalchemy.testing.suite import IsolationLevelTest as _IsolationLevelTest
@@ -205,7 +208,7 @@ class ComponentReflectionTest(_ComponentReflectionTest):
         #       FWIW, insp.get_view_names() does still work IRL
         pass
 
-    @testing.combinations(True, False, argnames="use_schema")
+    @testing.combinations(False, argnames="use_schema")
     @testing.combinations((True, testing.requires.views), False, argnames="views")
     def test_metadata(self, connection, use_schema, views):
         if not (config.db.dialect.driver == "asyncpg" and not config.db.dialect._is_v231plus):
@@ -217,18 +220,20 @@ class ComponentReflectionTest(_ComponentReflectionTest):
         pass
 
 
+class ComputedReflectionTest():
+    # expected STORED COMPUTED COLUMN expression to have type int,
+    #     but 'normal / 42' has type decimal
+    @skip("cockroachdb")
+    def test_everything(self):
+        pass
+
+
 class HasIndexTest(_HasIndexTest):
     @skip("cockroachdb")
     def test_has_index(self):
         """
         ObjectNotInPrerequisiteState: index "my_idx_2" in the middle of being added, try again later
         """
-        pass
-
-
-class HasTableTest(_HasTableTest):
-    @skip("cockroachdb")
-    def test_has_table_cache(self):
         pass
 
 

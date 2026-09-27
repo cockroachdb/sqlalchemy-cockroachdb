@@ -87,10 +87,6 @@ class Requirements(SuiteRequirementsSQLA, SuiteRequirementsAlembic):
     emulated_lastrowid = exclusions.open()
     dbapi_lastrowid = exclusions.open()
     views = exclusions.open()
-    schemas = exclusions.skip_if(
-        lambda config: not config.db.dialect._is_v202plus,
-        "versions before 20.2 do not suport schemas",
-    )
     implicit_default_schema = exclusions.skip_if(
         lambda config: not config.db.dialect._is_v202plus,
         "versions before 20.2 do not suport schemas",
@@ -159,6 +155,10 @@ class Requirements(SuiteRequirementsSQLA, SuiteRequirementsAlembic):
     fk_ondelete_restrict = exclusions.closed()
     fk_onupdate = exclusions.closed()
     fk_onupdate_restrict = exclusions.closed()
+
+    @property
+    def schemas(self):
+        return exclusions.open()
 
     @property
     def sync_driver(self):

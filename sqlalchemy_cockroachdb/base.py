@@ -120,32 +120,16 @@ class CockroachDBDialect(PGDialect):
         # used.
         return (12, 0, 0)
 
-    def get_table_names(self, conn, schema=None, **kw):
-        # Upstream implementation needs correlated subqueries.
-
-        if not self._is_v2plus:
-            # v1.1 or earlier.
-            return [row.Table for row in conn.execute(text("SHOW TABLES"))]
-
-        # v2.0+ have a good information schema. Use it. Only base tables are
-        # returned; views are reported by get_view_names().
-        return self._information_schema_relations(conn, schema, base_tables_only=True)
-
-    def _information_schema_relations(self, conn, schema, base_tables_only):
-        query = "SELECT table_name FROM information_schema.tables WHERE table_schema=:schema"
-        if base_tables_only:
-            query += " AND table_type = 'BASE TABLE'"
-        return [
-            row.table_name
-            for row in conn.execute(text(query), {"schema": schema or self.default_schema_name})
-        ]
-
-    def has_table(self, conn, table, schema=None, info_cache=None):
-        # Upstream implementation needs pg_table_is_visible().
-        # As in SQLAlchemy 2.0, has_table() is also true for views.
-        if not self._is_v2plus:
-            return any(t == table for t in self.get_table_names(conn, schema=schema))
-        return table in self._information_schema_relations(conn, schema, base_tables_only=False)
+    def get_table_names(self, connection, schema=None, **kw):
+        table_names = super().get_table_names(connection, schema=None, **kw)
+        for k in self.multi_entries_to_ignore:
+            try:
+                table_names.remove(k[1])
+            except ValueError:
+                pass
+            except Exception:
+                raise
+        return table_names
 
     def get_multi_columns(self, connection, schema, filter_names, scope, kind, **kw):
         _include_hidden = kw.get("include_hidden", False)
@@ -265,6 +249,31 @@ class CockroachDBDialect(PGDialect):
                             col["type"] = ARRAY(VARCHAR())
                 to_return.append((table, columns))
         return to_return
+
+    def get_multi_foreign_keys(
+        self,
+        connection,
+        schema,
+        filter_names,
+        scope,
+        kind,
+        postgresql_ignore_search_path=False,
+        **kw,
+    ):
+        result = super().get_multi_foreign_keys(
+            connection,
+            schema,
+            filter_names,
+            scope,
+            kind,
+            postgresql_ignore_search_path=False,
+            **kw,
+        )
+        if schema is None:
+            result = dict(result)
+            for k in self.multi_entries_to_ignore:
+                result.pop(k, None)
+        return result
 
     def get_indexes(self, conn, table_name, schema=None, **kw):
         if self._is_v192plus:
