@@ -121,14 +121,13 @@ class CockroachDBDialect(PGDialect):
         return (12, 0, 0)
 
     def get_table_names(self, connection, schema=None, **kw):
-        table_names = super().get_table_names(connection, schema=None, **kw)
-        for k in self.multi_entries_to_ignore:
-            try:
-                table_names.remove(k[1])
-            except ValueError:
-                pass
-            except Exception:
-                raise
+        table_names = super().get_table_names(connection, schema=schema, **kw)
+        if schema is None:
+            for k in self.multi_entries_to_ignore:
+                try:
+                    table_names.remove(k[1])
+                except ValueError:
+                    pass
         return table_names
 
     def get_multi_columns(self, connection, schema, filter_names, scope, kind, **kw):
@@ -266,7 +265,7 @@ class CockroachDBDialect(PGDialect):
             filter_names,
             scope,
             kind,
-            postgresql_ignore_search_path=False,
+            postgresql_ignore_search_path=postgresql_ignore_search_path,
             **kw,
         )
         if schema is None:
