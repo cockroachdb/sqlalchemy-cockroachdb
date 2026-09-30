@@ -7,6 +7,7 @@ from sqlalchemy import (
     UniqueConstraint,
     CheckConstraint,
     text,
+    inspect,
 )
 from sqlalchemy.types import Integer, String, Boolean
 import sqlalchemy.types as sqltypes
@@ -14,6 +15,8 @@ from sqlalchemy.testing import fixtures
 from sqlalchemy.dialects.postgresql import INET
 from sqlalchemy.dialects.postgresql import INTERVAL
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql.base import PGDialect
+from unittest import mock
 
 meta = MetaData()
 
@@ -166,3 +169,64 @@ class TestTypeReflection(fixtures.TestBase):
         ]
         for t in types:
             self._test(t, sqltypes.VARCHAR)
+
+
+class TableNamesTest(fixtures.TestBase):
+    __requires__ = ("sync_driver",)
+
+    def setup_method(self):
+        with testing.db.begin() as conn:
+            conn.execute(text("CREATE TABLE names_base (id INT PRIMARY KEY)"))
+            conn.execute(text("CREATE VIEW names_view AS SELECT id FROM names_base"))
+            conn.execute(
+                text(
+                    "CREATE TABLE names_ref (id INT PRIMARY KEY, "
+                    "base_id INT REFERENCES names_base (id))"
+                )
+            )
+
+    def teardown_method(self, method):
+        with testing.db.begin() as conn:
+            conn.execute(text("DROP TABLE IF EXISTS names_ref"))
+            conn.execute(text("DROP VIEW IF EXISTS names_view"))
+            conn.execute(text("DROP TABLE IF EXISTS names_base"))
+
+    def test_get_table_names_excludes_views(self):
+        insp = inspect(testing.db)
+        table_names = insp.get_table_names()
+        assert "names_base" in table_names
+        assert "names_view" not in table_names
+        assert "names_view" in insp.get_view_names()
+
+    def test_has_table_includes_views(self):
+        insp = inspect(testing.db)
+        assert insp.has_table("names_base")
+        assert insp.has_table("names_view")
+        assert not insp.has_table("names_absent")
+
+    @testing.requires.schemas
+    def test_get_table_names_uses_requested_schema(self):
+        schema = testing.config.test_schema
+        with testing.db.begin() as conn:
+            conn.execute(text(f"CREATE TABLE {schema}.names_other (id INT PRIMARY KEY)"))
+        try:
+            insp = inspect(testing.db)
+            table_names = insp.get_table_names(schema=schema)
+            assert "names_other" in table_names
+            assert "names_base" not in table_names
+            assert "names_other" not in insp.get_table_names()
+        finally:
+            with testing.db.begin() as conn:
+                conn.execute(text(f"DROP TABLE IF EXISTS {schema}.names_other"))
+
+    def test_get_foreign_keys_passes_ignore_search_path(self):
+        insp = inspect(testing.db)
+        (fk,) = insp.get_foreign_keys("names_ref")
+        assert fk["referred_table"] == "names_base"
+        with mock.patch.object(
+            PGDialect, "get_multi_foreign_keys", return_value={}
+        ) as upstream:
+            testing.db.dialect.get_multi_foreign_keys(
+                None, None, None, None, None, postgresql_ignore_search_path=True
+            )
+        assert upstream.call_args.kwargs["postgresql_ignore_search_path"] is True
