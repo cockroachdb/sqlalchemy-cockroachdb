@@ -16,7 +16,7 @@ distlib==0.4.3
     # via virtualenv
 docutils==0.23
     # via readme-renderer
-filelock==4.0.4
+filelock==4.2.1
     # via
     #   python-discovery
     #   tox
