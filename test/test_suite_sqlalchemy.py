@@ -308,3 +308,8 @@ class TrueDivTest(_TrueDivTest):
     def test_floordiv_integer_bound(self):
         # we return SELECT 15 / 10 as Decimal('1.5'), not Integer
         pass
+
+    @skip("cockroachdb")
+    def test_truediv_divisor(self):
+        # unsupported binary operator: <float> / <decimal>
+        pass
