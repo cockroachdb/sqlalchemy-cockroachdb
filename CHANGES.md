@@ -9,6 +9,16 @@ Unreleased
   implementations. `get_table_names()` returns base tables only; views were
   also listed and are reported by `get_view_names()`. `has_table()` still
   returns True for views, as in SQLAlchemy 2.0 (#310).
+- asyncpg: invalidate cached prepared statements when a schema change makes
+  them stale ("cached plan must not change result type", or "type with ID ...
+  does not exist" after a user-defined type is recreated). asyncpg recognizes
+  stale statements only by PostgreSQL's routine names, so such a statement
+  failed on every pooled connection that had cached it, for the life of the
+  connection. Now the first execution fails and a retry re-prepares, as on
+  PostgreSQL.
+- asyncpg: also invalidate cached prepared statements on "placeholder $N
+  already has type ...", raised when a column a textual statement binds a
+  parameter to changes type.
 
 # Version 2.0.4
 April 23, 2026
