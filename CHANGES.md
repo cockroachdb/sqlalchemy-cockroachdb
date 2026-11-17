@@ -16,6 +16,9 @@ Unreleased
   failed on every pooled connection that had cached it, for the life of the
   connection. Now the first execution fails and a retry re-prepares, as on
   PostgreSQL.
+- asyncpg: also invalidate cached prepared statements on "placeholder $N
+  already has type ...", raised when a column a textual statement binds a
+  parameter to changes type.
 
 # Version 2.0.4
 April 23, 2026

@@ -16,6 +16,9 @@ _STALE_STATEMENT_ERRORS = (
     ("0A000", re.compile(r"cached plan must not change result type")),
     # A user-defined type the statement was prepared against was dropped.
     ("42704", re.compile(r"type with ID \d+ does not exist")),
+    # A placeholder's type no longer fits its column (binds without casts,
+    # e.g. textual SQL). Some fresh statements also raise this; harmless.
+    ("42804", re.compile(r"placeholder \$\d+ already has type")),
 )
 
 
