@@ -8,7 +8,7 @@ alembic
 asyncpg
 futures
 mock
-more-itertools
+more-itertools==11.1.0
 psycopg
 psycopg2
 pytest

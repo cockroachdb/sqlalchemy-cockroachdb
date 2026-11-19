@@ -1,16 +1,16 @@
-alembic==1.20.0
+alembic==1.20.1
     # via -r test-requirements.in
-asyncpg==0.31.0
+asyncpg==0.32.0
     # via -r test-requirements.in
 futures==3.0.5
     # via -r test-requirements.in
 greenlet==3.5.6
     # via sqlalchemy
-iniconfig==2.3.0
+iniconfig==2.3.1
     # via pytest
 mako==1.4.3
     # via alembic
-markupsafe==3.0.3
+markupsafe==3.0.4
     # via mako
 mock==5.2.0
     # via -r test-requirements.in
@@ -18,17 +18,17 @@ more-itertools==11.1.0
     # via -r test-requirements.in
 packaging==26.3
     # via pytest
-pluggy==1.6.0
+pluggy==1.7.0
     # via pytest
-psycopg==3.3.6
+psycopg==3.3.9
     # via -r test-requirements.in
 psycopg2==2.9.13
     # via -r test-requirements.in
 pygments==2.21.0
     # via pytest
-pytest==9.1.1
+pytest==9.2.0
     # via -r test-requirements.in
-sqlalchemy==2.0.54
+sqlalchemy==2.0.58
     # via
     #   -r test-requirements.in
     #   alembic
