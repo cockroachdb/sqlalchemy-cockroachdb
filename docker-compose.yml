@@ -1,0 +1,31 @@
+version: "3.7"
+
+x-cockroach-base: &cockroach-base
+  image: cockroachdb/cockroach:latest-v21.1
+
+services:
+  cockroach-0:
+    <<: *cockroach-base
+    container_name: cockroach-0
+    command: start --insecure --advertise-addr=cockroach-0 --join=cockroach-0,cockroach-1,cockroach-2 --store=type=mem,size=1GB
+    ports:
+      - "26257:26257"
+
+  cockroach-1:
+    <<: *cockroach-base
+    container_name: cockroach-1
+    command: start --insecure --advertise-addr=cockroach-1 --join=cockroach-0,cockroach-1,cockroach-2 --store=type=mem,size=1GB
+
+  cockroach-2:
+    <<: *cockroach-base
+    container_name: cockroach-2
+    command: start --insecure --advertise-addr=cockroach-2 --join=cockroach-0,cockroach-1,cockroach-2 --store=type=mem,size=1GB
+
+  cockroach-init:
+    <<: *cockroach-base
+    container_name: cockroach-init
+    depends_on:
+      - cockroach-0
+      - cockroach-1
+      - cockroach-2
+    command: init --insecure --host=cockroach-0
